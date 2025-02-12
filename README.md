@@ -16,3 +16,7 @@
 - Replaces proctors both manual and automatic and TA’s should be notified by program and via email.
 - Initiate Automatic or Manual proctor swap.
 
+**Features for CHAIR & STAFF**
+- Getting notifications for leave of absence TA.
+- May view all exam data: students list, room number, proctoring TAs and the date.
+- Holds priority over Instructors in Proctor Assignment and Swap (More in Additional Features Section).
