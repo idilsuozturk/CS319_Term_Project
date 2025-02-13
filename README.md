@@ -29,7 +29,7 @@
 **Features for Deans Office** 
 - Will be able to choose the departments to be pooled in case of a need during the automated proctoring assignment.
 - Will be able to make assignments in exams scheduled by the Deans Office.
-- Will be abloe to schedule specific exams.
+- Will be able to schedule specific exams.
 
 **Features for the Admins**
 - Will be able to change some global parameters such as the current semester.
