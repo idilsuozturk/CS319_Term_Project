@@ -1,5 +1,5 @@
 ## Description
-- TA Management System is software that makes TA assignments easier. It allows authorized Staff to easily access, change and delete TA assignments. With its user-friendly interface, TA Management System also makes it easy for TAs to enter their workloads, see their schedules and make arrangements accordingly. One of the main aims of this software is to provide automatic proctor assignments, which will help avoid conflicts.  
+-TA Management System is a software to make TA assignments easier. It allows authorized staff to easily access, change and delete TA assignments. With its user-friendly interface TA Management System also makes it easy for TA’s to enter their workloads, see their schedules and make arrangements accordingly. One of the main aims of this software is to provide automatic proctor assignment which will help with avoiding conflicts. 
 ### Features (Additional Features are specified with (AF) written at the end of a feature, and the features Department Chairs will also be able to do are specified with (DC) written at the end of a feature)
 **Features for TAs**
 - TAs have the ability to view their schedule, student list of the class they are proctoring in and other proctoring TAs’ tasks to swap within the Dashboard for courses.  
