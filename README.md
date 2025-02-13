@@ -54,3 +54,12 @@
 - If the TA is on leave, she/he cannot be assigned.
 - If the TA is taking this course as a student, she/he cannot be assigned. This restriction is non-breachable.
 - If the TA is taking an exam for another course as a student on the same date/time, she/he cannot be assigned. This restriction is non-breachable.
+
+### Group Members
+ - Ege Kaan Eren.
+ - Ege İpekci.
+ - Rasul Ibrahimzade.
+ -  Ali Majidi.
+ - Enes Özdemir.
+ - İdil Su Öztürk.
+
