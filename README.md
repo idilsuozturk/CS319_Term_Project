@@ -9,31 +9,31 @@
 - TAs will be notified every time a change is made to the tasks they are assigned to, e.g., a manual or an automatic change of a task via an authorized faculty member or a change in the assigned tasks itself such as the task date or place via email.
 
 **Features for Instructors**
-- Will be able to view the courses they are responsible for in the Dashboard.
-- Will be able to approve/decline pending requests coming from TA’s (for tasks, TA swaps and absence permit requests) via a Sidebar.
-- Will be able to assign proctors manually with restrictions or automatically by the algorithm going to implemented based on restrictions. 
-- Will be able to print exam distributions alphabetically ordered or random based on preference.
-- Will be able to replace proctors both manually and automatically and when a replacement occurs, TA’s will be notified by program and via email.
-- Will be able to change the date or the place of the assignments their assigned courses have if an unexpected situation occurs with the current date or place. (AF)
+- Instructor will be able to view the courses they are responsible for in the Dashboard.
+- Instructor will be able to approve/decline pending requests coming from TA’s (for tasks, TA swaps and absence permit requests) via a Sidebar.
+- Instructor will be able to assign proctors manually with restrictions or automatically by the algorithm going to implemented based on restrictions. 
+- Instructor will be able to print exam distributions alphabetically ordered or random based on preference.
+- Instructor will be able to replace proctors both manually and automatically and when a replacement occurs, TA’s will be notified by program and via email.
+- Instructor will be able to change the date or the place of the assignments their assigned courses have if an unexpected situation occurs with the current date or place. (AF)
 
 **Features for Authorized Staff**
-- Will get notifications for leave of absence of TA's. (DC)
-- Will be able to view all exam data, such as students lists, exam place, proctoring TA's and the exam date.
-- Will hold priority over Instructors in Proctor Assignment and Swap. (AF)
-- Will be able to initiate automatic or manual proctor swaps.
-- Will be able to add/edit/delete student/staff/course/offering/classroom​.
+- Authorized Staff will get notifications for leave of absence of TA's. (DC)
+- Authorized Staff will be able to view all exam data, such as students lists, exam place, proctoring TA's and the exam date.
+- Authorized Staff will hold priority over Instructors in Proctor Assignment and Swap. (AF)
+- Authorized Staff will be able to initiate automatic or manual proctor swaps.
+- Authorized Staff will be able to add/edit/delete student/staff/course/offering/classroom​.
 
 **Features for Deans Office** 
-- Will be able to choose the departments to be pooled in case of a need during the automated proctoring assignment.
-- Will be able to make assignments in exams scheduled by the Deans Office.
-- Will be able to schedule specific exams.
+- Deans Office will be able to choose the departments to be pooled in case of a need during the automated proctoring assignment.
+- Deans Office will be able to make assignments in exams scheduled by the Deans Office.
+- Deans Office will be able to schedule specific exams.
 
 **Features for the Admins**
-- Will be able to change some global parameters such as the current semester.
-- Will be able to view records for a specific semester.
-- Will be able to set maximum number of hours a TA can do proctoring/TA duty per semester/academic year at the beginning of an academic year.
-- Will be able to ask for specific details for a specific semester/academic year such as total proctoring hours per semester/academic year, and total TA Duty of a course per semester/academic year/section/student.
-- Will have the permission to view every detail in TA distribution, e.g., the TAs assigned for specific courses, the courses given in that semester, the instructors for these courses, and so on.
+- Admins will be able to change some global parameters such as the current semester.
+- Admins will be able to view records for a specific semester.
+- Admins will be able to set maximum number of hours a TA can do proctoring/TA duty per semester/academic year at the beginning of an academic year.
+- Admins will be able to ask for specific details for a specific semester/academic year such as total proctoring hours per semester/academic year, and total TA Duty of a course per semester/academic year/section/student.
+- Admins will have the permission to view every detail in TA distribution, e.g., the TAs assigned for specific courses, the courses given in that semester, the instructors for these courses, and so on.
 
 **General Features**
 - Informations such as offerings in a semester, courses taken by each student in a semester, students, and faculty will be importable via Excel.
