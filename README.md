@@ -2,14 +2,11 @@
 - A website where the distribution and management of TA's duties can be done by faculty members of different ranks according to their authority levels. 
 ### Features (Additional Features are specified with (AF) written at the end of a feature, and the features Department Chairs will also be able to do are specified with (DC) written at the end of a feature)
 **Features for TAs**
-- Will be able to see the courses they are going to be a TA for via a Dashboard. student lists for the classes they are going to be proctoring in and other proctoring TAs’ tasks to swap within the dashboard for courses.
-- Will be able to see the tasks they ought to perform in a course they are assigned by clicking that course in the Dashboard.
-- Will be able to see the assignment details by clicking that assignment. 
-- Will be able to see their schedules via a button in the Dashboard. 
-- Will be able to enter the work / tasks that get added to “Total Work Load” via Sidebar. TAs may view their added tasks in the Dashboard.
-- Will be able to request an “Leave of Absence” due to a valid excuse such as medical reasons, conference, vacation etc via using the sidebar. 
-- Will be able to request to swap proctoring tasks with a different TA. Such requests done by a TA will only require the requested to TA's confirmation for the swap to be valid, without needing any other staffs approval.
-- Will be notified every time a change is made to the tasks they are assigned to, e.g., a manual or an automatic change of a task via an authorized faculty member or a change in the assigned tasks itself such as the tasks date or place via email.
+- TAs have the ability to view their schedule, student list of the class they are proctoring in and other proctoring TAs’ tasks to swap within the Dashboard for courses.  
+- The ability to enter the work / tasks that get added to “Total Work Load” via Sidebar. TAs may view their added tasks in the Dashboard.
+- TAs have the right to request a “Leave of Absence” due to a valid excuse such as medical reasons, conference, vacation etc via using the sidebar. 
+- A TA may request to swap Proctoring tasks with another TA. Such requests done by TA only requires another TA to confirm the swap, without needing any other Staff Members' approval.
+- TAs will be notified every time a change is made to the tasks they are assigned to, e.g., a manual or an automatic change of a task via an authorized faculty member or a change in the assigned tasks itself such as the task date or place via email.
 
 **Features for Instructors**
 - Will be able to view the courses they are responsible for in the Dashboard.
