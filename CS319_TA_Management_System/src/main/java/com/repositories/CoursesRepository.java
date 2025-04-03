@@ -16,10 +16,15 @@ import io.micrometer.common.lang.NonNull;
 public interface CoursesRepository  extends JpaRepository<Course, Integer> {
     List<Course> findAll();
     
-    @SuppressWarnings("null")
+    /*@SuppressWarnings("null")
     @Override
-    Optional<Course> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    */Optional<Course> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
 
-    @SuppressWarnings("null")
+    //@SuppressWarnings("null")
     Course save(@NonNull Course course);    
+
+    void  deleteById(@RequestParam(value = "id") Integer id);
+
+    //void updateCourseById(@RequestParam(value = "id") Integer id, @RequestParam(value = "course") Course course);
+    //Optional findById(Integer id);
 } 

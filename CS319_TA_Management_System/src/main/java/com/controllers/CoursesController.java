@@ -38,9 +38,13 @@ class CoursesController {
         return coursesService.getAllCourses();
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public Course creatCourse(@RequestBody Course course) {
         return coursesService.createCourse(course.getId(), course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs(), course.getSchedule());
     }
-    
+
+    @PostMapping("/delete")
+    public void deleteCourse(@RequestParam Integer id) {
+        coursesService.deleteCourseById(id);
+    }
 }
