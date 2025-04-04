@@ -25,10 +25,10 @@ public class CoursesService {
         Integer section,
         Integer instructor,
         Integer [] students,
-        Integer [] TAs,
-        Schedule schedule
+        Integer [] TAs
+        //Schedule schedule
     ) {
-        return coursesRepository.save(new Course(id, courseName, section, instructor, students, TAs, schedule));  // Insert user into MySQL
+        return coursesRepository.save(new Course(id, courseName, section, instructor, students, TAs));  // Insert user into MySQL
     }
 
  
@@ -44,7 +44,7 @@ public class CoursesService {
             existingCourse.setInstructor(course.getInstructor());
             existingCourse.setStudents(course.getStudents());
             existingCourse.setTAs(course.getTAs());
-            existingCourse.setSchedule(course.getSchedule());
+            //existingCourse.setSchedule(course.getSchedule());
             return coursesRepository.save(existingCourse);  // Update user in MySQL
         }
         return null;  // Return null if user not found

@@ -33,14 +33,14 @@ class CoursesController {
         return "Test endpoint is working!";
     }
     
-    @GetMapping("")
+    @GetMapping("/courselist")
     public List <Course> listCourses() {
         return coursesService.getAllCourses();
     }
 
     @PostMapping("/create")
     public Course creatCourse(@RequestBody Course course) {
-        return coursesService.createCourse(course.getId(), course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs(), course.getSchedule());
+        return coursesService.createCourse(course.getId(), course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs());
     }
 
     @PostMapping("/delete")

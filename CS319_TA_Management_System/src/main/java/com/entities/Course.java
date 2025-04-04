@@ -1,5 +1,7 @@
 package com.entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,11 +20,26 @@ public class Course    {
     private Integer section;
 
     private Integer instructor;
+     @Column(columnDefinition = "json")
+    @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer [] students;
+    @Column(columnDefinition = "json")
+    @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer [] TAs;
 
-    @Embedded
-    private Schedule schedule;
+    //@Embedded
+    //private Schedule schedule;
+
+    public Course () {
+        // Default constructor
+        id = -1;
+        courseName = null;  
+        section = 0;
+        instructor = 0;
+        students = null;
+        TAs = null;
+    }
+
 
     public Course( 
         Integer id, 
@@ -30,8 +47,8 @@ public class Course    {
         Integer section, 
         Integer instructor, 
         Integer [] students, 
-        Integer [] TAs, 
-        Schedule schedule
+        Integer [] TAs 
+        //Schedule schedule
         ) {
         this.id = id;
         this.courseName = courseName;
@@ -39,7 +56,7 @@ public class Course    {
         this.instructor = instructor;
         this.students = students;
         this.TAs = TAs;
-        this.schedule = schedule;
+        //this.schedule = schedule;
     }
 
     public Integer getId() {
@@ -89,13 +106,13 @@ public class Course    {
     public void setTAs(Integer[] tAs) {
         TAs = tAs;
     }
-
+    /*
     public Schedule getSchedule() {
         return schedule;
     }
     
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
-    }
+    }*/
 }
    
