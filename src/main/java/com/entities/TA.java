@@ -91,8 +91,7 @@ public class TA extends User {
         return tcNumber;
     }
 
-
-    // should we even allow this? 
+    // should we even allow this?
     public void setTcNumber(Integer tcNumber) {
         this.tcNumber = tcNumber;
     }
