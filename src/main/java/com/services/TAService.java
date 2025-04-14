@@ -12,7 +12,10 @@ import com.repositories.CoursesRepository;
 
 import java.util.List;
 
+<<<<<<< HEAD
 // f 
+=======
+>>>>>>> 151bd4a (Initial Workings of TA class.)
 @Service
 public class TAService {
     @Autowired

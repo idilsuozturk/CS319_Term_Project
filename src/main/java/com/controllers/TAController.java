@@ -7,10 +7,13 @@ import com.entities.TA;
 import com.services.TAService;
 
 import java.util.List;
+<<<<<<< HEAD
  
 
  
 
+=======
+>>>>>>> 151bd4a (Initial Workings of TA class.)
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

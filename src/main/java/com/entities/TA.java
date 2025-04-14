@@ -91,7 +91,12 @@ public class TA extends User {
         return tcNumber;
     }
 
+<<<<<<< HEAD
     // should we even allow this?
+=======
+
+    // should we even allow this? 
+>>>>>>> 151bd4a (Initial Workings of TA class.)
     public void setTcNumber(Integer tcNumber) {
         this.tcNumber = tcNumber;
     }
