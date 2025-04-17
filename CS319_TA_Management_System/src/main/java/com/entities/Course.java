@@ -20,7 +20,7 @@ public class Course    {
     private Integer section;
 
     private Integer instructor;
-     @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer [] students;
     @Column(columnDefinition = "json")
@@ -42,7 +42,6 @@ public class Course    {
 
 
     public Course( 
-        Integer id, 
         String courseName, 
         Integer section, 
         Integer instructor, 
@@ -50,7 +49,6 @@ public class Course    {
         Integer [] TAs 
         //Schedule schedule
         ) {
-        this.id = id;
         this.courseName = courseName;
         this.section = section;
         this.instructor = instructor;
@@ -63,9 +61,6 @@ public class Course    {
         return id;
     }
 
-    public  Integer setId(Integer id) {
-        return this.id = id;
-    }
 
     public String getCourseName() {
         return courseName;

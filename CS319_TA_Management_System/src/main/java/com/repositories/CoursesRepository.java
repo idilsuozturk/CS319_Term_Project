@@ -25,6 +25,9 @@ public interface CoursesRepository  extends JpaRepository<Course, Integer> {
 
     void  deleteById(@RequestParam(value = "id") Integer id);
 
+    //unnnecessary
     //void updateCourseById(@RequestParam(value = "id") Integer id, @RequestParam(value = "course") Course course);
+    
+    
     //Optional findById(Integer id);
 } 

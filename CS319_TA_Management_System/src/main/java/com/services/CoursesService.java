@@ -1,6 +1,5 @@
 package com.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -12,15 +11,18 @@ import java.util.List;
 
 @Service
 public class CoursesService {
-    @Autowired
-    private  CoursesRepository coursesRepository;
 
+    private  final CoursesRepository coursesRepository;
+
+    public CoursesService(CoursesRepository coursesRepository) {
+        this.coursesRepository = coursesRepository;
+    }
+    
     public List<Course> getAllCourses() {
         return coursesRepository.findAll();  // Fetch all users
     }
 
     public Course createCourse( 
-        Integer id,
         String courseName,
         Integer section,
         Integer instructor,
@@ -28,7 +30,7 @@ public class CoursesService {
         Integer [] TAs
         //Schedule schedule
     ) {
-        return coursesRepository.save(new Course(id, courseName, section, instructor, students, TAs));  // Insert user into MySQL
+        return coursesRepository.save(new Course( courseName, section, instructor, students, TAs));  // Insert user into MySQL
     }
 
  
