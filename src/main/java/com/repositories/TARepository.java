@@ -23,8 +23,7 @@ public interface TARepository extends JpaRepository<TA, Integer> {
 
     void deleteById(@RequestParam(value = "id") Integer id);
 
-<<<<<<< HEAD
+    /*
+     * For future additional functions might be needed such as findByname or findByEmail etc.
+     */
 }
-=======
-}
->>>>>>> 151bd4a (Initial Workings of TA class.)

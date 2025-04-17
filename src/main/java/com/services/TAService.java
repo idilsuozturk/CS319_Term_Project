@@ -12,17 +12,19 @@ import com.repositories.CoursesRepository;
 
 import java.util.List;
 
-<<<<<<< HEAD
-// f 
-=======
->>>>>>> 151bd4a (Initial Workings of TA class.)
+
 @Service
 public class TAService {
-    @Autowired
-    private TARepository taRepository;
+   
+    private final TARepository taRepository;
 
-    @Autowired
-    private CoursesRepository coursesRepository; // not used
+    
+    private final CoursesRepository coursesRepository; 
+
+    public TAService(TARepository taRepository, CoursesRepository coursesRepository) {
+        this.taRepository = taRepository;
+        this.coursesRepository = coursesRepository; 
+    }
 
     public List<TA> getAllTAs() {
         return taRepository.findAll();
@@ -32,7 +34,7 @@ public class TAService {
             Integer[] currentTakingCourses,
 
             Integer advisor, Integer totalWorkload, Integer tcNumber, Integer[] proctoringExams) {
-        TA newTA = new TA(id, email, userName, password, currentAssistingCourses, currentTakingCourses, advisor,
+        TA newTA = new TA( email, userName, password, currentAssistingCourses, currentTakingCourses, advisor,
                 totalWorkload, tcNumber, proctoringExams);
 
         return taRepository.save(newTA);
