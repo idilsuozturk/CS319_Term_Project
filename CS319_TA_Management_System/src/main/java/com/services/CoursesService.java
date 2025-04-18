@@ -20,7 +20,7 @@ public class CoursesService {
     
     public List<Course> getAllCourses() {
         return coursesRepository.findAll();  // Fetch all users
-    }
+    }   
 
     public Course createCourse( 
         String courseName,

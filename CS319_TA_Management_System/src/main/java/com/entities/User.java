@@ -4,10 +4,12 @@ import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = jakarta.persistence.InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -18,8 +20,7 @@ public class User {
     private String userName;
     private String password;
      
-    public User( Integer id, String email, String userName, String password) {
-        this.id = id;
+    public User( String email, String userName, String password) {
         this.email = email;
         this.userName = userName;
         this.password = password;
