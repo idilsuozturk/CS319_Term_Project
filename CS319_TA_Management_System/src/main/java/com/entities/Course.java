@@ -20,7 +20,7 @@ public class Course    {
     private Integer section;
 
     private Integer instructor;
-     @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer [] students;
     @Column(columnDefinition = "json")

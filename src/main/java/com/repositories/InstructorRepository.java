@@ -7,19 +7,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.entities.TA;
+import com.entities.Instructor;
 
 import io.micrometer.common.lang.NonNull;
 
-// Literally a copy paste from CourseRepository,java
-
 @Repository
-public interface TARepository extends JpaRepository<TA, Integer> {
-    List<TA> findAll();
+public interface InstructorRepository extends JpaRepository<Instructor, Integer> {
+    List<Instructor> findAll();
 
-    Optional<TA> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    Optional<Instructor> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
 
-    TA save(@NonNull TA ta);
+    Instructor save(@NonNull Instructor instructor);
 
     void deleteById(@RequestParam(value = "id") Integer id);
 
