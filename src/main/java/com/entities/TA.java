@@ -39,7 +39,7 @@ public class TA extends User {
     }
 
     // Too much variables?
-    public TA(Integer id, String email, String userName, String password, Integer[] currentAssistingCourses,
+    public TA(String email, String userName, String password, Integer[] currentAssistingCourses,
             Integer[] currentTakingCourses,
 
             Integer advisor, Integer totalWorkload, Integer tcNumber,
@@ -54,6 +54,9 @@ public class TA extends User {
     }
 
     // Get and set functions
+    public Integer getId() {
+        return super.getId();
+    }
 
     public Integer[] getCurrentAssistingCourses() {
         return currentAssistingCourses;
