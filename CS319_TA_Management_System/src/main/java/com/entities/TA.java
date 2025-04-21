@@ -45,9 +45,7 @@ public class TA extends User {
 
     // Too much variables?
     public TA(String email, String userName, String password, Integer[] currentAssistingCourses,
-            Integer[] currentTakingCourses,
-
-            Integer advisor, Integer totalWorkload, Integer tcNumber,
+            Integer[] currentTakingCourses, Integer advisor, Integer totalWorkload, Integer tcNumber,
             Integer[] proctoringExams) {
         super( email, userName, password);
         this.currentAssistingCourses = currentAssistingCourses;

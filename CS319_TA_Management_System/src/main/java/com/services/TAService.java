@@ -68,6 +68,8 @@ public class TAService {
             existingTA.setProctoringExams(ta.getProctoringExams());
             return taRepository.save(existingTA);
         }
+
+        // else iiçin hata mesajı döndürülebilinir
         return null;
     }
 
