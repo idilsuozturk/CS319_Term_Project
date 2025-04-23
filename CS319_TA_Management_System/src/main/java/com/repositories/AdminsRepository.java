@@ -21,13 +21,13 @@ public interface AdminsRepository  extends JpaRepository<Admin, Integer> {
 
     List<Admin> findAll(); // Retrieve all admins from the database
 
-    Optional<Admin> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    Optional<Admin> findById(Integer id);
 
     
-    Optional<Admin> findByUsername(@RequestParam(value = "username") String username);
+    Optional<Admin> findByUsername(String username);
     Admin save(@NonNull Admin admin); // Save a new admin or update an existing one
 
-    void deleteById(@RequestParam(value = "id") Integer id); // Delete an admin by ID
+    void deleteById(Integer id); // Delete an admin by ID
 
     //unnecessary
     //void updateAdminById(@RequestParam(value = "id") Integer id, @RequestParam(value = "admin") Admin admin); // Update an admin by ID

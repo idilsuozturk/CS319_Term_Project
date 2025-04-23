@@ -13,6 +13,7 @@ public class DepartmentStaff extends Staff {
     }
     public DepartmentStaff( String email, String userName, String password, String departmentCode, String tcNumber) {
         super( email, userName, password, departmentCode, "Department Staff");
+        super.setRole(Roles.DEPARTMENT_STAFF);
         this.tcNumber = tcNumber;
     }
     public String getTcNumber() {

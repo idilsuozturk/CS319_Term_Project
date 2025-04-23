@@ -19,7 +19,7 @@ public class AdminsService {
         return adminRepository.findAll();  // Fetch all admins
     }
 
-    public Admin findAdminByUsernme(String username) {
+    public Admin findAdminByUsername(String username) {
         return adminRepository.findByUsername(username).orElse(null);  // Find admin by username
     }
 

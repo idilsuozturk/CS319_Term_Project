@@ -21,9 +21,13 @@ public class Cs319TaManagementSystemApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(Cs319TaManagementSystemApplication.class);
 	public static void main(String[] args) {
+		//System.out.println("CS319 TA Management System is starting...");
+		// Password encoding example (for demonstration purposes only, not for production use)
+		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		//System.out.println( passwordEncoder.encode("1234")); // Example password encoding
 		SpringApplication.run(Cs319TaManagementSystemApplication.class, args);
 
 	}
 }
 
- 
+  

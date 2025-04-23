@@ -56,7 +56,7 @@ public class TAService {
         if (existingTA != null) {
 
             existingTA.setEmail(ta.getEmail());
-            existingTA.setUserName(ta.getUserName());
+            existingTA.setUsername(ta.getUsername());
             existingTA.setPassword(ta.getPassword());
 
             existingTA.setCurrentAssistingCourses(ta.getCurrentAssistingCourses());

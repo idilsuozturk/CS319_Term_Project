@@ -16,11 +16,11 @@ import io.micrometer.common.lang.NonNull;
 public interface DepartmentStaffRepository extends JpaRepository<DepartmentStaff, Integer> {
     List<DepartmentStaff> findAll();
 
-    Optional<DepartmentStaff> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    Optional<DepartmentStaff> findById(Integer id);
 
     DepartmentStaff save(@NonNull DepartmentStaff departmentStaff);
 
-    void deleteById(@RequestParam(value = "id") Integer id);
+    void deleteById(Integer id);
 
     //void updateById(@RequestParam(value = "id") Integer id, @RequestParam(value = "departmentStaff") DepartmentStaff departmentStaff);
 

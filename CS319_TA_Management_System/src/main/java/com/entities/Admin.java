@@ -1,6 +1,10 @@
 package com.entities;
 
+import javax.management.relation.Role;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,22 +23,33 @@ public class Admin {
     private String name;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Roles role;
+
     public Admin() {
-        // Default constructor
+        this.username = null;
+        this.name = null;  
+        this.email = null;
+        this.password = null;
+        this.role = Roles.ADMIN;
     }
     
     public Admin( String username, String name, String email, String password) {
         this.username = username;
-        this.name = null;  
-        this.email = null;
-        this.password = null;
+        this.name = name;  
+        this.email = email;
+        this.password = password;
+        this.role = Roles.ADMIN;
     }
 
     public Integer getId() {
         return id;
     }
-
-    public void setUsernme(String username) {
+    public Roles getRole() {
+        return role;
+    }
+    public void setUsername(String username) {
         this.username = username;
     }
 

@@ -18,12 +18,12 @@ public interface CoursesRepository  extends JpaRepository<Course, Integer> {
     
     /*@SuppressWarnings("null")
     @Override
-    */Optional<Course> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    */Optional<Course> findById(Integer id);
 
     //@SuppressWarnings("null")
     Course save(@NonNull Course course);    
 
-    void  deleteById(@RequestParam(value = "id") Integer id);
+    void  deleteById( Integer id);
 
     //unnnecessary
     //void updateCourseById(@RequestParam(value = "id") Integer id, @RequestParam(value = "course") Course course);

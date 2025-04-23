@@ -49,7 +49,7 @@ public class TAController {
         return taService.createTA(
                 
                 ta.getEmail(),
-                ta.getUserName(),
+                ta.getUsername(),
                 ta.getPassword(),
 
                 ta.getCurrentAssistingCourses(),

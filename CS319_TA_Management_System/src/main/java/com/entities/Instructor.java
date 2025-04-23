@@ -25,9 +25,12 @@ public class Instructor extends Staff {
 
     public Instructor( String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
         super( email, userName, password, departmentCode, "Instructor");
+        super.setRole(Roles.INSTRUCTOR);
         this.courses = courses;
         this.tas = tas;
         this.tcNumber = tcNumber;
+
+        
     }
 
     // Get and set functions

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "staff")
 @Inheritance(strategy = jakarta.persistence.InheritanceType.JOINED)
-public abstract class Staff extends User {
+public class Staff extends User {
     private String departmentCode;
     private String title;
 
@@ -15,7 +15,7 @@ public abstract class Staff extends User {
         this.title = "";
     }
     public Staff( String email, String userName, String password, String departmentCode, String title) {
-        super( email, userName, password);
+        super( email, userName, password, Roles.UNKNOWN);
         this.departmentCode = departmentCode;
         this.title = title;
     }
@@ -25,6 +25,10 @@ public abstract class Staff extends User {
         return super.getId();
     }
 
+    public void setRole(Roles role) {
+        super.setRole(role);
+    }
+    
     public String getDepartmentCode() {
         return this.departmentCode;
     }

@@ -37,7 +37,7 @@ public class DepartmentStaffController {
     public DepartmentStaff createDepartmentStaff(@RequestBody DepartmentStaff staff) {
         return departmentStaffService.createDepartmentStaff(
                 staff.getEmail(),
-                staff.getUserName(),
+                staff.getUsername(),
                 staff.getPassword(),
                 staff.getDepartmentCode(),
                 staff.getTcNumber()

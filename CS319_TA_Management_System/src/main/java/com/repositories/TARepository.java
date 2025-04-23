@@ -17,11 +17,11 @@ import io.micrometer.common.lang.NonNull;
 public interface TARepository extends JpaRepository<TA, Integer> {
     List<TA> findAll();
 
-    Optional<TA> findById(@SuppressWarnings("null") @RequestParam(value = "id") Integer id);
+    Optional<TA> findById(Integer id);
 
     TA save(@NonNull TA ta);
 
-    void deleteById(@RequestParam(value = "id") Integer id);
+    void deleteById(Integer id);
 
     /*
      * For future additional functions might be needed such as findByname or findByEmail etc.

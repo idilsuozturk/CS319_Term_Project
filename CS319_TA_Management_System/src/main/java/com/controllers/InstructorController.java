@@ -38,7 +38,7 @@ public class InstructorController {
     public Instructor createInstructor(@RequestBody Instructor instructor) {
         return instructorService.createInstructor(
                 instructor.getEmail(),
-                instructor.getUserName(),
+                instructor.getUsername(),
                 instructor.getPassword(),
                 instructor.getCourses(),
                 instructor.getTas(),
