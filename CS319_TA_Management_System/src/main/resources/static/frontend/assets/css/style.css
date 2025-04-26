@@ -1,3 +1,11 @@
+@font-face { font-family: SalmaproMedium; src: url('../font/SalmaproMedium-yw9ad.otf'); } 
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .bilkent-logo {
     display: block;
     margin: 0 auto; 
@@ -6,7 +14,7 @@
     max-width: 60%;
 }
 
-body {
+.login-body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -43,3 +51,136 @@ button {
 button:hover {
     background: darkblue;
 }
+
+
+.header {
+    background-color: #14558a;
+    color: #fff;
+    width: 100%;
+    height: 125px;
+}
+
+.innerheader {
+    width: 1400px;
+    height: 100%;
+    display: block;
+    margin: 0 auto;
+    /* background-color: rgb(255, 0, 221); */
+}
+
+.logo-container {
+    height: 100%;
+    display: table;
+    float: left;
+}
+
+.logo-container li{
+display: contents;
+    height: 100%;
+    font-size: 34px;
+    font-weight: 600;
+    font-family: 'SalmaproMedium';
+    float: left;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+}
+
+.logo-container li h1{
+    color: white;
+    height: 100%;
+    font-size: 30px;
+    font-weight: 750;
+    font-family: 'SalmaproMedium';
+    display: table-cell;
+    vertical-align: middle;
+
+}
+
+.logo-container li:hover > .submenu {
+    display: grid;
+}
+
+.logo {
+    height: 125px;
+    float: left;
+    display: table-cell;
+}
+
+.navigation {
+    float: right;
+    height: 100%;
+    /* background-color: red; */
+}
+
+.navigation li{
+    display: table;
+    height: 100%;
+    font-size: 34px;
+    font-weight: 600;
+    font-family: 'SalmaproMedium';
+    float: left;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+
+}
+
+.navigation li a{
+    color: white;
+    height: 100%;
+    display: table-cell;
+    padding: 0px 20px;
+    text-decoration: none;
+    vertical-align: middle;
+
+}
+
+
+
+.navigation li:hover > .submenu {
+    display: grid;
+}
+
+.submenu{
+    width: 300px;
+    position: absolute;
+    display: none;
+    list-style-type: none;
+    transform: translateX(-60%); /* Perfectly center it */
+    top: 125px;
+    background-color: #14558a;
+    z-index: 2;
+}
+
+.submenu li {
+    display: block;
+    height: 100%;
+    font-size: 20px;
+    font-weight: 300;
+    font-family: 'SalmaproMedium';
+    text-decoration: none;
+}
+
+.submenu li:hover{
+    background-color: #e4f7ff;
+}
+
+
+.submenu li a{
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    vertical-align: middle;
+    padding: 0px 20px;
+    padding-top: 3px;
+    padding-bottom: 10px;
+    width: 100%;
+
+}
+
+.submenu li:hover a {
+    color: #14558a; /* Child text color change when parent is hovered */
+}
+
+
