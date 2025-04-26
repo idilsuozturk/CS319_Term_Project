@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/notifications")
+@RequestMapping("/api")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -26,34 +26,29 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Notification controller is working!";
-    }
-
-    @GetMapping("/list")
+    @GetMapping("/notifications")
     public List<Notification> listNotifications() {
         return notificationService.getAllNotifications();
     }
 
-    @GetMapping("/{notificationId}")
+    @GetMapping("/notification/{notificationId}")
     public Notification getNotification(@PathVariable Integer notificationId) {
         return notificationService.getNotificationById(notificationId);
     }
 
-    @DeleteMapping("/delete/{notificationId}")
+    @DeleteMapping("/delete-notification/{notificationId}")
     public void deleteNotification(@PathVariable Integer notificationId) {
         notificationService.deleteNotificationById(notificationId);
     }
 
-    @PutMapping("/update/{notificationId}")
+    @PutMapping("/update-notification/{notificationId}")
     public Notification updateNotification(@PathVariable Integer notificationId,
             @RequestBody Notification notification) {
         return notificationService.updateNotification(notificationId, notification);
     }
 
  
-    @PostMapping("/send")
+    @PostMapping("/send-notification")
     public boolean sendNotification(
             @RequestParam Integer userId,
             @RequestParam String description) {
@@ -61,7 +56,7 @@ public class NotificationController {
     }
 
 
-    @PostMapping("/send-with-email")
+    @PostMapping("/send-notification-with-email")
     public boolean sendNotificationWithEmail(
             @RequestParam Integer userId,
             @RequestParam String description, @RequestParam String email,
@@ -70,7 +65,7 @@ public class NotificationController {
         return notificationService.sendNotificationWithEmail(userId, description, email, subject);
     }
 
-    @PostMapping("/{notificationId}/mark-read")
+    @PostMapping("/mark-notification-read/{notificationId}")
     public boolean markNotificationAsRead(@PathVariable Integer notificationId) {
         return notificationService.markNotificationAsRead(notificationId);
     }

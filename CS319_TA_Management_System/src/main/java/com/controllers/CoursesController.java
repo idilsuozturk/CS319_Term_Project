@@ -43,6 +43,11 @@ class CoursesController {
         return coursesService.createCourse( course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs());
     }
 
+    @GetMapping("/course/{id}")
+    public Course getCourse(@PathVariable Integer id) {
+        return coursesService.getCourseById(id);
+    }
+
     @PutMapping("update-course/{id}")
     public Course updateCourse(@PathVariable Integer id, @RequestBody Course course) {
         //Course updatedCourse = coursesService.updateCourseById(id, course);

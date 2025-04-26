@@ -23,10 +23,6 @@ public class DepartmentChairController {
         this.departmentChairService = departmentChairService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Department Staff controller is working!";
-    }
 
     @GetMapping("/list-dept-chair")
     public List<DepartmentChair> listDepartmentChair() {

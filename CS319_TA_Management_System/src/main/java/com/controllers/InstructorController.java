@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/instructors")
+@RequestMapping("/api")
 public class InstructorController {
 
     private final InstructorService instructorService;
@@ -19,22 +19,17 @@ public class InstructorController {
         this.instructorService = instructorService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Instructor controller is up!";
-    }
-
-    @GetMapping("/list")
+    @GetMapping("/instructors")
     public List<Instructor> listInstructors() {
         return instructorService.getAllInstructors();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/instructor/{id}")
     public Instructor getInstructor(@PathVariable Integer id) {
         return instructorService.getInstructorById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-instructor")
     public Instructor createInstructor(@RequestBody Instructor instructor) {
         return instructorService.createInstructor(
                 instructor.getName(),
@@ -48,12 +43,12 @@ public class InstructorController {
         );
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update-instructor/{id}")
     public Instructor updateInstructor(@PathVariable Integer id, @RequestBody Instructor instructor) {
         return instructorService.updateInstructor(id, instructor);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete-instructor/{id}")
     public void deleteInstructor(@PathVariable Integer id) {
         instructorService.deleteInstructorById(id);
     }

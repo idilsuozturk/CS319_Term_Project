@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/absences")
+@RequestMapping("/api")
 public class AbsenceController {
 
     private final AbsenceService absenceService;
@@ -31,19 +31,19 @@ public class AbsenceController {
         this.taService = taService;
     }
 
-    @GetMapping("/test")
+    /*@GetMapping("/test")
     public String test() {
         return "Absence controller works.";
-    }
+    }*/
 
-    @GetMapping("/list")
+    @GetMapping("/list-absences")
     public List<Absence> listAbsences() {
         return absenceService.getAllAbsences();
     }
 
 
 
-    @GetMapping("/{id}")
+    @GetMapping("absence/{id}")
     public Absence getAbsence(@PathVariable Integer id) {
         return absenceService.getAbsenceById(id);
     }
@@ -51,16 +51,16 @@ public class AbsenceController {
 
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete-absence/{id}")
     public void deleteAbsence(@PathVariable Integer id) {
         absenceService.deleteAbsenceById(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update-absence/{id}")
     public Absence updateAbsence(@PathVariable Integer id, @RequestBody Absence absence) {
         return absenceService.updateAbsence(id, absence);
     }
-    @PostMapping("/request")
+    @PostMapping("/request-absence")
     public boolean requestAbsence(
             @RequestParam Integer taId,
             @RequestParam String date,
@@ -75,7 +75,7 @@ public class AbsenceController {
 
 
     // have to deal with permissions
-    @PostMapping("/approve/{id}")
+    @PostMapping("/approve-absence/{id}")
     public boolean approveAbsence(
             @PathVariable Integer id,
             @RequestParam Integer staffId) {
@@ -93,7 +93,7 @@ public class AbsenceController {
         return false;
     }
     // TODO permissions
-    @PostMapping("/reject/{id}")
+    @PostMapping("/reject-absence/{id}")
     public boolean rejectAbsence(
             @PathVariable Integer id,
             @RequestParam Integer staffId) {
@@ -114,7 +114,7 @@ public class AbsenceController {
         return false;
     }
     // basic structure for vieing
-    @GetMapping("/view/{id}")
+    @GetMapping("/view-absence/{id}")
     public boolean viewAbsence(
             @PathVariable Integer id,
             @RequestParam Integer staffId) {
@@ -134,18 +134,18 @@ public class AbsenceController {
         }
         return false;
     }
-    @GetMapping("/by-ta/{taId}")
+    @GetMapping("/absence-by-taId/{taId}")
     public List<Absence> getAbsencesByTA(@PathVariable Integer taId) {
         return absenceService.getAbsencesByTAId(taId);
     }
 
 
-    @GetMapping("/approved")
+    @GetMapping("/absence-approved")
     public List<Absence> getApprovedAbsences() {
         return absenceService.getApprovedAbsences();
     }
 
-    @GetMapping("/rejected")
+    @GetMapping("/absence-rejected")
     public List<Absence> getRejectedAbsences() {
         return absenceService.getRejectedAbsences();
     }

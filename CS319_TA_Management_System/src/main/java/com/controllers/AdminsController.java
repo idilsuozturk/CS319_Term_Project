@@ -30,29 +30,23 @@ public class AdminsController {
         return adminsService.getAllAdmins(); // Fetch all admins
     }
 
-    @PostMapping("/createAdmin")
+    @PostMapping("/create-admin")
     public Admin createAdmin(@RequestBody Admin admin) {
         return adminsService.createAdmin(admin.getUsername(), admin.getName(), admin.getEmail(), admin.getPassword()); // Create a new admin
     }
 
-    @PostMapping("/deleteAdmin")
+    @PostMapping("/delete-admin")
     public void deleteAdmin(@RequestBody Integer id) {
         adminsService.deleteAdminById(id); // Delete admin by ID
     }
 
-    @PutMapping("admins/{id}")
+    @PutMapping("update-admin/{id}")
     public Admin updateAdmin(@RequestBody Admin admin) {
         return adminsService.updateAdminById(admin.getId(), admin); // Update admin by ID
     }
 
-    @PostMapping("/getAdmin")
+    @PostMapping("/admin/{id}")
     public Admin getAdmin(@RequestBody Integer id) {
         return adminsService.getAdminById(id); // Get admin by ID
     }
-
-    @GetMapping("/testAdmin")
-    public String testAdmin() {
-        return "Test endpoint for Admins is working!"; // Test endpoint for admins
-    }
-
 }

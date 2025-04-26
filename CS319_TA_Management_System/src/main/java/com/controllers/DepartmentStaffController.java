@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/deptstaff")
+@RequestMapping("/api")
 public class DepartmentStaffController {
 
     private final DepartmentStaffService departmentStaffService;
@@ -18,22 +18,17 @@ public class DepartmentStaffController {
         this.departmentStaffService = departmentStaffService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Department Staff controller is working!";
-    }
-
-    @GetMapping("/list")
+    @GetMapping("/list-dept-staff")
     public List<DepartmentStaff> listDepartmentStaff() {
         return departmentStaffService.getAllDepartmentStaff();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/dept-staff/{id}")
     public DepartmentStaff getDepartmentStaff(@PathVariable Integer id) {
         return departmentStaffService.getDepartmentStaffById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-dept-staff")
     public DepartmentStaff createDepartmentStaff(@RequestBody DepartmentStaff staff) {
         return departmentStaffService.createDepartmentStaff(
                 staff.getName(),
@@ -45,12 +40,12 @@ public class DepartmentStaffController {
         );
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update-dept-staff/{id}")
     public DepartmentStaff updateDepartmentStaff(@PathVariable Integer id, @RequestBody DepartmentStaff staff) {
         return departmentStaffService.updateDepartmentStaff(id, staff);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete-dept-staff/{id}")
     public void deleteDepartmentStaff(@PathVariable Integer id) {
         departmentStaffService.deleteDepartmentStaffById(id);
     }
