@@ -47,7 +47,7 @@ public class TAController {
     @PostMapping("/create")
     public TA createTA(@RequestBody TA ta) {
         return taService.createTA(
-                
+                ta.getName(),
                 ta.getEmail(),
                 ta.getUsername(),
                 ta.getPassword(),

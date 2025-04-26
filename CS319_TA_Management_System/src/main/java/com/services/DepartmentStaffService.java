@@ -10,15 +10,15 @@ import java.util.List;
 
 @Service
 public class DepartmentStaffService {
-    @Autowired
+
     private DepartmentStaffRepository departmentStaffRepository;
 
     public List<DepartmentStaff> getAllDepartmentStaff() {
         return departmentStaffRepository.findAll();
     }
 
-    public DepartmentStaff createDepartmentStaff(  String email, String userName, String password, String departmentCode, String tcNumber) {
-        DepartmentStaff newDepartmentStaff = new DepartmentStaff(  email, userName, password, departmentCode, tcNumber);
+    public DepartmentStaff createDepartmentStaff( String name, String email, String userName, String password, String departmentCode, String tcNumber) {
+        DepartmentStaff newDepartmentStaff = new DepartmentStaff( name, email, userName, password, departmentCode, tcNumber);
         return departmentStaffRepository.save(newDepartmentStaff);
     }
 
@@ -30,11 +30,16 @@ public class DepartmentStaffService {
         departmentStaffRepository.deleteById(id);
     }
 
-    public DepartmentStaff updateDepartmentStaff(Integer id, DepartmentStaff admin) {
+    public DepartmentStaff updateDepartmentStaff(Integer id, DepartmentStaff deptStaff) {
         DepartmentStaff existingDepartmentStaff = departmentStaffRepository.findById(id).orElse(null);
         if (existingDepartmentStaff != null) {
-            departmentStaffRepository.deleteById(id);
-            return departmentStaffRepository.save(admin);
+            existingDepartmentStaff.setName(deptStaff.getName());
+            existingDepartmentStaff.setEmail(deptStaff.getEmail());
+            existingDepartmentStaff.setUsername(deptStaff.getUsername());
+            existingDepartmentStaff.setPassword(deptStaff.getPassword());
+            existingDepartmentStaff.setDepartmentCode(deptStaff.getDepartmentCode());
+            existingDepartmentStaff.setTcNumber(deptStaff.getTcNumber());
+            return departmentStaffRepository.save(deptStaff);
         }
         return null;
     }

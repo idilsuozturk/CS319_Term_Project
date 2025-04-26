@@ -32,7 +32,7 @@ public class SecurityConfig {
         this.adminDetailsService = adminDetailsService;
     }
 
-    @Bean
+@Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> {
             String uri = request.getRequestURI();
@@ -65,15 +65,17 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // test amaçlı, prod'da dikkat!
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( "/adminpanel/login", "/adminpanel/register", "/adminpanel/dist/pages/login.html").permitAll() // html ve login sayfaları herkese açık
-                .requestMatchers("/adminpanel/dist/pages/**").authenticated()
+                .requestMatchers("/adminpanel/dist/pages/**").permitAll()//.authenticated()
                 .requestMatchers(
                     "/adminpanel/assets/**",  
                     "/adminpanel/dist/assets/**").permitAll()
-                .requestMatchers("/api/**").authenticated() // tüm API çağrıları login gerektirir
+                    .requestMatchers("/adminpanel/dist/**").permitAll()
+
+                .requestMatchers("/api/**").permitAll()//.authenticated() // tüm API çağrıları login gerektirir
                 .anyRequest().denyAll() // diğer her şey açık
             )
 
-            .formLogin(form -> form
+            /* .formLogin(form -> form
                 .loginPage("/adminpanel/dist/pages/login.html") // özel login sayfan
                 .loginProcessingUrl("/adminpanel/login") // form'un action'ı buraya olmalı
                 .defaultSuccessUrl("/adminpanel/dist/pages/index.html", true)
@@ -84,7 +86,7 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())
-            )
+            )*/
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/frontend/login.html")

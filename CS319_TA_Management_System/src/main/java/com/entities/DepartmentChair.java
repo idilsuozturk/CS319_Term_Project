@@ -7,15 +7,17 @@ import jakarta.persistence.Table;
 @Table(name = "department_chair")
 
 public class DepartmentChair extends Staff{
+    private String tcNumber;
 
     public DepartmentChair() {
         super();
         super.setRole(Roles.DEPARTMENT_CHAIR);
     }
 
-    public DepartmentChair(String email, String userName, String password, String departmentCode, String title) {
-        super(email, userName, password, departmentCode, title);
+    public DepartmentChair(String name, String email, String userName, String password, String departmentCode, String title, String tcNumber) {
+        super(name, email, userName, password, departmentCode, title);
         super.setRole(Roles.DEPARTMENT_CHAIR);
+        this.setTcNumber(tcNumber);
     }
 
     public Integer getId() {
@@ -42,4 +44,11 @@ public class DepartmentChair extends Staff{
         super.setTitle(title);
     }
 
+    public String getTcNumber() {
+        return tcNumber;
+    }
+
+    public void setTcNumber(String tcNumber) {
+        this.tcNumber = tcNumber;
+    }
 }

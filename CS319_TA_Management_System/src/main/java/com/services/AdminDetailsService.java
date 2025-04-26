@@ -27,10 +27,10 @@ public class AdminDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       System.out.println("eheheheheheheheheheheheheheh");
+       
         Admin admin = adminRepository.findByUsername(username)
         
-                .orElseThrow(() -> new UsernameNotFoundException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Admin not found: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Admin not found: " + username));
         System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name());
         System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name() +"password: " + admin.getPassword());
         return User.builder()

@@ -44,10 +44,10 @@ public class TA extends User {
     }
 
     // Too much variables?
-    public TA(String email, String userName, String password, Integer[] currentAssistingCourses,
+    public TA(String name, String email, String userName, String password, Integer[] currentAssistingCourses,
             Integer[] currentTakingCourses, Integer advisor, Integer totalWorkload, Integer tcNumber,
             Integer[] proctoringExams) {
-        super( email, userName, password, Roles.TA);
+        super( name, email, userName, password, Roles.TA);
         this.currentAssistingCourses = currentAssistingCourses;
         this.currentTakingCourses = currentTakingCourses;
         this.advisor = advisor;

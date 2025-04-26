@@ -7,20 +7,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.entities.Absence;
 import com.entities.TA;
 
 import io.micrometer.common.lang.NonNull;
 
-// Literally a copy paste from CourseRepository,java
-
 @Repository
-public interface TARepository extends JpaRepository<TA, Integer> {
-    List<TA> findAll();
+public interface AbsenceRepository extends JpaRepository<Absence, Integer> {
+    List<Absence> findAll();
 
-    Optional<TA> findById(Integer id);
+    Optional<Absence> findById( Integer id);
 
-    TA save(@NonNull TA ta);
+    Absence save(@NonNull Absence absence);
 
     void deleteById(Integer id);
+
+    List<Absence> findByTaId(Integer taId);
+
+    // filter by status
+    List<Absence> findByStatus(String status);
 
 }

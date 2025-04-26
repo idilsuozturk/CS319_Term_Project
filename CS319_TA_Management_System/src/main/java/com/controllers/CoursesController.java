@@ -31,24 +31,19 @@ class CoursesController {
         this.coursesService = coursesService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Test endpoint is working!";
-    }
-    
-    //@GetMapping("/courselist")
+
     @GetMapping("/courses")
     
     public List <Course> listCourses() {
         return coursesService.getAllCourses();
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-course/{id}")
     public Course creatCourse(@RequestBody Course course) {
         return coursesService.createCourse( course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs());
     }
 
-    @PutMapping("courses/{id}")
+    @PutMapping("update-course/{id}")
     public Course updateCourse(@PathVariable Integer id, @RequestBody Course course) {
         //Course updatedCourse = coursesService.updateCourseById(id, course);
         /*if (updatedCourse != null) {
@@ -58,7 +53,7 @@ class CoursesController {
         }*/
         return coursesService.updateCourseById(id, course);
     }
-    @PostMapping("/delete")
+    @PostMapping("/delete-course/{id}")
     public void deleteCourse(@RequestParam Integer id) {
         coursesService.deleteCourseById(id);
     }

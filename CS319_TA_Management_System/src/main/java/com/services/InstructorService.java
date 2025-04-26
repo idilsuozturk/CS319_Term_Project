@@ -17,8 +17,8 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(  String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        Instructor newInstructor = new Instructor( email, userName, password, courses, tas, departmentCode, tcNumber);
+    public Instructor createInstructor(String name,String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
+        Instructor newInstructor = new Instructor(name, email, userName, password, courses, tas, departmentCode, tcNumber);
         return instructorRepository.save(newInstructor);
     }
 
@@ -30,11 +30,19 @@ public class InstructorService {
         instructorRepository.deleteById(id);
     }
 
-    public Instructor updateInstructor(Integer id, Instructor admin) {
+    public Instructor updateInstructor(Integer id, Instructor instructor) {
         Instructor existingInstructor = instructorRepository.findById(id).orElse(null);
         if (existingInstructor != null) {
-            instructorRepository.deleteById(id);
-            return instructorRepository.save(admin);
+           existingInstructor.setName(instructor.getName());
+            existingInstructor.setEmail(instructor.getEmail());
+            existingInstructor.setUsername(instructor.getUsername());
+            existingInstructor.setPassword(instructor.getPassword());
+            existingInstructor.setCourses(instructor.getCourses());
+            existingInstructor.setTas(instructor.getTas());
+            existingInstructor.setDepartmentCode(instructor.getDepartmentCode());
+            existingInstructor.setTcNumber(instructor.getTcNumber());
+
+            return instructorRepository.save(instructor);
         }
         return null;
     }

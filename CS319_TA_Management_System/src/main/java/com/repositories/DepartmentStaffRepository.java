@@ -3,7 +3,6 @@ package com.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.sql.Update;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +21,5 @@ public interface DepartmentStaffRepository extends JpaRepository<DepartmentStaff
 
     void deleteById(Integer id);
 
-    //void updateById(@RequestParam(value = "id") Integer id, @RequestParam(value = "departmentStaff") DepartmentStaff departmentStaff);
 
 }

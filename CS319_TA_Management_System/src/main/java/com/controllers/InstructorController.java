@@ -37,6 +37,7 @@ public class InstructorController {
     @PostMapping("/create")
     public Instructor createInstructor(@RequestBody Instructor instructor) {
         return instructorService.createInstructor(
+                instructor.getName(),
                 instructor.getEmail(),
                 instructor.getUsername(),
                 instructor.getPassword(),

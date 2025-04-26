@@ -13,72 +13,59 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "admins")
-public class Admin {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    
-    private String username;
-    private String name;
-    private String email;
-    private String password;
+public class Admin extends User {
+  
 
     @Enumerated(EnumType.STRING)
     private Roles role;
 
     public Admin() {
-        this.username = null;
-        this.name = null;  
-        this.email = null;
-        this.password = null;
+        super();
         this.role = Roles.ADMIN;
+       
     }
     
     public Admin( String username, String name, String email, String password) {
-        this.username = username;
-        this.name = name;  
-        this.email = email;
-        this.password = password;
+        super(name, email, username, password, Roles.ADMIN);
         this.role = Roles.ADMIN;
     }
 
     public Integer getId() {
-        return id;
+        return super.getId();
     }
     public Roles getRole() {
         return role;
     }
     public void setUsername(String username) {
-        this.username = username;
+        super.setUsername(username);
     }
 
     public String getUsername() {
-        return username;
+        return super.getUsername();
     }
     
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public void setName(String name) {
-        this.name = name;
+        super.setName(name);
     }
 
     public String getEmail() {
-        return email;
+        return super.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+       super.setEmail(email);
     }
 
     public String getPassword() {
-        return password;
+        return super.getPassword();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        super.setPassword(password);
     }
 
 

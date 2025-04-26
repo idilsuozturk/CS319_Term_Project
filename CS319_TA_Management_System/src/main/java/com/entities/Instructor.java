@@ -23,8 +23,8 @@ public class Instructor extends Staff {
         this.tcNumber = "";
     }
 
-    public Instructor( String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        super( email, userName, password, departmentCode, "Instructor");
+    public Instructor(String name, String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
+        super(name, email, userName, password, departmentCode, "Instructor");
         super.setRole(Roles.INSTRUCTOR);
         this.courses = courses;
         this.tas = tas;
