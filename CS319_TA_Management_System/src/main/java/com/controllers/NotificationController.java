@@ -69,15 +69,4 @@ public class NotificationController {
     public boolean markNotificationAsRead(@PathVariable Integer notificationId) {
         return notificationService.markNotificationAsRead(notificationId);
     }
-
-
-    // @GetMapping("/user/{userId}")
-    // public List<Notification> getNotificationsByUser(@PathVariable Integer userId) {
-    //     return notificationService.getNotificationsByUserId(userId);
-    // }
-
-    // @GetMapping("/user/{userId}/unread")
-    // public List<Notification> getUnreadNotificationsByUser(@PathVariable Integer userId) {
-    //     return notificationService.getUnreadNotificationsByUserId(userId);
-    // }
 }

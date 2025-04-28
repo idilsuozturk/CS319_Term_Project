@@ -1,8 +1,5 @@
 package com.services;
 
-import javax.management.RuntimeErrorException;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.entities.Admin;
 // Ensure the correct package path for RolesEnum
-import com.entities.Roles; // Update this path if RolesEnum is in a different package
 import com.repositories.AdminsRepository;
 
 @Service

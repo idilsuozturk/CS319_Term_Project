@@ -118,11 +118,4 @@ public class TaskController {
         }
         return false;
     }
-
-    // Needed to filter tasks by Date
-
-    // @GetMapping("/by-date")
-    // public List<Task> getTasksByDate(@RequestParam String date) {
-    // return taskService.getTasksByDate(date);
-    // }
 }

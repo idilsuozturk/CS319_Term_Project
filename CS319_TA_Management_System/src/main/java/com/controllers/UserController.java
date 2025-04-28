@@ -2,6 +2,7 @@ package com.controllers;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import com.entities.Dean;
 import com.entities.DepartmentChair;
 import com.entities.DepartmentStaff;
 import com.entities.Instructor;
-import com.entities.Roles;
 import com.entities.TA;
 import com.entities.User;
 import com.services.*;
@@ -52,6 +52,9 @@ public class UserController {
 
     @PostMapping("/create-user")
     public User createUser(@RequestBody User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+            
             if (user instanceof Admin) {
         Admin admin = (Admin) user;
         return adminsService.createAdmin(

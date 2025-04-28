@@ -1,8 +1,5 @@
 package com.entities;
 
-import javax.management.relation.Role;
-
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
   @JsonSubTypes.Type(value = Instructor.class, name = "INSTRUCTOR"),
   @JsonSubTypes.Type(value = DepartmentStaff.class, name = "DEPARTMENT_STAFF"),
   @JsonSubTypes.Type(value = DepartmentChair.class, name = "DEPARTMENT_CHAIR"),
-@JsonSubTypes.Type(value = Dean.class, name = "DEAN"),
+  @JsonSubTypes.Type(value = Dean.class, name = "DEAN"),
   @JsonSubTypes.Type(value = User.class, name = "UNKNOWN")
 })
 

@@ -38,7 +38,7 @@ public class Staff extends User {
     }
 
     public String getTitle() {
-        return this.departmentCode;
+        return title;
     }
 
     public void setTitle(String title) {

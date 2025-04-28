@@ -2,8 +2,6 @@ package com.controllers;
 
 import com.entities.Instructor;
 import com.services.InstructorService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +11,6 @@ import java.util.List;
 public class InstructorController {
 
     private final InstructorService instructorService;
-
-    @Autowired
     public InstructorController(InstructorService instructorService) {
         this.instructorService = instructorService;
     }

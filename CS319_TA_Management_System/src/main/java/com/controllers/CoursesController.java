@@ -1,9 +1,7 @@
 package com.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.annotation.RequestScope;
 
-import com.entities.Schedule;
 import com.entities.Course;
 import com.services.CoursesService;
 

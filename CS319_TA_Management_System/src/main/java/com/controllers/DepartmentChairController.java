@@ -1,17 +1,12 @@
 package com.controllers;
 
 import com.entities.DepartmentChair;
-import com.entities.DepartmentStaff;
-import com.repositories.DepartmentChairRepository;
 import com.services.DepartmentChairService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/api")
@@ -37,13 +32,13 @@ public class DepartmentChairController {
     @PostMapping("/create-dept-chair")
     public DepartmentChair createDepartmentChair(@RequestBody DepartmentChair chair) {
         return departmentChairService.createDepartmentChair(
-                chair.getName(),
-                chair.getEmail(),
-                chair.getUsername(),
-                chair.getPassword(),
-                chair.getDepartmentCode(),
-                chair.getTitle(),
-                chair.getTcNumber()
+            chair.getName(),
+            chair.getEmail(),
+            chair.getUsername(),
+            chair.getPassword(),
+            chair.getDepartmentCode(),
+            chair.getTitle(),
+            chair.getTcNumber()
         );
     }
  
