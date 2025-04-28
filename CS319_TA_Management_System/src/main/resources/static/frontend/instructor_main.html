@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TA Main Page</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .header {
+            background-color: #135589;
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            margin-left: -150px;   /* Menüleri sola kaydırdık */
+        }
+
+        .navigation li {
+            margin-right: 40px;
+            position: relative;
+        }
+
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            list-style: none;
+            padding: 10px;
+            top: 35px;
+        }
+
+        .navigation li:hover .submenu {
+            display: block;
+        }
+
+        .submenu li a {
+            color: #135589;
+            font-size: 16px;
+        }
+
+        .notification {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .notification .fa-bell {
+            font-size: 24px;
+            color: white;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            padding: 3px 6px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+            font-size: 12px;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="assets/img/pfp.png" alt="Profile">
+            <h1 style="color:white;">Teaching Assistant Name</h1>
+        </div>
+
+        <div class="right-section">
+            <ul class="navigation">
+                <li><a href="#">Schedule</a></li>
+                <li>
+                    <a href="#">TA Services</a>
+                    <ul class="submenu">
+                        <li><a href="#">Accept/Reject Proctoring Assignments</a></li>
+                        <li><a href="#">TA Advise</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Courses</a>
+                    <ul class="submenu">
+                        <li><a href="#">Current Courses</a></li>
+                        <li><a href="#">Exams</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="notification">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
