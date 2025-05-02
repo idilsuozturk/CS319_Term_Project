@@ -83,7 +83,7 @@ button:hover {
 }
 
 .logo-container li{
-display: contents;
+    display: table;
     height: 100%;
     font-size: 34px;
     font-weight: 600;
@@ -91,7 +91,7 @@ display: contents;
     float: left;
     text-decoration: none;
     cursor: pointer;
-    position: relative;
+    position: relative; /* important for submenu positioning */
     vertical-align: middle;
 }
 
@@ -108,6 +108,7 @@ display: contents;
 
 .logo-container li:hover > .submenu {
     display: grid;
+    
 }
 
 .logo {
@@ -152,19 +153,17 @@ display: contents;
 }
 
 .submenu{
-    width: 300px;
+    width: max-content;
     position: absolute;
     display: none;
     list-style-type: none;
-    transform: translateX(-60%); /* Perfectly center it */
-    top: 125px;
+    left: 0;
+    top: 100%;
+    list-style-type: none;
     background-color: #14558a;
     z-index: 2;
 }
 
-.logo-container li .submenu {
-    transform: translateX(-80%);
-} 
 
 .submenu li {
     display: block;
@@ -173,6 +172,7 @@ display: contents;
     font-weight: 300;
     font-family: 'SalmaproMedium';
     text-decoration: none;
+    width: 100%;
 }
 
 .submenu li:hover{
@@ -183,12 +183,15 @@ display: contents;
 .submenu li a{
     color: rgb(255, 255, 255);
     text-decoration: none;
-    vertical-align: middle;
-    padding: 0px 20px;
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
     padding-top: 3px;
     padding-bottom: 10px;
-    width: 100%;
 
+    min-height: 40px; /* or whatever size you want */
+    line-height: 40px; /* vertically centers the text */
 }
 
 .submenu li:hover a {
@@ -202,11 +205,6 @@ display: contents;
     cursor: pointer;
 }
 
-.notification .fa-bell {
-    font-size: 24px;
-    color: white;
-}
-
 .notification .badge {
     position: absolute;
     top: -5px;
@@ -216,11 +214,6 @@ display: contents;
     background: red;
     color: white;
     font-size: 12px;
-}
-
-.right-section {
-    display: flex;
-    align-items: center;
 }
 
 
