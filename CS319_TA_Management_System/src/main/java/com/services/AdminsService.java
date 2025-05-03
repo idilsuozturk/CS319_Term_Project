@@ -24,7 +24,8 @@ public class AdminsService {
     }
 
     public Admin createAdmin(String username, String name, String email, String password) {
-        return adminRepository.save(new Admin(username, name, email, password));  // Insert admin into MySQL
+        Admin newAdmin = new Admin(username, name, email, password);  // Create new admin object
+        return adminRepository.save(newAdmin);  // Insert admin into MySQL
     }
 
     public void deleteAdminById(Integer id) {
@@ -34,6 +35,7 @@ public class AdminsService {
     public Admin updateAdminById(Integer id, Admin admin) {
         Admin existingAdmin = adminRepository.findById(id).orElse(null);  // Find admin by ID
         if (existingAdmin != null) {
+
             existingAdmin.setName(admin.getName());
             existingAdmin.setEmail(admin.getEmail());
             existingAdmin.setPassword(admin.getPassword());

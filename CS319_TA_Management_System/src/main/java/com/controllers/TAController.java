@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/tas")
+@RequestMapping("/api")
 public class TAController {
 
     private final TAService taService;
@@ -25,24 +25,20 @@ public class TAController {
         this.taService = taService;
     }
 
-    @GetMapping("/test")
+  
 
-    public String test() {
-        return "TA controller pls work";
-    }
-
-    @GetMapping("/list")
+    @GetMapping("/TAs")
     public List<TA> listTAs() {
         return taService.getAllTAs();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/TA/{id}")
     public TA getTA(@PathVariable Integer id) {
 
         return taService.getTAById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-TA")
     public TA createTA(@RequestBody TA ta) {
         return taService.createTA(
                 ta.getName(),
@@ -59,18 +55,18 @@ public class TAController {
                 ta.getProctoringExams());
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update-TA/{id}")
     public TA updateTA(@PathVariable Integer id, @RequestBody TA ta) {
         return taService.updateTA(id, ta);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete-TA/{id}")
     public void deleteTA(@PathVariable Integer id) {
         taService.deleteTAById(id);
     }
 
     // Still gotta figure out the Schedule thing
-    @GetMapping("/{id}/schedule")
+    @GetMapping("/TA/{id}/schedule")
     public String viewSchedule(@PathVariable Integer id) {
         taService.viewSchedule(id);
         return "Viewed Schedule for TA " + id;

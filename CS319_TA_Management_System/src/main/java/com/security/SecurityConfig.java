@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import com.services.AdminDetailsService;
 import com.services.CustomUserDetailsService;
@@ -65,17 +66,18 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // test amaçlı, prod'da dikkat!
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( "/adminpanel/login", "/adminpanel/register", "/adminpanel/dist/pages/login.html").permitAll() // html ve login sayfaları herkese açık
-                .requestMatchers("/adminpanel/dist/pages/**").permitAll()//.authenticated()
+                .requestMatchers("/adminpanel/dist/pages/**").permitAll()//.hasRole("ADMIN") // admin paneli sayfaları sadece admin'e açık
+                .requestMatchers("/adminpanel/dist/pages/403.html").permitAll()
                 .requestMatchers(
                     "/adminpanel/assets/**",  
-                    "/adminpanel/dist/assets/**").permitAll()
-                    .requestMatchers("/adminpanel/dist/**").permitAll()
+                    "/adminpanel/dist/**").permitAll()
+                    
 
-                .requestMatchers("/api/**").permitAll()//.authenticated() // tüm API çağrıları login gerektirir
+                .requestMatchers("/api/**").hasRole("ADMIN")//.authenticated() // tüm API çağrıları login gerektirir
                 .anyRequest().denyAll() // diğer her şey açık
             )
 
-            /* .formLogin(form -> form
+             .formLogin(form -> form
                 .loginPage("/adminpanel/dist/pages/login.html") // özel login sayfan
                 .loginProcessingUrl("/adminpanel/login") // form'un action'ı buraya olmalı
                 .defaultSuccessUrl("/adminpanel/dist/pages/index.html", true)
@@ -86,7 +88,7 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())
-            )*/
+            )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/frontend/login.html")
@@ -128,21 +130,6 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
 
     return http.build();
 }
-  
-    /*@Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService); 
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -14,7 +14,7 @@ public class DepartmentStaff extends Staff {
     public DepartmentStaff(String name, String email, String userName, String password, String departmentCode, String tcNumber) {
         super(name, email, userName, password, departmentCode, "Department Staff");
         super.setRole(Roles.DEPARTMENT_STAFF);
-        this.tcNumber = tcNumber;
+        this.tcNumber = tcNumber;  
     }
     public String getTcNumber() {
         return this.tcNumber;

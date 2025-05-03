@@ -10,27 +10,27 @@ import jakarta.persistence.Table;
 @Table(name = "admins")
 public class Admin extends User {
   
-
-    @Enumerated(EnumType.STRING)
-    private Roles role;
+    //private String username;
+   // private String admin;
 
     public Admin() {
         super();
-        this.role = Roles.ADMIN;
+        super.setRole(Roles.ADMIN);
+        //this.username = null;
+        //this.admin = null;
        
     }
     
     public Admin( String username, String name, String email, String password) {
         super(name, email, username, password, Roles.ADMIN);
-        this.role = Roles.ADMIN;
+        //this.username = username;
+        //this.admin = username;
+  
     }
 
-    public Integer getId() {
-        return super.getId();
+    /*public Integer getId() {
     }
-    public Roles getRole() {
-        return role;
-    }
+
     public void setUsername(String username) {
         super.setUsername(username);
     }
@@ -38,7 +38,7 @@ public class Admin extends User {
     public String getUsername() {
         return super.getUsername();
     }
-    
+
     public String getName() {
         return super.getName();
     }
@@ -52,7 +52,7 @@ public class Admin extends User {
     }
 
     public void setEmail(String email) {
-       super.setEmail(email);
+        super.setEmail(email);
     }
 
     public String getPassword() {
@@ -61,9 +61,6 @@ public class Admin extends User {
 
     public void setPassword(String password) {
         super.setPassword(password);
-    }
-
-
-
+    }*/
 
 }

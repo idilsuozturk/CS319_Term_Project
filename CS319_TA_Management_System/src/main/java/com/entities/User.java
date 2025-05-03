@@ -12,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
+use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "role"
+  property = "role",
+  visible = true
 )
 @JsonSubTypes({
   @JsonSubTypes.Type(value = Admin.class, name = "ADMIN"),
   @JsonSubTypes.Type(value = TA.class, name = "TA"),
-  @JsonSubTypes.Type(value = Instructor.class, name = "INSTRUCTOR"),
   @JsonSubTypes.Type(value = DepartmentStaff.class, name = "DEPARTMENT_STAFF"),
   @JsonSubTypes.Type(value = DepartmentChair.class, name = "DEPARTMENT_CHAIR"),
   @JsonSubTypes.Type(value = Dean.class, name = "DEAN"),

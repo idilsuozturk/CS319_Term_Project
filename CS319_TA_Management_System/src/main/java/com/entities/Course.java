@@ -34,8 +34,7 @@ public class Course    {
         id = -1;
         courseName = null;  
         section = 0;
-        instructor = 0;
-        students = null;
+        instructor = 0; 
         TAs = null;
     }
 
