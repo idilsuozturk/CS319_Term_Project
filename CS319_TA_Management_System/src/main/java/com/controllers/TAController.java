@@ -51,7 +51,6 @@ public class TAController {
                 ta.getAdvisor(),
                 ta.getTotalWorkload(),
 
-                ta.getTcNumber(),
                 ta.getProctoringExams());
     }
 

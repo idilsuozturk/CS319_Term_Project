@@ -75,7 +75,6 @@ public class UserController {
             ta.getCurrentTakingCourses(),
             ta.getAdvisor(),
             ta.getTotalWorkload(),
-            ta.getTcNumber(),
             ta.getProctoringExams()
         );
     } else if (user instanceof Instructor) {
