@@ -39,7 +39,41 @@
                                     </thead>
                                     <tbody id="dynamic-table-body"></tbody>
                                     `;
-               
+                addForm = ` <form id="addUserForm">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="mb-3">
+                                <label for="username" class="form-label">User Name</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select class="form-select" id="role" name="role" required>
+                                  <option value="">Select Role</option>
+                                  <option value="ADMIN">Admin</option>
+                                  <option value="TA">TA</option>
+                                  <option value="INSTRUCTOR">Instructor</option>
+                                  <option value="DEPARTMENT_STAFF">Department Staff</option>
+                                  <option value="DEPARTMENT_CHAIR">Department Chair</option>
+                                  <option value="DEAN">Dean</option>
+                                </select>
+                              </div>
+                              <!-- Extra fields will be injected here -->
+                              <div id="extra-fields"></div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Create User</button>
+                            </div>
+                          </form>`;
+                  break;
                 case "courses":
                   row = `
                   <thead>

@@ -17,8 +17,8 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(Integer id, String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        Instructor newInstructor = new Instructor(id, email, userName, password, courses, tas, departmentCode, tcNumber);
+    public Instructor createInstructor(  String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
+        Instructor newInstructor = new Instructor( email, userName, password, courses, tas, departmentCode, tcNumber);
         return instructorRepository.save(newInstructor);
     }
 

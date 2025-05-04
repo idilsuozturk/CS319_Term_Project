@@ -3,6 +3,7 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "instructor")
 public class Instructor extends Staff {
 
     @Column(columnDefinition = "json")
@@ -18,18 +19,23 @@ public class Instructor extends Staff {
         super();
         this.courses = null;
         this.tas = null;
-        this.departmentCode = "";
+        //this.departmentCode = "";
         this.tcNumber = "";
     }
 
-    public Instructor(Integer id, String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        super(id, email, userName, password, departmentCode, "Instructor");
+    public Instructor( String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
+        super( email, userName, password, departmentCode, "Instructor");
         this.courses = courses;
         this.tas = tas;
         this.tcNumber = tcNumber;
     }
 
     // Get and set functions
+
+    public Integer getId() {
+        return super.getId();
+    }
+
     public Integer[] getCourses() {
         return this.courses;
     }

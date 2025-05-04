@@ -13,11 +13,17 @@ public class Staff extends User {
         this.departmentCode = "";
         this.title = "";
     }
-    public Staff(Integer id, String email, String userName, String password, String departmentCode, String title) {
-        super(id, email, userName, password);
+    public Staff( String email, String userName, String password, String departmentCode, String title) {
+        super( email, userName, password);
         this.departmentCode = departmentCode;
         this.tcNumber = title;
     }
+
+
+    public Integer getId() {
+        return super.getId();
+    }
+
     public String getDepartmentCode() {
         return this.departmentCode;
     }

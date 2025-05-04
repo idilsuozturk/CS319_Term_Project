@@ -26,11 +26,10 @@ public class CoursesService {
         String courseName,
         Integer section,
         Integer instructor,
-        Integer [] students,
         Integer [] TAs
         //Schedule schedule
     ) {
-        return coursesRepository.save(new Course( courseName, section, instructor, students, TAs));  // Insert user into MySQL
+        return coursesRepository.save(new Course( courseName, section, instructor, TAs));  // Insert user into MySQL
     }
 
  
@@ -44,7 +43,6 @@ public class CoursesService {
             existingCourse.setCourseName(course.getCourseName());
             existingCourse.setSection(course.getSection());
             existingCourse.setInstructor(course.getInstructor());
-            existingCourse.setStudents(course.getStudents());
             existingCourse.setTAs(course.getTAs());
             //existingCourse.setSchedule(course.getSchedule());
             return coursesRepository.save(existingCourse);  // Update user in MySQL

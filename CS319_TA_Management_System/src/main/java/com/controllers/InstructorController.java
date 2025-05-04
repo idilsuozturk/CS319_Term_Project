@@ -35,7 +35,7 @@ public class InstructorController {
                 instructor.getCourses(),
                 instructor.getTas(),
                 instructor.getDepartmentCode(),
-                instructor.getTcNumber()
+                instructor.getTitle()
         );
     }
 

@@ -17,8 +17,8 @@ public class DepartmentStaffService {
         return departmentStaffRepository.findAll();
     }
 
-    public DepartmentStaff createDepartmentStaff(Integer id, String email, String userName, String password, String departmentCode, String tcNumber) {
-        DepartmentStaff newDepartmentStaff = new DepartmentStaff(id, email, userName, password, departmentCode, tcNumber);
+    public DepartmentStaff createDepartmentStaff(  String email, String userName, String password, String departmentCode, String tcNumber) {
+        DepartmentStaff newDepartmentStaff = new DepartmentStaff(  email, userName, password, departmentCode, tcNumber);
         return departmentStaffRepository.save(newDepartmentStaff);
     }
 

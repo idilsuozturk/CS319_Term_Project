@@ -20,8 +20,8 @@ public class DeanService {
     }
 
 
-    public Dean createDean(String name, String email, String userName, String password, String departmentCode, String title, String tcNumber) {
-        Dean newDean = new Dean(name, email, userName, password, departmentCode, title, tcNumber);
+    public Dean createDean(String name, String email, String userName, String password, String departmentCode, String title) {
+        Dean newDean = new Dean(name, email, userName, password, departmentCode, title);
         return deanRepository.save(newDean);
     }
     
@@ -42,7 +42,6 @@ public class DeanService {
             existingDean.setPassword(dean.getPassword());
             existingDean.setDepartmentCode(dean.getDepartmentCode());
             existingDean.setTitle(dean.getTitle());
-            existingDean.setTcNumber(dean.getTcNumber());
             return deanRepository.save(dean);
         }
         return null;

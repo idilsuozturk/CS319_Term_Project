@@ -19,9 +19,8 @@ public class Course    {
     private Integer section;
 
     private Integer instructor;
-    @Column(columnDefinition = "json")
-    @Convert(converter = IntegerArrayToJsonConverter.class)
-    private Integer [] students;
+
+
     @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayToJsonConverter.class)
     private Integer [] TAs;
@@ -43,14 +42,13 @@ public class Course    {
         String courseName, 
         Integer section, 
         Integer instructor, 
-        Integer [] students, 
         Integer [] TAs 
         //Schedule schedule
         ) {
         this.courseName = courseName;
         this.section = section;
         this.instructor = instructor;
-        this.students = students;
+    
         this.TAs = TAs;
         //this.schedule = schedule;
     }
@@ -83,14 +81,6 @@ public class Course    {
     public void setInstructor(Integer instructor) {
         this.instructor = instructor;
     } 
-
-    public Integer[] getStudents() {
-        return students;
-    }
-
-    public void setStudents(Integer[] students) {
-        this.students = students;
-    }
 
     public Integer[] getTAs() {
         return TAs;

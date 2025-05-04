@@ -38,7 +38,7 @@ class CoursesController {
 
     @PostMapping("/create-course/{id}")
     public Course creatCourse(@RequestBody Course course) {
-        return coursesService.createCourse( course.getCourseName(), course.getSection(), course.getInstructor(), course.getStudents(), course.getTAs());
+        return coursesService.createCourse( course.getCourseName(), course.getSection(), course.getInstructor(), course.getTAs());
     }
 
     @GetMapping("/course/{id}")

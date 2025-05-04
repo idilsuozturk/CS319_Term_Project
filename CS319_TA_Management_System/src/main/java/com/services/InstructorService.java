@@ -17,8 +17,8 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(String name,String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        Instructor newInstructor = new Instructor(name, email, userName, password, courses, tas, departmentCode, tcNumber);
+    public Instructor createInstructor(String name,String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String title) {
+        Instructor newInstructor = new Instructor(name, email, userName, password, courses, tas, departmentCode, title);
         return instructorRepository.save(newInstructor);
     }
 
@@ -40,7 +40,7 @@ public class InstructorService {
             existingInstructor.setCourses(instructor.getCourses());
             existingInstructor.setTas(instructor.getTas());
             existingInstructor.setDepartmentCode(instructor.getDepartmentCode());
-            existingInstructor.setTcNumber(instructor.getTcNumber());
+            existingInstructor.setTitle(instructor.getTitle());
 
             return instructorRepository.save(instructor);
         }
