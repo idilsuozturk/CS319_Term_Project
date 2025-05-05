@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitTaskLink = document.getElementById('submitTaskLink');
     const taskFormContainer = document.getElementById('taskSubmissionForm');
 
+    const historyContentContainer = document.getElementById('historyContentContainer');
+    const absenceFormContainer = document.getElementById('absenceFormContainer');
+
     // Making sure CSS is loaded, dynamically worst case
     function ensureStylesLoaded() {
         const cssLoaded = Array.from(document.styleSheets).some(sheet => 
@@ -15,12 +18,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    async function loadTaskForm() {
+    function closeOtherForms() {
+        
+        if (absenceFormContainer && absenceFormContainer.style.display === 'flex') {
+            absenceFormContainer.style.display = 'none';
+            absenceFormContainer.innerHTML = '';
+        }
 
+        if (historyContentContainer && historyContentContainer.innerHTML !== '') {
+            historyContentContainer.innerHTML = '';
+        }
+        
+        // Add any other forms here too
+    }
+    async function loadTaskForm() {
+        closeOtherForms()
         ensureStylesLoaded();
 
         try {
-            // Getting the template for absence in html fromat
+            // Getting the template for TASk in html fromat
             const response = await fetch('task_form.html');
             const html = await response.text();
             const tempContainer = document.createElement('div');
@@ -42,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function loadWithXHR() {
+        closeOtherForms()
         const xhr = new XMLHttpRequest();
         xhr.open('GET', 'task_form.html', true);
         xhr.onreadystatechange = function() {
@@ -104,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // All dealing with backennd and sending data to server done here ->
              
-                alert('Task submitted successfully!');
                 taskFormContainer.style.display = 'none';
                 taskFormContainer.innerHTML = '';
             });

@@ -11,6 +11,8 @@
   
     <link rel="stylesheet" href="assets/css/task_form.css">
     <link rel="stylesheet" href="assets/css/absence_form.css">
+    
+    <link rel="stylesheet" href="assets/css/history_viewer.css">
 </head>
 <body>
 
@@ -36,13 +38,13 @@
                 </li>   
                 <li><a href="#">Tasks</a>
                     <ul class="submenu">
-                        <li><a href="#">Task History</a>
+                        <li><a href="#" id="taskHistoryLink">Task History</a>
                         <li><a href="#" id="submitTaskLink">Submit Task Request</a>
                     </ul>
                 </li>
                 <li><a href="#">Absence</a>
                     <ul class="submenu">
-                        <li><a href="#">Leave of Absence History</a>
+                        <li><a href="#" id="absenceHistoryLink">Leave of Absence History</a>
                         <li><a href="#" id="requestAbsenceLink">Request Leave of Absence</a>
                     </ul>
                 </li>
@@ -65,7 +67,7 @@
     -->
 
 
-
+    <div id="historyContentContainer"></div>
 
     <!-- Task submission -->
     <div id="taskSubmissionForm" class="form-container"></div>
@@ -75,6 +77,7 @@
 
     <script src="assets/js/task_form.js"></script>
     <script src="assets/js/absence_form.js"></script>
+    <script src="assets/js/history_viewer.js"></script>
     
 </body>
 </html>
