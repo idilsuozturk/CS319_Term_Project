@@ -387,9 +387,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${item.username}</td>
                         <td>${item.password}</td>
                         <td>${item.role}</td>
-                        <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removePopUp-${index}">
-                          X
-                        </button><td>
+                        <td>
+                        <div class="d-flex">
+                        <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
+                          <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;">
+                          <i class="bi bi-x-lg"></i>
+                        </button>
+                      </div> </td>
 
                       </tr>
                     `;
@@ -409,10 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taModal-${index}">
                           View TAs
                         </button>
-                        
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removePopUp-${index}">
-                          X
-                        </button>
+
                           <div class="modal fade" id="taModal-${index}" tabindex="-1" aria-labelledby="taModalLabel-${index}">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -442,9 +445,17 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                           </div>
                         </td>
-                       
+                      <td>
+    <div class="d-flex ms-auto">
+      <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
+        <i class="bi bi-pencil-fill"></i>
+      </button>
+      <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  </td>
                       </tr>
-
 
                     `;
 
@@ -519,7 +530,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (breadcrumbElement) breadcrumbElement.innerText = pageType;
   }
 });
-
 
 
 
