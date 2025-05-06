@@ -49,6 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                      <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
                     <div class="mb-3">
                       <label for="username" class="form-label">User Name</label>
                       <input type="text" class="form-control" id="username" name="username" required>
@@ -194,10 +198,6 @@ document.addEventListener("DOMContentLoaded", function () {
               case "ADMIN":
                 fields = `
             <div class="mb-3">
-              <label for="adminName" class="form-label">Name</label>
-              <input type="text" class="form-control" id="adminName" name="name" required>
-            </div>
-            <div class="mb-3">
               <label for="adminPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="adminPassword" name="password" required>
             </div>
@@ -224,10 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="mb-3">
               <label for="totalWorkload" class="form-label">Total Workload</label>
               <input type="number" class="form-control" id="totalWorkload" name="totalWorkload">
-            </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
             </div>
             <div class="mb-3">
               <label for="proctoringExams" class="form-label">Proctoring Exams (comma separated IDs)</label>
