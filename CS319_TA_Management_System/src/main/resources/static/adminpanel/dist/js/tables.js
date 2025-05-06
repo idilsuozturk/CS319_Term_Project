@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`/api/${pageType}`)
       .then(response => response.json())
       .then(data => {
-        tableBody.innerHTML = ""; // Önceki satırları temizle
+        tableBody.innerHTML = "";
         let row = ``;
         let addForm = ``;
 
@@ -368,7 +368,7 @@ document.addEventListener("DOMContentLoaded", function () {
               });
           });
         }
-
+     
         //switch case to create the table
         data.forEach((item, index) => {
           let row = "";
@@ -388,9 +388,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
                           <i class="bi bi-pencil-fill"></i>
                         </button>
-                        <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;">
+                        <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                                style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
+                                onclick="deleteItem(${item.id}, ${index})">
                           <i class="bi bi-x-lg"></i>
                         </button>
+
                       </div> </td>
 
                       </tr>
@@ -526,6 +529,31 @@ document.addEventListener("DOMContentLoaded", function () {
     if (breadcrumbElement) breadcrumbElement.innerText = pageType;
   }
 });
+
+function deleteItem(id) {
+  const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+  
+  if (confirmDelete) {
+    fetch(`/api/delete-user/${id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.text())
+    .then(result => {
+      console.log('Server response:', result);
+      location.reload();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error deleting the user.');
+    });
+  }
+}
+
+
+
+
+
+
 
 
 
