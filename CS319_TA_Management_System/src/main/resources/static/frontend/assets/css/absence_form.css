@@ -175,3 +175,20 @@
 .cancel-btn:hover {
     background-color: #e0e0e0;
 }
+
+/* Active menu item styling */
+.navigation .submenu a.active {
+    background-color: #e4f7ff;
+    color: #14558a !important;
+    position: relative;
+}
+
+.navigation .submenu a.active:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 25%;
+    height: 50%;
+    width: 3px;
+    background-color: #14558a;
+}
