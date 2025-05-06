@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TA Request Form</title>
+  <link rel="stylesheet" href="assets/css/ta_request_form.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h2>TA Request Form</h2>
+
+    <label for="taName">Select TA</label>
+    <select id="taName" name="taName" required>
+      <option value="">--Select TA--</option>
+      <option value="ta1">TA 1</option>
+      <option value="ta2">TA 2</option>
+      <option value="ta3">TA 3</option>
+    </select>
+
+    <label for="weeklyHours">Weekly Requested Hours</label>
+    <input type="number" id="weeklyHours" name="weeklyHours" required />
+
+    <button onclick="submitTARequest()">Submit</button>
+  </div>
+
+  <script src="assets/js/ta_request_form.js"></script>
+</body>
+</html>

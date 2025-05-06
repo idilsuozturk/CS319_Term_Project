@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dean Dashboard</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/task_form.css">
+    <link rel="stylesheet" href="assets/css/absence_form.css">
+    <link rel="stylesheet" href="assets/css/history_viewer.css">
+</head>
+<body>
+
+    <div class="header">
+        <div class="innerheader">
+            <div class="logo-container">
+                <li>
+                    <h1>Dean Name</h1>
+                    <img class="logo" src="assets/img/pfp.png" alt="">
+                </li>
+            </div>
+
+            <ul class="navigation">
+                <li><a href="#" onclick="toggleUpload()">Import</a></li>
+                <li><a href="#">Semester</a>
+                    <ul class="submenu">
+                        <li><a href="#">Current Courses</a></li>
+                        <li><a href="#">Exams</a></li>
+                    </ul>
+                
+                </li>
+            </ul>
+
+            <div class="notification">
+                <img src="assets/img/bell.png" alt="Bell Icon" class="bell-icon">
+                <span class="badge">3</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import File Upload Section -->
+    <div id="uploadContainer" class="form-container" style="display:none; text-align: center;">
+        <h2>Select File to Upload</h2>
+        <input type="file">
+        <br><br>
+        <button>Upload</button>
+    </div>
+
+    <script>
+        function toggleUpload() {
+            const container = document.getElementById('uploadContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+    "tasks": [
+      {
+        "sub_date": "2025-04-24",
+        "course": "CS 223 - Digital Design",
+        "description": "Created and graded midterm exams for 45 students",
+        "date": "2025-04-15",
+        "timeSpent": 4.5,
+        "status": "approved"
+      },
+      {
+        "sub_date": "2025-04-24",
+        "course": "CS 315 - Programming Languages",
+        "description": "Prepared lab materials for Week 6",
+        "date": "2025-04-10",
+        "timeSpent": 2.0,
+        "status": "approved"
+      },
+      {
+        "sub_date": "2025-04-23",
+        "course": "CS 319 - Object-Oriented Software Engineering",
+        "description": "Held additional office hours",
+        "date": "2025-04-22",
+        "timeSpent": 3.0,
+        "status": "pending"
+      },
+      {
+        "sub_date": "2025-04-20",
+        "course": "CS 223 - Digital Design",
+        "description": "Graded Lab work of Section 31",
+        "date": "2025-04-18",
+        "timeSpent": 1.5,
+        "status": "pending"
+      },
+      {
+        "sub_date": "2025-04-07",
+        "course": "CS 315 - Programming Languages",
+        "description": "Did not do anything",
+        "date": "2025-04-05",
+        "timeSpent": 2.5,
+        "status": "approved"
+      },
+      {
+        "sub_date": "2025-04-06",
+        "course": "CS 319 - Object-Oriented Software Engineering",
+        "description": "Bla bla bla",
+        "date": "2025-03-28",
+        "timeSpent": 5.0,
+        "status": "rejected"
+      }
+    ]
+  }
