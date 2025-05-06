@@ -35,8 +35,8 @@ public class DepartmentStaffController {
                 staff.getUsername(),
                 staff.getPassword(),
                 staff.getDepartmentCode(),
-                staff.getTcNumber()
-        );
+                staff.getTitle()
+       );
     }
 
     @PutMapping("/update-dept-staff/{id}")

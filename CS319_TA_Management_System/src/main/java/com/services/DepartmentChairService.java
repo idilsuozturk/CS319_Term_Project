@@ -19,8 +19,8 @@ public class DepartmentChairService {
         return departmentChairRepository.findAll();
     }
 
-    public DepartmentChair createDepartmentChair(String name, String email, String userName, String password, String departmentCode,String title,  String tcNumber) {
-        DepartmentChair newDepartmentChair = new DepartmentChair(name,email, userName, password, departmentCode, title, tcNumber);
+    public DepartmentChair createDepartmentChair(String name, String email, String userName, String password, String departmentCode,String title) {
+        DepartmentChair newDepartmentChair = new DepartmentChair(name,email, userName, password, departmentCode, title);
         return departmentChairRepository.save(newDepartmentChair);
     }
 
@@ -41,7 +41,6 @@ public class DepartmentChairService {
             existingDepartmentChair.setPassword(deptChair.getPassword());
             existingDepartmentChair.setDepartmentCode(deptChair.getDepartmentCode());
             existingDepartmentChair.setTitle(deptChair.getTitle());
-            existingDepartmentChair.setTcNumber(deptChair.getTcNumber());
             
             return departmentChairRepository.save(deptChair);
         }

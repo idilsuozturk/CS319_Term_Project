@@ -21,7 +21,7 @@ public class TA extends User {
 
     private Integer totalWorkload;
 
-    private Integer tcNumber;
+
 
     @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayToJsonConverter.class)
@@ -34,20 +34,19 @@ public class TA extends User {
         this.currentTakingCourses = null;
         this.advisor = 0;
         this.totalWorkload = 0;
-        this.tcNumber = 0;
+    
         this.proctoringExams = null;
     }
 
     // Too much variables?
     public TA(String name, String email, String userName, String password, Integer[] currentAssistingCourses,
-            Integer[] currentTakingCourses, Integer advisor, Integer totalWorkload, Integer tcNumber,
+            Integer[] currentTakingCourses, Integer advisor, Integer totalWorkload,
             Integer[] proctoringExams) {
         super( name, email, userName, password, Roles.TA);
         this.currentAssistingCourses = currentAssistingCourses;
         this.currentTakingCourses = currentTakingCourses;
         this.advisor = advisor;
         this.totalWorkload = totalWorkload;
-        this.tcNumber = tcNumber;
         this.proctoringExams = proctoringExams;
     }
 
@@ -86,16 +85,6 @@ public class TA extends User {
 
     public void setTotalWorkload(Integer totalWorkload) {
         this.totalWorkload = totalWorkload;
-    }
-
-    public Integer getTcNumber() {
-        return tcNumber;
-    }
-
-    // should we even allow this?
-
-    public void setTcNumber(Integer tcNumber) {
-        this.tcNumber = tcNumber;
     }
 
     public Integer[] getProctoringExams() {

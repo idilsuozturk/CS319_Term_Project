@@ -32,10 +32,9 @@ public class TAService {
 
     public TA createTA( String name, String email, String userName, String password, Integer[] currentAssistingCourses,
             Integer[] currentTakingCourses,
-
-            Integer advisor, Integer totalWorkload, Integer tcNumber, Integer[] proctoringExams) {
+            Integer advisor, Integer totalWorkload, Integer[] proctoringExams) {
         TA newTA = new TA(name, email, userName, password, currentAssistingCourses, currentTakingCourses, advisor,
-                totalWorkload, tcNumber, proctoringExams);
+                totalWorkload, proctoringExams);
 
         return taRepository.save(newTA);
     }
@@ -64,7 +63,6 @@ public class TAService {
             existingTA.setAdvisor(ta.getAdvisor());
 
             existingTA.setTotalWorkload(ta.getTotalWorkload());
-            existingTA.setTcNumber(ta.getTcNumber());
             existingTA.setProctoringExams(ta.getProctoringExams());
             return taRepository.save(existingTA);
         }

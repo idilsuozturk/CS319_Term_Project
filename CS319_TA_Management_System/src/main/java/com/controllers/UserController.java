@@ -75,7 +75,6 @@ public class UserController {
             ta.getCurrentTakingCourses(),
             ta.getAdvisor(),
             ta.getTotalWorkload(),
-            ta.getTcNumber(),
             ta.getProctoringExams()
         );
     } else if (user instanceof Instructor) {
@@ -88,7 +87,7 @@ public class UserController {
                 instructor.getCourses(),
                 instructor.getTas(),
                 instructor.getDepartmentCode(),
-                instructor.getTcNumber()
+                instructor.getTitle()
         );
     } else if (user instanceof DepartmentStaff) {
         DepartmentStaff departmentStaff = (DepartmentStaff) user;
@@ -97,8 +96,8 @@ public class UserController {
             departmentStaff.getEmail(),
             departmentStaff.getUsername(),
             departmentStaff.getPassword(),
-            departmentStaff.getDepartmentCode(),
-            departmentStaff.getTcNumber()
+            departmentStaff.getDepartmentCode(), 
+            departmentStaff.getTitle()
         );
     } else if (user instanceof DepartmentChair) {
         DepartmentChair departmentChair = (DepartmentChair) user;
@@ -108,8 +107,7 @@ public class UserController {
             departmentChair.getUsername(),
             departmentChair.getPassword(),
             departmentChair.getDepartmentCode(),
-            departmentChair.getTitle(), 
-            departmentChair.getTcNumber()
+            departmentChair.getTitle()
         );
 
     } else if (user instanceof Dean) {
@@ -120,8 +118,7 @@ public class UserController {
             dean.getUsername(),
             dean.getPassword(),
             dean.getDepartmentCode(),
-            dean.getTitle(),
-            dean.getTcNumber()
+            dean.getTitle()
         );
         
     } else {

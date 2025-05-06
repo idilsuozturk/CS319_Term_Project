@@ -3,6 +3,7 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "department_staff")
 public class DepartmentStaff extends Staff {
     private String tcNumber;
 
@@ -10,8 +11,8 @@ public class DepartmentStaff extends Staff {
         super();
         this.tcNumber = "";
     }
-    public DepartmentStaff(Integer id, String email, String userName, String password, String departmentCode, String tcNumber) {
-        super(id, email, userName, password, departmentCode, "Department Staff");
+    public DepartmentStaff( String email, String userName, String password, String departmentCode, String tcNumber) {
+        super( email, userName, password, departmentCode, "Department Staff");
         this.tcNumber = tcNumber;
     }
     public String getTcNumber() {

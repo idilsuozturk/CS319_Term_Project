@@ -44,7 +44,7 @@ public class TA extends User {
 
             Integer advisor, Integer totalWorkload, Integer tcNumber,
             Integer[] proctoringExams) {
-        super(id, email, userName, password);
+        super( email, userName, password);
         this.currentAssistingCourses = currentAssistingCourses;
         this.currentTakingCourses = currentTakingCourses;
         this.advisor = advisor;

@@ -17,8 +17,8 @@ public class DepartmentStaffService {
         return departmentStaffRepository.findAll();
     }
 
-    public DepartmentStaff createDepartmentStaff( String name, String email, String userName, String password, String departmentCode, String tcNumber) {
-        DepartmentStaff newDepartmentStaff = new DepartmentStaff( name, email, userName, password, departmentCode, tcNumber);
+    public DepartmentStaff createDepartmentStaff( String name, String email, String userName, String password, String departmentCode, String title) {
+        DepartmentStaff newDepartmentStaff = new DepartmentStaff( name, email, userName, password, departmentCode, title);
         return departmentStaffRepository.save(newDepartmentStaff);
     }
 
@@ -38,7 +38,7 @@ public class DepartmentStaffService {
             existingDepartmentStaff.setUsername(deptStaff.getUsername());
             existingDepartmentStaff.setPassword(deptStaff.getPassword());
             existingDepartmentStaff.setDepartmentCode(deptStaff.getDepartmentCode());
-            existingDepartmentStaff.setTcNumber(deptStaff.getTcNumber());
+            existingDepartmentStaff.setTitle(deptStaff.getTitle());
             return departmentStaffRepository.save(deptStaff);
         }
         return null;
