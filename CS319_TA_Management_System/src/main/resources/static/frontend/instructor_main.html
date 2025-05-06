@@ -5,44 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TA Main Page</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/ta_request_form.css"> <!-- TA Request Form CSS -->
 </head>
 <body>
 
     <div class="header">
         <div class="innerheader">
             <div class="logo-container">
-                <li><h1>Instructor Name</h1>
+                <li>
+                    <h1>Instructor Name</h1>
                     <img class="logo" src="assets/img/pfp.png" alt="">
-                    
                 </li>
             </div>
-                <ul class="navigation">
-                    <li><a href="#">Schedule</a></li>
-                    <li>
-                        <a href="#">Proctoring</a>
-                        <ul class="submenu">
-                            <li><a href="#">Approve TA Assignments</a></li>
-                            <li><a href="#">TA Request</a></li>
-                            <li><a href="#">Proctoring Information</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Courses</a>
-                        <ul class="submenu">
-                            <li><a href="#">Current Courses</a></li>
-                            <li><a href="#">Exams</a></li>
-                        </ul>
-                    </li>
-                </ul>
 
-                <div class="notification">
-                    <img src="assets/img/bell.png" alt="Bell Icon" class="bell-icon">
-                    <span class="badge">3</span>
-                </div>
-                
+            <ul class="navigation">
+                <li><a href="#">Schedule</a></li>
+                <li>
+                    <a href="#">Proctoring</a>
+                    <ul class="submenu">
+                        <li><a href="#">Approve TA Assignments</a></li>
+                        <li><a href="#" onclick="showTARequestForm()">TA Request</a></li>
+                        <li><a href="#">Proctoring Information</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Courses</a>
+                    <ul class="submenu">
+                        <li><a href="#">Current Courses</a></li>
+                        <li><a href="#">Exams</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="notification">
+                <img src="assets/img/bell.png" alt="Bell Icon" class="bell-icon">
+                <span class="badge">3</span>
             </div>
         </div>
     </div>
 
+    <!-- TA Request form container -->
+    <div id="taRequestForm" class="form-container" style="display: none;">
+        <h2>TA Request Form</h2>
+        <form id="taRequest">
+             <label for="ta">Select TA:</label>
+            <select id="ta" required>
+                <option value="">-- Optional --</option>
+                <option value="ta1">TA 1</option>
+                <option value="ta2">TA 2</option>
+                <option value="ta3">TA 3</option>
+            </select>
+
+            <label for="weeklyHours">Weekly Hours:</label>
+            <input type="number" id="weeklyHours" required>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="assets/js/ta_request_form.js"></script>
 </body>
 </html>
