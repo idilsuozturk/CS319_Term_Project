@@ -385,12 +385,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${item.role}</td>
                         <td>
                         <div class="d-flex">
-                        <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
+                        <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;
+                        on">
                           <i class="bi bi-pencil-fill"></i>
                         </button>
                         <button class="btn btn-danger d-flex align-items-center justify-content-center"
                                 style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
-                                onclick="deleteItem(${item.id}, ${index})">
+                                onclick="deleteUser(${item.id}, ${index})">
                           <i class="bi bi-x-lg"></i>
                         </button>
 
@@ -449,7 +450,8 @@ document.addEventListener("DOMContentLoaded", function () {
       <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
         <i class="bi bi-pencil-fill"></i>
       </button>
-      <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;">
+      <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
+                    onclick="deleteCourse(${item.id}, ${index})">
         <i class="bi bi-x-lg"></i>
       </button>
     </div>
@@ -530,7 +532,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-function deleteItem(id) {
+function deleteUser(id) {
   const confirmDelete = window.confirm("Are you sure you want to delete this user?");
   
   if (confirmDelete) {
@@ -545,6 +547,25 @@ function deleteItem(id) {
     .catch(error => {
       console.error('Error:', error);
       alert('Error deleting the user.');
+    });
+  }
+}
+
+function deleteCourse(id) {
+  const confirmation = window.confirm("Are you sure you want to delete this course?");
+  
+  if (confirmation) {
+    fetch(`/api/delete-course/${id}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.text())
+    .then(result => {
+      console.log('Server response:', result);
+      location.reload();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error deleting the course.');
     });
   }
 }
