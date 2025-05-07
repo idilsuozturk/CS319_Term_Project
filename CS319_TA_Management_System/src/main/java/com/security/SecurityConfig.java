@@ -106,7 +106,7 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
         .csrf(csrf -> csrf.disable()) 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
-            .requestMatchers("/api/**", "/frontend/**").authenticated()
+            .requestMatchers("/api/**", "/frontend/**").permitAll()//.authenticated()
             .anyRequest().denyAll()//.hasRole("USER")
         )
         .formLogin(form -> form

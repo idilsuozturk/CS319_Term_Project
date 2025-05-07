@@ -1,58 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dean Dashboard</title>
-
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/task_form.css">
-    <link rel="stylesheet" href="assets/css/absence_form.css">
-    <link rel="stylesheet" href="assets/css/history_viewer.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dean Main Page</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
+  <!-- Header -->
+  <div class="header">
+    <div class="innerheader">
+      <div class="logo-container">
+        <li>
+          <h1>Dean Name</h1>
+          <img class="logo" src="assets/img/pfp.png" alt="Profile" />
+        </li>
+      </div>
 
-    <div class="header">
-        <div class="innerheader">
-            <div class="logo-container">
-                <li>
-                    <h1>Dean Name</h1>
-                    <img class="logo" src="assets/img/pfp.png" alt="">
-                </li>
-            </div>
-
-            <ul class="navigation">
-                <li><a href="#" onclick="toggleUpload()">Import</a></li>
-                <li><a href="#">Semester</a>
-                    <ul class="submenu">
-                        <li><a href="#">Current Courses</a></li>
-                        <li><a href="#">Exams</a></li>
-                    </ul>
-                
-                </li>
-            </ul>
-
-            <div class="notification">
-                <img src="assets/img/bell.png" alt="Bell Icon" class="bell-icon">
-                <span class="badge">3</span>
-            </div>
-        </div>
+      <ul class="navigation">
+        <li><a href="#">Import</a></li>
+        <li><a href="#">Semester</a></li>
+        <li>
+          <a href="#">
+            <img src="assets/img/bell.png" alt="Notification" class="bell-icon" />
+            <span class="badge">3</span>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 
-    <!-- Import File Upload Section -->
-    <div id="uploadContainer" class="form-container" style="display:none; text-align: center;">
-        <h2>Select File to Upload</h2>
-        <input type="file">
-        <br><br>
-        <button>Upload</button>
-    </div>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- İçerik buraya gelecek -->
+  </div>
 
-    <script>
-        function toggleUpload() {
-            const container = document.getElementById('uploadContainer');
-            container.style.display = container.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
-
+  <script src="assets/js/dean_main.js"></script>
 </body>
 </html>
