@@ -7,7 +7,7 @@ import com.converters.IntegerArrayListToJsonConverter;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "leaveofabsencerequests")
+@Table(name = "leave_of_absence_requests")
 public class LeaveofAbsenceRequest extends Request {
     @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayListToJsonConverter.class)
