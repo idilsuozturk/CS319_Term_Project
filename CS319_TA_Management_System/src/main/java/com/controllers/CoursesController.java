@@ -55,6 +55,7 @@ class CoursesController {
         }*/
         return coursesService.updateCourseById(id, course);
     }
+    
     @DeleteMapping("/delete-course/{id}")
     public String deleteCourse(@PathVariable Integer id) {
         coursesService.deleteCourseById(id);
