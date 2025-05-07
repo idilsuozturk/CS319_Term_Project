@@ -107,12 +107,12 @@ public class TAController {
             @RequestParam String date,
             @RequestParam String reason) {
         return taService.requestLeave(id, date, reason);
-    }
+    }*/
 
     @GetMapping("/{id}/workload")
-    public boolean viewTotalWorkload(@PathVariable Integer id) {
+    public int viewTotalWorkload(@PathVariable Integer id) {
         return taService.viewTotalWorkload(id);
-    }*/
+    }
 
     @GetMapping("/{id}/proctoring")
     public String[] viewProctoringAssignment(@PathVariable Integer id) {

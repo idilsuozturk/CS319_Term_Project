@@ -36,8 +36,7 @@ public class DepartmentChairController {
             chair.getEmail(),
             chair.getUsername(),
             chair.getPassword(),
-            chair.getDepartmentCode(),
-            chair.getTitle()
+            chair.getDepartmentCode()
         );
     }
  

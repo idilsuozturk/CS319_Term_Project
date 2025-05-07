@@ -34,8 +34,7 @@ public class DepartmentStaffController {
                 staff.getEmail(),
                 staff.getUsername(),
                 staff.getPassword(),
-                staff.getDepartmentCode(),
-                staff.getTitle()
+                staff.getDepartmentCode()
        );
     }
 

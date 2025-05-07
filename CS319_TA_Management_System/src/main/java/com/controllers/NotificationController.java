@@ -50,23 +50,7 @@ public class NotificationController {
  
     @PostMapping("/send-notification")
     public boolean sendNotification(
-            @RequestParam Integer userId,
-            @RequestParam String description) {
-        return notificationService.sendNotification(userId, description);
-    }
-
-
-    @PostMapping("/send-notification-with-email")
-    public boolean sendNotificationWithEmail(
-            @RequestParam Integer userId,
-            @RequestParam String description, @RequestParam String email,
-
-            @RequestParam String subject) {
-        return notificationService.sendNotificationWithEmail(userId, description, email, subject);
-    }
-
-    @PostMapping("/mark-notification-read/{notificationId}")
-    public boolean markNotificationAsRead(@PathVariable Integer notificationId) {
-        return notificationService.markNotificationAsRead(notificationId);
+            @RequestParam Integer requestID) {
+        return notificationService.sendNotification(requestID);
     }
 }

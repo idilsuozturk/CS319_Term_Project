@@ -106,11 +106,11 @@ public class UserController {
     } else if (user instanceof Dean) {
         Dean dean = (Dean) user;
         return deanService.createDean(
-            deansOffice.getName(),
-            deansOffice.getEmail(),
-            deansOffice.getUsername(),
-            deansOffice.getPassword(),
-            deansOffice.getDepartmentCode()
+            dean.getName(),
+            dean.getEmail(),
+            dean.getUsername(),
+            dean.getPassword(),
+            dean.getDepartmentCode()
         );
         
     } else {
