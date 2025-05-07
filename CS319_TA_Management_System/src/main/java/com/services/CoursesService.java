@@ -2,56 +2,48 @@ package com.services;
 
 import org.springframework.stereotype.Service;
 
-
-import com.entities.Schedule;
 import com.entities.Course; 
-import com.repositories.CoursesRepository;
+import com.repositories.CourseRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CoursesService {
 
-    private  final CoursesRepository coursesRepository;
+    private  final CourseRepository courseRepository;
 
-    public CoursesService(CoursesRepository coursesRepository) {
-        this.coursesRepository = coursesRepository;
+    public CoursesService(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
     
     public List<Course> getAllCourses() {
-        return coursesRepository.findAll();  // Fetch all users
+        return courseRepository.findAll();  
     }   
 
-    public Course createCourse( 
-        String courseName,
-        Integer section,
-        Integer instructor,
-        Integer [] TAs
-        //Schedule schedule
-    ) {
-        return coursesRepository.save(new Course( courseName, section, instructor, TAs));  // Insert user into MySQL
+    public Course createCourse(String code, Integer section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
+        return courseRepository.save(new Course(code, section, instructorID, taIDs, schedule));  // Insert user into MySQL
     }
 
  
-    public void deleteCourseById(Integer id) {
-        coursesRepository.deleteById(id);  
+    public void deleteCourseByID(Integer id) {
+        courseRepository.deleteById(id);  
     }
 
-    public Course updateCourseById(Integer id, Course course) {
-        Course existingCourse = coursesRepository.findById(id).orElse(null);  // Find user by ID
+    public Course updateCourseByID(Integer id, Course course) {
+        Course existingCourse = courseRepository.findById(id).orElse(null);  // Find user by ID
         if (existingCourse != null) {
-            existingCourse.setCourseName(course.getCourseName());
+            existingCourse.setCode(course.getCode());
             existingCourse.setSection(course.getSection());
-            existingCourse.setInstructor(course.getInstructor());
-            existingCourse.setTAs(course.getTAs());
-            //existingCourse.setSchedule(course.getSchedule());
-            return coursesRepository.save(existingCourse);  // Update user in MySQL
+            existingCourse.setInstructorID(course.getInstructorID());
+            existingCourse.setTaIDs(course.getTaIDs());
+            existingCourse.setSchedule(course.getSchedule());
+            return courseRepository.save(existingCourse);  // Update user in MySQL
         }
         return null;  // Return null if user not found
     }
 
-    public Course getCourseById(Integer id) {
-        return coursesRepository.findById(id).orElse(null);  // Find user by ID
+    public Course getCourseByID(Integer id) {
+        return courseRepository.findById(id).orElse(null);  // Find user by ID
     }
-
 }
