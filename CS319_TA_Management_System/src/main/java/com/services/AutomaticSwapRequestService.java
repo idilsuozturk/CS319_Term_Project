@@ -19,8 +19,8 @@ public class AutomaticSwapRequestService {
         return automaticSwapRequestRepository.findAll(); 
     }
 
-    public AutomaticSwapRequest createAutomaticSwapRequest(String requestDate, int ownerID, int firstTAID, int secondTAID) {
-        return automaticSwapRequestRepository.save(new AutomaticSwapRequest(requestDate, ownerID, firstTAID, secondTAID));  
+    public AutomaticSwapRequest createAutomaticSwapRequest(String requestDate, int ownerID, String message, int firstTAID, int secondTAID, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID) {
+        return automaticSwapRequestRepository.save(new AutomaticSwapRequest(requestDate, ownerID, message, firstTAID, secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID));
     }
 
     public void deleteAutomaticSwapRequestByID(Integer id) {
@@ -32,9 +32,12 @@ public class AutomaticSwapRequestService {
         if (existingAutomaticSwapRequest != null) {
             existingAutomaticSwapRequest.setRequestDate(automaticSwapRequest.getRequestDate());
             existingAutomaticSwapRequest.setRequestType(automaticSwapRequest.getRequestType());
+            existingAutomaticSwapRequest.setMessage(automaticSwapRequest.getMessage());
             existingAutomaticSwapRequest.setOwnerID(automaticSwapRequest.getOwnerID());
             existingAutomaticSwapRequest.setFirstTAID(automaticSwapRequest.getFirstTAID());
             existingAutomaticSwapRequest.setSecondTAID(automaticSwapRequest.getSecondTAID());
+            existingAutomaticSwapRequest.setFirstTAsProctoringAssignmentID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
+            existingAutomaticSwapRequest.setSecondTAsProctoringAssignmentID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
             return automaticSwapRequestRepository.save(existingAutomaticSwapRequest);  // Update AutomaticSwapRequest in MySQL
         }
         return null;  // Return null if AutomaticSwapRequest not found
