@@ -1,0 +1,40 @@
+{
+  "proctoring": [
+    {
+      "course": "CS 101 - Introduction to Programming",
+      "examType": "Midterm",
+      "date": "2025-05-10",
+      "startTime": "09:00",
+      "endTime": "11:00",
+      "location": "EA-409",
+      "students": 35
+    },
+    {
+      "course": "CS 223 - Digital Design",
+      "examType": "Final",
+      "date": "2025-05-15",
+      "startTime": "13:30",
+      "endTime": "16:30",
+      "location": "EE-214",
+      "students": 42
+    },
+    {
+      "course": "CS 319 - Object-Oriented Software Engineering",
+      "examType": "Midterm",
+      "date": "2025-05-12",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "location": "EA-502",
+      "students": 31
+    },
+    {
+      "course": "CS 342 - Operating Systems",
+      "examType": "Final",
+      "date": "2025-05-20",
+      "startTime": "09:00",
+      "endTime": "12:00",
+      "location": "EB-204",
+      "students": 25
+    }
+  ]
+}
