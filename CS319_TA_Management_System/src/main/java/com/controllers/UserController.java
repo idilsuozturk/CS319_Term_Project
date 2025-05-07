@@ -71,23 +71,18 @@ public class UserController {
             ta.getEmail(),
             ta.getUsername(),
             ta.getPassword(),
-            ta.getCurrentAssistingCourses(),
-            ta.getCurrentTakingCourses(),
-            ta.getAdvisor(),
-            ta.getTotalWorkload(),
-            ta.getProctoringExams()
+            ta.getAdvisorID()
         );
     } else if (user instanceof Instructor) {
         Instructor instructor = (Instructor) user;
         return instructorService.createInstructor(
-                instructor.getName(),
-                instructor.getEmail(),
-                instructor.getUsername(),
-                instructor.getPassword(),
-                instructor.getCourses(),
-                instructor.getTas(),
-                instructor.getDepartmentCode(),
-                instructor.getTitle()
+            instructor.getName(),
+            instructor.getEmail(),
+            instructor.getUsername(),
+            instructor.getPassword(),
+            instructor.getDepartmentCode(),
+            instructor.getCourseIDs(),
+            instructor.getTaIDs()
         );
     } else if (user instanceof DepartmentStaff) {
         DepartmentStaff departmentStaff = (DepartmentStaff) user;
@@ -96,8 +91,7 @@ public class UserController {
             departmentStaff.getEmail(),
             departmentStaff.getUsername(),
             departmentStaff.getPassword(),
-            departmentStaff.getDepartmentCode(), 
-            departmentStaff.getTitle()
+            departmentStaff.getDepartmentCode()
         );
     } else if (user instanceof DepartmentChair) {
         DepartmentChair departmentChair = (DepartmentChair) user;
@@ -106,19 +100,17 @@ public class UserController {
             departmentChair.getEmail(),
             departmentChair.getUsername(),
             departmentChair.getPassword(),
-            departmentChair.getDepartmentCode(),
-            departmentChair.getTitle()
+            departmentChair.getDepartmentCode()
         );
 
     } else if (user instanceof Dean) {
         Dean dean = (Dean) user;
         return deanService.createDean(
-            dean.getName(),
-            dean.getEmail(),
-            dean.getUsername(),
-            dean.getPassword(),
-            dean.getDepartmentCode(),
-            dean.getTitle()
+            deansOffice.getName(),
+            deansOffice.getEmail(),
+            deansOffice.getUsername(),
+            deansOffice.getPassword(),
+            deansOffice.getDepartmentCode()
         );
         
     } else {
