@@ -2,7 +2,7 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "manuelswaprequests")
+@Table(name = "manuel_swap_requests")
 public class ManuelSwapRequest extends Request {
     private int receiverID;
     private int ownerProctoringAssignmentID;
