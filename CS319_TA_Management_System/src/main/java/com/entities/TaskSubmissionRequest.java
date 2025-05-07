@@ -10,12 +10,13 @@ public class TaskSubmissionRequest extends Request {
 
     public TaskSubmissionRequest(){
         super();
+        setRequestType(RequestTypes.TASK_SUBMISSION_REQUEST);
         this.taskType = null;
         this.taskDate = null;
     }
 
-    public TaskSubmissionRequest(String requestDate, int ownerID, String taskType, String taskDate){
-        super(requestDate, "Task Submission", ownerID);
+    public TaskSubmissionRequest(String requestDate, int ownerID, String message, String taskType, String taskDate){
+        super(requestDate, RequestTypes.TASK_SUBMISSION_REQUEST, ownerID, message);
         this.taskType = taskType;
         this.taskDate = taskDate;
     }
