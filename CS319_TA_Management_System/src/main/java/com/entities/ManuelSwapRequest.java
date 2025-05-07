@@ -5,21 +5,22 @@ import jakarta.persistence.*;
 @Table(name = "manuelswaprequests")
 public class ManuelSwapRequest extends Request {
     private int receiverID;
-    private int ownerCourseID;
-    private int receiverCourseID;
-
+    private int ownerProctoringAssignmentID;
+    private int receiverProctoringAssignmentID;
+    
     public ManuelSwapRequest(){
         super();
+        setRequestType(RequestTypes.MANUEL_SWAP_REQUEST);
         this.receiverID = -1;
-        this.ownerCourseID = -1;
-        this.receiverCourseID = -1;
+        this.ownerProctoringAssignmentID = -1;
+        this.receiverProctoringAssignmentID = -1;
     }
 
-    public ManuelSwapRequest(String requestDate, int ownerID, int receiverID, int ownerCourseID, int receiverCourseID){
-        super(requestDate, "Manuel Swap", ownerID);
+    public ManuelSwapRequest(String requestDate, int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID){
+        super(requestDate, RequestTypes.MANUEL_SWAP_REQUEST, ownerID, message);
         this.receiverID = receiverID;
-        this.ownerCourseID = ownerCourseID;
-        this.receiverCourseID = receiverCourseID;
+        this.ownerProctoringAssignmentID = ownerProctoringAssignmentID;
+        this.receiverProctoringAssignmentID = receiverProctoringAssignmentID;
     }
 
     public int getReceiverID(){
@@ -30,19 +31,19 @@ public class ManuelSwapRequest extends Request {
         this.receiverID = receiverID;
     }
 
-    public int getOwnerCourseID(){
-        return this.ownerCourseID;
+    public int getOwnerProctoringAssignmentID(){
+        return this.ownerProctoringAssignmentID;
     }
 
-    public void setOwnerCourseID(int ownerCourseID){
-        this.ownerCourseID = ownerCourseID;
+    public void setOwnerProctoringAssignmentID(int ownerProctoringAssignmentID){
+        this.ownerProctoringAssignmentID = ownerProctoringAssignmentID;
     }
 
-    public int getReceiverCourseID(){
-        return this.receiverCourseID;
+    public int getReceiverProctoringAssignmentID(){
+        return this.receiverProctoringAssignmentID;
     }
 
-    public void setReceiverCourseID(int receiverCourseID){
-        this.receiverCourseID = receiverCourseID;
+    public void setReceiverProctoringAssignmentID(int receiverProctoringAssignmentID){
+        this.receiverProctoringAssignmentID = receiverProctoringAssignmentID;
     }
 }
