@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching Assistant Dashboard</title>
+    
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+  
+    <link rel="stylesheet" href="assets/css/task_form.css">
+    <link rel="stylesheet" href="assets/css/absence_form.css">
+    
+    <link rel="stylesheet" href="assets/css/history_viewer.css">
+</head>
+<body>
+    <div class="header">
+        <div class="innerheader">
+            <div class="logo-container">
+                <li><h1>Teaching Assistant Name</h1>
+                    <img class="logo" src="assets/img/pfp.png" alt="">
+                    <ul class="submenu">
+                        <li><a href="#">View Schedule</a>
+                        <li><a href="#">Information Card</a>
+                    </ul>
+                </li>
+            </div>
+            
+            <ul class="navigation" >
+                <li><a href="#">Proctoring</a>
+                    <ul class="submenu">
+                        <li><a href="#" id="proctoringAssignmentsLink">Current Proctoring Assignments</a>
+                        <li><a href="#">Swap Proctoring Assignments</a>
+                    </ul>
+                </li>   
+                <li><a href="#">Tasks</a>
+                    <ul class="submenu">
+                        <li><a href="#" id="taskHistoryLink">Task History</a>
+                        <li><a href="#" id="submitTaskLink">Submit Task Request</a>
+                    </ul>
+                </li>
+                <li><a href="#">Absence</a>
+                    <ul class="submenu">
+                        <li><a href="#" id="absenceHistoryLink">Leave of Absence History</a>
+                        <li><a href="#" id="requestAbsenceLink">Request Leave of Absence</a>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="notification">
+                <img src="assets/img/bell.png" alt="Bell Icon" class="bell-icon">
+                <span class="badge">3</span>
+            </div>
+        </div>  
+    </div>
+
+
+    <!-- FOR LOCAL TESTING YOU MUST USE THE FOLLOWING
+     1.
+    python -m http.server 8000
+     2.
+    http://localhost:8000/your/path/to/src/main/resources/static/frontend/main.html
+    
+    -->
+
+
+    <div id="historyContentContainer"></div>
+
+    <!-- Task submission -->
+    <div id="taskSubmissionForm" class="form-container"></div>
+    
+    <!-- Absence-->
+    <div id="absenceFormContainer" class="form-container"></div>
+
+    <script src="assets/js/task_form.js"></script>
+    <script src="assets/js/absence_form.js"></script>
+    <script src="assets/js/history_viewer.js"></script>
+    
+</body>
+</html>
