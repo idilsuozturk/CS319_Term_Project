@@ -7,6 +7,6 @@ public enum Roles {
     INSTRUCTOR,
     DEPARTMENT_STAFF,
     DEPARTMENT_CHAIR,
-    DEANS_OFFICE,
+    DEAN,
     UNKNOWN
 }
