@@ -7,11 +7,11 @@ public class ProctoringAssignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    private int year;
-    private int month;
-    private int day;
-    private int startDate;
-    private int endDate;
+    private short year;
+    private byte month;
+    private byte day;
+    private short startDate;
+    private short endDate;
     private String examPlace;
     private int courseID;
     private int proctorID;
@@ -27,7 +27,7 @@ public class ProctoringAssignment {
         this.proctorID = -1;
     }
 
-    public ProctoringAssignment(int year, int month, int day, int startDate, int endDate, String examPlace, int courseID, int proctorID){
+    public ProctoringAssignment(short year, byte month, byte day, short startDate, short endDate, String examPlace, int courseID, int proctorID){
         this.year = year;
         this.month = month;
         this.day = day;
@@ -38,43 +38,43 @@ public class ProctoringAssignment {
         this.proctorID = proctorID;
     }
 
-    public int getYear(){
+    public short getYear(){
         return this.year;
     }
 
-    public void setYear(int year){
+    public void setYear(short year){
         this.year = year;
     }
 
-    public int getMonth(){
+    public byte getMonth(){
         return this.month;
     }
 
-    public void setMonth(int month){
+    public void setMonth(byte month){
         this.month = month;
     }
 
-    public int getDay(){
+    public byte getDay(){
         return this.day;
     }
 
-    public void setDay(int day){
+    public void setDay(byte day){
         this.day = day;
     }
 
-    public int getStartDate(){
+    public short getStartDate(){
         return this.startDate;
     }
 
-    public void setStartDate(int startDate){
+    public void setStartDate(short startDate){
         this.startDate = startDate;
     }
 
-    public int getEndDate(){
+    public short getEndDate(){
         return this.endDate;
     }
 
-    public void setEndDate(int endDate){
+    public void setEndDate(short endDate){
         this.endDate = endDate;
     }
 

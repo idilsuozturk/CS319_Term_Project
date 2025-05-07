@@ -10,19 +10,22 @@ public class Request {
     private Integer id;
 
     private String requestDate;
-    private String requestType;
+    private RequestTypes requestType;
     private int ownerID;
+    private String message;
 
     public Request(){
         this.requestDate = null;
-        this.requestType = null;
+        this.requestType = RequestTypes.UNKNOWN;
         this.ownerID = -1;
+        this.message = null;
     }
 
-    public Request(String requestDate, String requestType, int ownerID){
+    public Request(String requestDate, RequestTypes requestType, int ownerID, String message){
         this.requestDate = requestDate;
         this.requestType = requestType;
         this.ownerID = ownerID;
+        this.message = message;
     }
 
     public String getRequestDate(){
@@ -33,11 +36,11 @@ public class Request {
         this.requestDate = requestDate;
     }
 
-    public String getRequestType(){
+    public RequestTypes getRequestType(){
         return this.requestType;
     }
 
-    public void setRequestType(String requestType){
+    public void setRequestType(RequestTypes requestType){
         this.requestType = requestType;
     }
 
@@ -47,5 +50,13 @@ public class Request {
 
     public void setOwnerID(int ownerID){
         this.ownerID = ownerID;
+    }
+
+    public String getMessage(){
+        return this.message;
+    }
+
+    public void setMessage(String message){
+        this.message = message;
     }
 }

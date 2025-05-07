@@ -15,87 +15,76 @@ public class Course    {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String courseName;
+    private String code;
     private Integer section;
 
-    private Integer instructor;
-
-
+    private Integer instructorID;
     @Column(columnDefinition = "json")
-    @Convert(converter = IntegerArrayToJsonConverter.class)
-    private Integer [] TAs;
-
-    //@Embedded
-    //private Schedule schedule;
+    @Convert(converter = IntegerArrayListToJsonConverter.class)
+    private ArrayList<Integer> taIDs;
+    @Column(columnDefinition = "json")
+    @Convert(converter = StringArrayToJsonConverter.class)
+    private String[] schedule;
 
     public Course () {
-        // Default constructor
-        id = -1;
-        courseName = null;  
-        section = 0;
-        instructor = 0; 
-        TAs = null;
+        this.code = null;  
+        this.section = null;
+        this.instructorID = null;
+        this.taIDs = null;
+        this.schedule = null;
     }
 
 
-    public Course( 
-        String courseName, 
-        Integer section, 
-        Integer instructor, 
-        Integer [] TAs 
-        //Schedule schedule
-        ) {
-        this.courseName = courseName;
+    public Course(String code, Integer section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
+        this.code = code;
         this.section = section;
-        this.instructor = instructor;
-    
-        this.TAs = TAs;
-        //this.schedule = schedule;
+        this.instructorID = instructorID;
+        this.taIDs = taIDs;
+        this.schedule = schedule;
     }
 
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
 
-    public String getCourseName() {
-        return courseName;
+    public String getCode() {
+        return this.code;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Integer getSection() {
-        return section;
+        return this.section;
     }
 
     public void setSection(Integer section) {
         this.section = section;
     }
 
-    public Integer getInstructor() {
-        return instructor;
+    public Integer getInstructorID() {
+        return this.instructorID;
     }
 
-    public void setInstructor(Integer instructor) {
-        this.instructor = instructor;
+    public void setInstructorID(Integer instructorID) {
+        this.instructorID = instructorID;
     } 
 
-    public Integer[] getTAs() {
-        return TAs;
+        public ArrayList<Integer> getTaIDs() {
+        return this.taIDs;
     }
 
-    public void setTAs(Integer[] tAs) {
-        TAs = tAs;
+    public void setTaIDs(ArrayList<Integer> taIDs) {
+        this.taIDs = taIDs;
     }
-    /*
-    public Schedule getSchedule() {
-        return schedule;
+    public String[] getSchedule() {
+        return this.schedule;
     }
     
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(String[] schedule) {
         this.schedule = schedule;
-    }*/
+    }
 }
    

@@ -1,65 +1,47 @@
 package com.entities;
 
+import com.converters.IntegerArrayListToJsonConverter;
+
+import java.util.ArrayList;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "instructor")
+@Table(name = "instructors")
 public class Instructor extends Staff {
 
     @Column(columnDefinition = "json")
-    @Convert(converter = IntegerArrayToJsonConverter.class)
-    private Integer[] courses;
+    @Convert(converter = IntegerArrayListToJsonConverter.class)
+    private ArrayList<Integer> courseIDs;
 
     @Column(columnDefinition = "json")
-    @Convert(converter = IntegerArrayToJsonConverter.class)
-    private Integer[] tas;
-    private String tcNumber;
+    @Convert(converter = IntegerArrayListToJsonConverter.class)
+    private ArrayList<Integer> taIDs;
 
     public Instructor() {
         super();
-        this.courses = null;
-        this.tas = null;
-        //this.departmentCode = "";
-        this.tcNumber = "";
+        this.courseIDs = null;
+        this.taIDs = null;
     }
 
-    public Instructor(String name, String email, String userName, String password, Integer[] courses, Integer[] tas, String departmentCode, String tcNumber) {
-        super(name, email, userName, password, departmentCode, "Instructor");
-        super.setRole(Roles.INSTRUCTOR);
-        this.courses = courses;
-        this.tas = tas;
-        this.tcNumber = tcNumber;
-
-        
+    public Instructor(String name, String email, String username, String password, String departmentCode, ArrayList<Integer> courseIDs, ArrayList<Integer> taIDs) {
+        super(name, email, username, password, departmentCode, Roles.INSTRUCTOR);
+        this.courseIDs = courseIDs;
+        this.taIDs = taIDs;
     }
 
-    // Get and set functions
-
-    public Integer getId() {
-        return super.getId();
+    public ArrayList<Integer> getCourseIDs() {
+        return this.courseIDs;
     }
 
-    public Integer[] getCourses() {
-        return this.courses;
+    public void setCourseIDs(ArrayList<Integer> courseIDs) {
+        this.courseIDs = courseIDs;
     }
 
-    public void setCourses(Integer[] courses) {
-        this.courses = courses;
+    public ArrayList<Integer> getTaIDs() {
+        return this.taIDs;
     }
 
-    public Integer[] getTas() {
-        return this.tas;
-    }
-
-    public void setTas(Integer[] tas) {
-        this.tas = tas;
-    }
-
-    public String getTcNumber() {
-        return this.tcNumber;
-    }
-
-    public void setTcNumber(String tcNumber) {
-        this.tcNumber = tcNumber;
+    public void setTaIDs(ArrayList<Integer> taIDs) {
+        this.taIDs = taIDs;
     }
 }

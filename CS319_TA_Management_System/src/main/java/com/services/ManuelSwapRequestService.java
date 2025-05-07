@@ -19,8 +19,8 @@ public class ManuelSwapRequestService {
         return manuelSwapRequestRepository.findAll(); 
     }
 
-    public ManuelSwapRequest createManuelSwapRequest(String requestDate, int ownerID, int receiverID, int ownerCourseID, int receiverCourseID) {
-        return manuelSwapRequestRepository.save(new ManuelSwapRequest(requestDate, ownerID, receiverID, ownerCourseID, receiverCourseID));  
+    public ManuelSwapRequest createManuelSwapRequest(String requestDate, int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID) {
+        return manuelSwapRequestRepository.save(new ManuelSwapRequest(requestDate, ownerID, message, receiverID, ownerProctoringAssignmentID, receiverProctoringAssignmentID));  
     }
 
     public void deleteManuelSwapRequestByID(Integer id) {
@@ -28,20 +28,21 @@ public class ManuelSwapRequestService {
     }
 
     public ManuelSwapRequest updateManuelSwapRequestByID(Integer id, ManuelSwapRequest manuelSwapRequest) {
-        ManuelSwapRequest existingManuelSwapRequest = manuelSwapRequestRepository.findById(id).orElse(null);  // Find ManuelSwapRequest by ID
+        ManuelSwapRequest existingManuelSwapRequest = manuelSwapRequestRepository.findById(id).orElse(null);  
         if (existingManuelSwapRequest != null) {
             existingManuelSwapRequest.setRequestDate(manuelSwapRequest.getRequestDate());
             existingManuelSwapRequest.setRequestType(manuelSwapRequest.getRequestType());
             existingManuelSwapRequest.setOwnerID(manuelSwapRequest.getOwnerID());
+            existingManuelSwapRequest.setMessage(manuelSwapRequest.getMessage());
             existingManuelSwapRequest.setReceiverID(manuelSwapRequest.getReceiverID());
-            existingManuelSwapRequest.setOwnerCourseID(manuelSwapRequest.getOwnerCourseID());
-            existingManuelSwapRequest.setReceiverCourseID(manuelSwapRequest.getReceiverCourseID());
-            return manuelSwapRequestRepository.save(existingManuelSwapRequest);  // Update ManuelSwapRequest in MySQL
+            existingManuelSwapRequest.setOwnerProctoringAssignmentID(manuelSwapRequest.getOwnerProctoringAssignmentID());
+            existingManuelSwapRequest.setReceiverProctoringAssignmentID(manuelSwapRequest.getReceiverProctoringAssignmentID());
+            return manuelSwapRequestRepository.save(existingManuelSwapRequest); 
         }
-        return null;  // Return null if ManuelSwapRequest not found
+        return null;  
     }
 
     public ManuelSwapRequest getManuelSwapRequestByID(Integer id) {
-        return manuelSwapRequestRepository.findById(id).orElse(null);  // Find ManuelSwapRequest by ID
+        return manuelSwapRequestRepository.findById(id).orElse(null); 
     }
 }

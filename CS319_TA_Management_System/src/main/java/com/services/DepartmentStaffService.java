@@ -1,6 +1,4 @@
- package com.services;
-
-import org.springframework.beans.factory.annotation.Autowired;
+package com.services;
 import org.springframework.stereotype.Service;
 
 import com.entities.DepartmentStaff;
@@ -13,12 +11,16 @@ public class DepartmentStaffService {
 
     private DepartmentStaffRepository departmentStaffRepository;
 
+    public DepartmentStaffService(DepartmentStaffRepository departmentStaffRepository) {
+        this.departmentStaffRepository = departmentStaffRepository;
+    }
+
     public List<DepartmentStaff> getAllDepartmentStaff() {
         return departmentStaffRepository.findAll();
     }
 
-    public DepartmentStaff createDepartmentStaff( String name, String email, String userName, String password, String departmentCode, String title) {
-        DepartmentStaff newDepartmentStaff = new DepartmentStaff( name, email, userName, password, departmentCode, title);
+    public DepartmentStaff createDepartmentStaff( String name, String email, String username, String password, String departmentCode) {
+        DepartmentStaff newDepartmentStaff = new DepartmentStaff( name, email, username, password, departmentCode);
         return departmentStaffRepository.save(newDepartmentStaff);
     }
 
@@ -30,16 +32,15 @@ public class DepartmentStaffService {
         departmentStaffRepository.deleteById(id);
     }
 
-    public DepartmentStaff updateDepartmentStaff(Integer id, DepartmentStaff deptStaff) {
+    public DepartmentStaff updateDepartmentStaff(Integer id, DepartmentStaff departmentStaff) {
         DepartmentStaff existingDepartmentStaff = departmentStaffRepository.findById(id).orElse(null);
         if (existingDepartmentStaff != null) {
-            existingDepartmentStaff.setName(deptStaff.getName());
-            existingDepartmentStaff.setEmail(deptStaff.getEmail());
-            existingDepartmentStaff.setUsername(deptStaff.getUsername());
-            existingDepartmentStaff.setPassword(deptStaff.getPassword());
-            existingDepartmentStaff.setDepartmentCode(deptStaff.getDepartmentCode());
-            existingDepartmentStaff.setTitle(deptStaff.getTitle());
-            return departmentStaffRepository.save(deptStaff);
+            existingDepartmentStaff.setName(departmentStaff.getName());
+            existingDepartmentStaff.setEmail(departmentStaff.getEmail());
+            existingDepartmentStaff.setUsername(departmentStaff.getUsername());
+            existingDepartmentStaff.setPassword(departmentStaff.getPassword());
+            existingDepartmentStaff.setDepartmentCode(departmentStaff.getDepartmentCode());
+            return departmentStaffRepository.save(existingDepartmentStaff);
         }
         return null;
     }

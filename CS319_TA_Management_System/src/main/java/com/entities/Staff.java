@@ -7,17 +7,14 @@ import jakarta.persistence.*;
 @Inheritance(strategy = jakarta.persistence.InheritanceType.JOINED)
 public class Staff extends User {
     private String departmentCode;
-    private String title;
 
     public Staff() {
         super();
-        this.departmentCode = "";
-        this.title = "";
+        this.departmentCode = null;
     }
-    public Staff( String name, String email, String userName, String password, String departmentCode, String title) {
-        super( name, email, userName, password, Roles.UNKNOWN);
+    public Staff( String name, String email, String username, String password, String departmentCode, Roles role) {
+        super( name, email, username, password, role);
         this.departmentCode = departmentCode;
-        this.title = title;
     }
 
 
@@ -35,13 +32,5 @@ public class Staff extends User {
 
     public void setDepartmentCode(String departmentCode) {
         this.departmentCode = departmentCode;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

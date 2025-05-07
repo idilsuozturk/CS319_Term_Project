@@ -20,8 +20,8 @@ public class UserService {
         return userRepository.findAll();  // Fetch all users
     }
 
-    public User createUser(String name, String email, String userName, String password) {
-        return userRepository.save(new User(name,email, userName, password, Roles.UNKNOWN));  // Insert user into MySQL
+    public User createUser(String name, String email, String username, String password) {
+        return userRepository.save(new User(name,email, username, password, Roles.UNKNOWN));  // Insert user into MySQL
     }
 
     public void deleteUserById(Integer id) {

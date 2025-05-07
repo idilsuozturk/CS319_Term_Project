@@ -19,8 +19,8 @@ public class DepartmentChairService {
         return departmentChairRepository.findAll();
     }
 
-    public DepartmentChair createDepartmentChair(String name, String email, String userName, String password, String departmentCode,String title) {
-        DepartmentChair newDepartmentChair = new DepartmentChair(name,email, userName, password, departmentCode, title);
+    public DepartmentChair createDepartmentChair(String name, String email, String username, String password, String departmentCode) {
+        DepartmentChair newDepartmentChair = new DepartmentChair(name,email, username, password, departmentCode);
         return departmentChairRepository.save(newDepartmentChair);
     }
 
@@ -32,17 +32,16 @@ public class DepartmentChairService {
         departmentChairRepository.deleteById(id);
     }
 
-    public DepartmentChair updateDepartmentChair(Integer id, DepartmentChair deptChair) {
+    public DepartmentChair updateDepartmentChair(Integer id, DepartmentChair departmentChair) {
         DepartmentChair existingDepartmentChair = departmentChairRepository.findById(id).orElse(null);
         if (existingDepartmentChair != null) {
-            existingDepartmentChair.setName(deptChair.getName());
-            existingDepartmentChair.setEmail(deptChair.getEmail());
-            existingDepartmentChair.setUsername(deptChair.getUsername());
-            existingDepartmentChair.setPassword(deptChair.getPassword());
-            existingDepartmentChair.setDepartmentCode(deptChair.getDepartmentCode());
-            existingDepartmentChair.setTitle(deptChair.getTitle());
+            existingDepartmentChair.setName(departmentChair.getName());
+            existingDepartmentChair.setEmail(departmentChair.getEmail());
+            existingDepartmentChair.setUsername(departmentChair.getUsername());
+            existingDepartmentChair.setPassword(departmentChair.getPassword());
+            existingDepartmentChair.setDepartmentCode(departmentChair.getDepartmentCode());
             
-            return departmentChairRepository.save(deptChair);
+            return departmentChairRepository.save(existingDepartmentChair);
         }
         return null;
     }

@@ -1,9 +1,12 @@
 package com.services;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.entities.ProctoringAssignment;
 import com.repositories.ProctoringAssignmentRepository;
-
+@Service
 public class ProctoringAssignmentService {
     private  final ProctoringAssignmentRepository proctoringAssignmentRepository;
 
@@ -15,8 +18,9 @@ public class ProctoringAssignmentService {
         return proctoringAssignmentRepository.findAll();  
     }   
 
-    public ProctoringAssignment createProctoringAssignment(int year, int month, int day, int startDate, int endDate, String examPlace, int courseID, int proctorID) {
-        return proctoringAssignmentRepository.save(new ProctoringAssignment(year, month, day, startDate, endDate, examPlace, courseID, proctorID));  
+    public ProctoringAssignment createProctoringAssignment(short year, byte month, byte day, int startDate, int endDate, String examPlace, int courseID, int proctorID) {
+        return null;
+        //return proctoringAssignmentRepository.save(new ProctoringAssignment(year, month, day, startDate, endDate, examPlace, courseID, proctorID));  
     }
 
  
