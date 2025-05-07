@@ -1,4 +1,8 @@
 package com.entities;
+import java.util.ArrayList;
+
+import com.converters.IntegerArrayListToJsonConverter;
+import com.converters.StringArrayToJsonConverter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

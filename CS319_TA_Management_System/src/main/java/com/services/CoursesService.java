@@ -1,19 +1,19 @@
 package com.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.entities.Course; 
-import com.repositories.CourseRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.repositories.CoursesRepository;
 
 @Service
 public class CoursesService {
 
-    private  final CourseRepository courseRepository;
+    private  final CoursesRepository courseRepository;
 
-    public CoursesService(CourseRepository courseRepository) {
+    public CoursesService(CoursesRepository courseRepository) {
         this.courseRepository = courseRepository;
     }
     

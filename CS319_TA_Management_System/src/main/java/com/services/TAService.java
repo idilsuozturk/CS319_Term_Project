@@ -18,7 +18,7 @@ public class TAService {
    
     private final TARepository taRepository;
 
-    private final CourseService courseService; 
+    private final CoursesService courseService; 
 
     private final InstructorService instructorService;
 
@@ -26,7 +26,7 @@ public class TAService {
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
-    public TAService(TARepository taRepository, CourseService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taRepository = taRepository;
         this.courseService = courseService; 
         this.instructorService = instructorService;
