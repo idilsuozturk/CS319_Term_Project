@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/tas")
 public class TAController {
 
     private final TAService taService;
@@ -25,50 +25,47 @@ public class TAController {
         this.taService = taService;
     }
 
-  
+    @GetMapping("/test")
 
-    @GetMapping("/TAs")
+    public String test() {
+        return "TA controller pls work";
+    }
+
+    @GetMapping("/list")
     public List<TA> listTAs() {
         return taService.getAllTAs();
     }
 
-    @GetMapping("/TA/{id}")
+    @GetMapping("/{id}")
     public TA getTA(@PathVariable Integer id) {
 
-        return taService.getTAById(id);
+        return taService.getTAByID(id);
     }
 
-    @PostMapping("/create-TA")
+    @PostMapping("/create")
     public TA createTA(@RequestBody TA ta) {
         return taService.createTA(
                 ta.getName(),
                 ta.getEmail(),
                 ta.getUsername(),
                 ta.getPassword(),
-
-                ta.getCurrentAssistingCourses(),
-                ta.getCurrentTakingCourses(),
-                ta.getAdvisor(),
-                ta.getTotalWorkload(),
-
-                ta.getProctoringExams());
+                ta.getAdvisorID());
     }
 
-    @PutMapping("/update-TA/{id}")
+    @PutMapping("/update/{id}")
     public TA updateTA(@PathVariable Integer id, @RequestBody TA ta) {
-        return taService.updateTA(id, ta);
+        return taService.updateTAByID(id, ta);
     }
 
-    @DeleteMapping("/delete-TA/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteTA(@PathVariable Integer id) {
-        taService.deleteTAById(id);
+        taService.deleteTAByID(id);
     }
 
     // Still gotta figure out the Schedule thing
-    @GetMapping("/TA/{id}/schedule")
-    public String viewSchedule(@PathVariable Integer id) {
-        taService.viewSchedule(id);
-        return "Viewed Schedule for TA " + id;
+    @GetMapping("/{id}/schedule")
+    public String[] viewSchedule(@PathVariable Integer id, int day) {
+        return taService.viewSchedule(id, day);
     }
 
     // a stupid code for task submission, no task yyet
@@ -83,14 +80,14 @@ public class TAController {
 
     // Proctor task approve-reject ONLY for TA level. So the TA knows what got
     // rejected or approved by Superiors.
-    @PostMapping("/{id}/proc-swap-request")
-    public boolean sendProcSwapRequest(
-            @PathVariable Integer id,
-            @RequestParam Integer examId) {
-        return taService.sendProcSwapRequest(id, examId);
-    }
+    //@PostMapping("/{id}/proc-swap-request")
+    //public boolean sendProcSwapRequest(
+            //@PathVariable Integer id,
+            //@RequestParam Integer examId) {
+        //return taService.sendProcSwapRequest(id, examId);
+    //}
 
-    @PostMapping("/{id}/approve-proc-swap")
+    /*@PostMapping("/{id}/approve-proc-swap")
     public boolean approveProcSwapRequest(
             @PathVariable Integer id,
             @RequestParam Integer examId) {
@@ -115,10 +112,10 @@ public class TAController {
     @GetMapping("/{id}/workload")
     public boolean viewTotalWorkload(@PathVariable Integer id) {
         return taService.viewTotalWorkload(id);
-    }
+    }*/
 
     @GetMapping("/{id}/proctoring")
-    public boolean viewProctoringAssignment(@PathVariable Integer id) {
+    public String[] viewProctoringAssignment(@PathVariable Integer id) {
         return taService.viewProctoringAssignment(id);
     }
 
