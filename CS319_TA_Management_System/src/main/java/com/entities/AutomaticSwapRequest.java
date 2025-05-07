@@ -2,7 +2,7 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "automaticswaprequests")
+@Table(name = "automatic_swap_requests")
 public class AutomaticSwapRequest extends Request {
     private int firstTAID;
     private int secondTAID;
