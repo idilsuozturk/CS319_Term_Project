@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "deansoffice")
+@Table(name = "deans_office")
 public class DeansOffice extends Staff{
     public DeansOffice() {
         super();
