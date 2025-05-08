@@ -1,11 +1,12 @@
 package com.services;
 
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.entities.Notification;
 import com.repositories.NotificationRepository;
+
+import java.util.List;
 
 @Service
 public class NotificationService {
@@ -24,9 +25,8 @@ public class NotificationService {
         return notificationRepository.findById(notificationId).orElse(null);
     }
 
-    public Notification createNotification(String requestDate, Integer requestID, int status, String description, boolean isRead, Integer userId) {
-        Notification notification = new Notification(requestDate, requestID, status, description, isRead, userId);
-        return notificationRepository.save(notification);
+    public Notification createNotification(String requestDate, Integer requestID, int status){
+        return notificationRepository.save(new Notification(requestDate, requestID, status));
     }
 
     public void deleteNotificationById(Integer notificationId) {
@@ -36,30 +36,17 @@ public class NotificationService {
     public Notification updateNotification(Integer notificationId, Notification notification) {
         Notification existingNotification = notificationRepository.findById(notificationId).orElse(null);
         if (existingNotification != null) {
-
             existingNotification.setRequestDate(notification.getRequestDate());
-            existingNotification.setRequestID(notification.getRequestID());
-            existingNotification.setDescription(notification.getDescription());
-            existingNotification.setIsRead(notification.getIsRead());
-            existingNotification.setUserId(notification.getUserId());
-            existingNotification.setStatus(notification.getStatus());
+            existingNotification.setRequestId(notification.getRequestId());
             return notificationRepository.save(existingNotification);
         }
         return null;
     }
-
-
-    public boolean sendNotification(Integer requestID, String description, boolean isRead, Integer userId) {
+    
+    public boolean sendNotification(Integer requestID) {
         try {
-
             Notification notification = new Notification();
-            notification.setRequestID(requestID);
-            notification.setDescription(description);
-            notification.setIsRead(isRead);
-            notification.setUserId(userId);
-            notification.setRequestDate("2025-05-08");
-            notification.setStatus(0); 
-
+            notification.setRequestId(requestID);
             notificationRepository.save(notification);
             return true;
         } catch (Exception e) {

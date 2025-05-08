@@ -9,8 +9,6 @@ import com.entities.ManuelSwapRequest;
 import com.entities.ProctoringAssignment;
 import com.repositories.TARepository;
 
-//import static org.mockito.Mockito.description;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,10 +209,9 @@ public class TAService {
         return null;
     }
 
-    //TODO INITIALIZE MANUAL SWAP
     public void initializeManuelSwapRequest(String requestDate, String message, int requesterID, int receiverID, int requesterProctoringAssignmentID, int receiverProctoringAssignmentID){
         ManuelSwapRequest newManuelSwapRequest = manuelSwapRequestService.createManuelSwapRequest(requesterID, message, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
-        //notificationService.createNotification(requestDate, requestID, status, description, isRead, userId);
+        notificationService.createNotification(requestDate, newManuelSwapRequest.getID(), 0);
     }
 
     public ArrayList<String> viewRequests(int id){
@@ -254,7 +251,7 @@ public class TAService {
                     updateTAByID(owner.getId(), owner);
                     updateTAByID(receiver.getId(), receiver);
                 }
-                //notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 1);
+                notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 1);
                 manuelSwapRequest.setPending(false);
                 manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
                 return true;
@@ -267,7 +264,7 @@ public class TAService {
     public boolean rejectManuelSwapRequest(String requestDate, Integer manuelSwapRequestID) {
         ManuelSwapRequest manuelSwapRequest = manuelSwapRequestService.getManuelSwapRequestByID(manuelSwapRequestID);
         if (manuelSwapRequest != null){
-            //notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 2);
+            notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 2);
             manuelSwapRequest.setPending(false);
             manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
         }
