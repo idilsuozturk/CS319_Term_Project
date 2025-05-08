@@ -15,14 +15,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     List<Notification> findAll();
 
     Optional<Notification> findById(
-            @SuppressWarnings("null") @RequestParam(value = "notificationId") Integer notificationId);
-
+    
+    @SuppressWarnings("null") @RequestParam(value = "notificationId") Integer notificationId);
     Notification save(@NonNull Notification notification);
 
     void deleteById( Integer notificationId);
 
-    // might need
-    List<Notification> findByUserId(Integer userId);
-
-    List<Notification> findByUserIdAndIsRead(Integer userId, Boolean isRead);
 }
