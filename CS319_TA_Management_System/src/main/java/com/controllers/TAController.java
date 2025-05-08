@@ -118,4 +118,9 @@ public class TAController {
     public String[] viewProctoringAssignment(@PathVariable Integer id) {
         return taService.viewProctoringAssignments(id);
     }
+
+    @GetMapping("/{id}/viewnotifications")
+    public ArrayList<String> viewNotifications(@PathVariable Integer id){
+        return taService.viewNotifications(id);
+    }
 }

@@ -12,7 +12,7 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer notificationID;
+    private Integer notificationId;
 
     private String requestDate;
     private Integer requestID;
@@ -33,7 +33,7 @@ public class Notification {
 
     // getters and 
     public Integer getID() {
-        return this.notificationID;
+        return this.notificationId;
     }
 
     public String getRequestDate(){

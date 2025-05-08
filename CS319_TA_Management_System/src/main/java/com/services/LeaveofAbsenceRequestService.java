@@ -20,7 +20,7 @@ public class LeaveofAbsenceRequestService {
         return leaveofAbsenceRequestRepository.findAll(); 
     }
 
-    public LeaveofAbsenceRequest createLeaveofAbsenceRequest(int ownerID, String message, ArrayList<Integer> dates) {
+    public LeaveofAbsenceRequest createLeaveofAbsenceRequest(int ownerID, String message, ArrayList<String> dates) {
         return leaveofAbsenceRequestRepository.save(new LeaveofAbsenceRequest(ownerID, message, dates));
     }
 

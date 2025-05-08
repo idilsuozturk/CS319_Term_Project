@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 public class LeaveofAbsenceRequest extends Request {
     @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayListToJsonConverter.class)
-    ArrayList<Integer> dates;
+    private ArrayList<String> dates;
 
     public LeaveofAbsenceRequest(){
         super();
@@ -19,16 +19,16 @@ public class LeaveofAbsenceRequest extends Request {
         this.dates = null;
     }
 
-    public LeaveofAbsenceRequest(int ownerID, String message, ArrayList<Integer> dates){
+    public LeaveofAbsenceRequest(int ownerID, String message, ArrayList<String> dates){
         super(RequestTypes.LEAVE_OF_ABSENCE_REQUEST, ownerID, message);
         this.dates = dates;
     }
 
-    public ArrayList<Integer> getDates(){
+    public ArrayList<String> getDates(){
         return this.dates;
     }
 
-    public void setDates(ArrayList<Integer> dates){
+    public void setDates(ArrayList<String> dates){
         this.dates = dates;
     }
 }

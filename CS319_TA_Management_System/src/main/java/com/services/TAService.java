@@ -3,11 +3,18 @@ package com.services;
 import org.springframework.stereotype.Service;
 
 import com.entities.TA;
+import com.entities.TaskSubmissionRequest;
+import com.entities.AutomaticSwapRequest;
 import com.entities.Course;
 import com.entities.Instructor;
+import com.entities.LeaveofAbsenceRequest;
 import com.entities.ManuelSwapRequest;
+import com.entities.Notification;
 import com.entities.ProctoringAssignment;
+import com.entities.Request;
+import com.entities.RequestTypes;
 import com.repositories.TARepository;
+import com.repositories.RequestRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +24,8 @@ import java.util.List;
 public class TAService {
    
     private final TARepository taRepository;
+
+    private final RequestRepository requestRepository;
 
     private final CoursesService courseService; 
 
@@ -28,8 +37,9 @@ public class TAService {
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
-    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository, RequestRepository requestRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taRepository = taRepository;
+        this.requestRepository = requestRepository;
         this.courseService = courseService; 
         this.instructorService = instructorService;
         this.manuelSwapRequestService = manuelSwapRequestService;
@@ -292,6 +302,183 @@ public class TAService {
         }
 
         return null;
+    }
+
+    public ArrayList<String> viewNotifications(Integer id) {
+        ArrayList<String> output = new ArrayList<>();
+        List<Notification> notifications = notificationService.getAllNotifications();
+        for (Notification notification : notifications){
+            Request request = requestRepository.findById(id).orElse(null);
+            if (request.getRequestType() == RequestTypes.AUTOMATIC_SWAP_REQUEST){
+                AutomaticSwapRequest automaticSwapRequest = (AutomaticSwapRequest) request;
+                if (id == automaticSwapRequest.getFirstTAID()){
+                    TA ta = getTAByID(automaticSwapRequest.getSecondTAID());
+                    Instructor instructor = instructorService.getInstructorByID(automaticSwapRequest.getOwnerID());
+                    ProctoringAssignment proctoringAssignmentOne = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
+                    ProctoringAssignment proctoringAssignmentTwo = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
+                    String newString = "The Instructor " + instructor.getName() + " initialized a Proctor Swap at " + 
+                    notification.getRequestDate() + " between you and TA " + ta.getName() + 
+                    ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
+                    "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
+                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo);
+                    output.add(newString);
+                }
+                else if (id == automaticSwapRequest.getSecondTAID()){
+                    TA ta = getTAByID(automaticSwapRequest.getFirstTAID());
+                    Instructor instructor = instructorService.getInstructorByID(automaticSwapRequest.getOwnerID());
+                    ProctoringAssignment proctoringAssignmentOne = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
+                    ProctoringAssignment proctoringAssignmentTwo = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
+                    String newString = "The Instructor " + instructor.getName() + " initialized a Proctor Swap at " + 
+                    notification.getRequestDate() + " between you and TA " + ta.getName() + 
+                    ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
+                    "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
+                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo);
+                    output.add(newString);
+                }
+                else {
+                    continue;
+                }
+            }
+            else if (request.getRequestType() == RequestTypes.LEAVE_OF_ABSENCE_REQUEST){
+                LeaveofAbsenceRequest leaveofAbsenceRequest = (LeaveofAbsenceRequest) request;
+                if (leaveofAbsenceRequest.getOwnerID() == id){
+                    if (notification.getStatus() == 0){
+                        String newString = "You have sent a Leave of Absence request at " + notification.getRequestDate() + 
+                        "for date(s) " + leaveofAbsenceRequest.getDates().get(0);
+                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
+                            newString += ", " + i;
+                        }
+                        newString += ".";
+                        output.add(newString);
+                    }
+                    else if (notification.getStatus() == 1){
+                        String newString = "Your Leave of Absence request requested for date(s) " + leaveofAbsenceRequest.getDates().get(0);
+                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
+                            newString += ", " + leaveofAbsenceRequest.getDates().get(i);
+                        } 
+                        newString += " has been approved at " + notification.getRequestDate() + ".";
+                        output.add(newString);
+                    }
+                    else {
+                        String newString = "Your Leave of Absence request requested for date(s) " + leaveofAbsenceRequest.getDates().get(0);
+                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
+                            newString += ", " + leaveofAbsenceRequest.getDates().get(i);
+                        } 
+                        newString += " has been rejected at " + notification.getRequestDate() + ".";
+                        output.add(newString);
+                    }
+                }
+                else {
+                    continue;
+                }
+                
+            }
+            else if (request.getRequestType() == RequestTypes.MANUEL_SWAP_REQUEST){
+                ManuelSwapRequest manuelSwapRequest = (ManuelSwapRequest) request;
+                if (manuelSwapRequest.getOwnerID() == id){
+                    if (notification.getStatus() == 0){
+                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
+                        String newString = "You have sent a Proctoring Swap Request to TA " + ta.getName() + " at " + notification.getRequestDate() +
+                        ".\nYour Proctoring Assignment Information:\n" +
+                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        output.add(newString);
+                        
+                    }
+                    else if (notification.getStatus() == 1){
+                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
+                        String newString = "Your Proctoring Swap Request to TA " + ta.getName() + " has been approved at " + notification.getRequestDate() + 
+                        ".\nYour Proctoring Assignment Information:\n" +
+                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        output.add(newString);
+                    }
+                    else {
+                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
+                        String newString = "Your Proctoring Swap Request to TA " + ta.getName() + " has been rejected at " + notification.getRequestDate() + 
+                        ".\nYour Proctoring Assignment Information:\n" +
+                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        output.add(newString);
+                    }
+                }
+                else if (manuelSwapRequest.getReceiverID() == id){
+                    if (notification.getStatus() == 0){
+                        TA ta = getTAByID(manuelSwapRequest.getOwnerID());
+                        String newString = "A Proctoring Swap Request has been sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() +
+                        ".\nYour Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        output.add(newString);
+                    }
+                    else if (notification.getStatus() == 1){
+                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
+                        String newString = "You have approved the Swap Request sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() + 
+                        ".\nYour Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        output.add(newString);
+                    }
+                    else {
+                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
+                        String newString = "You have rejected the Swap Request sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() + 
+                        ".\nYour Proctoring Assignment Information:\n";
+                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                            newString += "No Proctoring Assignment.";
+                        }
+                        else {
+                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                        }
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        output.add(newString);
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+            else {
+                TaskSubmissionRequest taskSubmissionRequest = (TaskSubmissionRequest) request;
+                if (notification.getStatus() == 0){
+                    
+                }
+                else if (notification.getStatus() == 1){
+
+                }
+                else {
+
+                }
+            }
+        }
+        return output;
     }
 
     public int[] isAvailable(Integer taID, Integer proctoringAssignmentID, Integer ignore){
