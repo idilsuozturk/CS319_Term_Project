@@ -25,6 +25,10 @@ public class NotificationService {
         return notificationRepository.findById(notificationId).orElse(null);
     }
 
+    public Notification createNotification(String requestDate, Integer requestID, int status){
+        return notificationRepository.save(new Notification(requestDate, requestID, status));
+    }
+
     public void deleteNotificationById(Integer notificationId) {
         notificationRepository.deleteById(notificationId);
     }
@@ -32,7 +36,9 @@ public class NotificationService {
     public Notification updateNotification(Integer notificationId, Notification notification) {
         Notification existingNotification = notificationRepository.findById(notificationId).orElse(null);
         if (existingNotification != null) {
+            existingNotification.setRequestDate(notification.getRequestDate());
             existingNotification.setRequestId(notification.getRequestId());
+            return notificationRepository.save(existingNotification);
         }
         return null;
     }

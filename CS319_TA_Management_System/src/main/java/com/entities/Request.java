@@ -8,32 +8,27 @@ public class Request {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
-
-    private String requestDate;
     private RequestTypes requestType;
     private int ownerID;
     private String message;
+    private boolean pending;
 
     public Request(){
-        this.requestDate = null;
         this.requestType = RequestTypes.UNKNOWN;
         this.ownerID = -1;
         this.message = null;
+        this.pending = true;
     }
 
-    public Request(String requestDate, RequestTypes requestType, int ownerID, String message){
-        this.requestDate = requestDate;
+    public Request(RequestTypes requestType, int ownerID, String message){;
         this.requestType = requestType;
         this.ownerID = ownerID;
         this.message = message;
+        this.pending = true;
     }
 
-    public String getRequestDate(){
-        return this.requestDate;
-    }
-
-    public void setRequestDate(String requestDate){
-        this.requestDate = requestDate;
+    public int getID(){
+        return this.id;
     }
 
     public RequestTypes getRequestType(){
@@ -58,5 +53,13 @@ public class Request {
 
     public void setMessage(String message){
         this.message = message;
+    }
+
+    public boolean getPending(){
+        return this.pending;
+    }
+
+    public void setPending(boolean pending){
+        this.pending = pending;
     }
 }

@@ -3,7 +3,7 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tasksubmissionrequests")
+@Table(name = "task_submission_requests")
 public class TaskSubmissionRequest extends Request {
     String taskType;
     String taskDate;
@@ -15,8 +15,8 @@ public class TaskSubmissionRequest extends Request {
         this.taskDate = null;
     }
 
-    public TaskSubmissionRequest(String requestDate, int ownerID, String message, String taskType, String taskDate){
-        super(requestDate, RequestTypes.TASK_SUBMISSION_REQUEST, ownerID, message);
+    public TaskSubmissionRequest(int ownerID, String message, String taskType, String taskDate){
+        super(RequestTypes.TASK_SUBMISSION_REQUEST, ownerID, message);
         this.taskType = taskType;
         this.taskDate = taskDate;
     }

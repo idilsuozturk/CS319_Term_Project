@@ -19,8 +19,8 @@ public class ManuelSwapRequestService {
         return manuelSwapRequestRepository.findAll(); 
     }
 
-    public ManuelSwapRequest createManuelSwapRequest(String requestDate, int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID) {
-        return manuelSwapRequestRepository.save(new ManuelSwapRequest(requestDate, ownerID, message, receiverID, ownerProctoringAssignmentID, receiverProctoringAssignmentID));  
+    public ManuelSwapRequest createManuelSwapRequest(int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID) {
+        return manuelSwapRequestRepository.save(new ManuelSwapRequest(ownerID, message, receiverID, ownerProctoringAssignmentID, receiverProctoringAssignmentID));  
     }
 
     public void deleteManuelSwapRequestByID(Integer id) {
@@ -30,10 +30,10 @@ public class ManuelSwapRequestService {
     public ManuelSwapRequest updateManuelSwapRequestByID(Integer id, ManuelSwapRequest manuelSwapRequest) {
         ManuelSwapRequest existingManuelSwapRequest = manuelSwapRequestRepository.findById(id).orElse(null);  
         if (existingManuelSwapRequest != null) {
-            existingManuelSwapRequest.setRequestDate(manuelSwapRequest.getRequestDate());
             existingManuelSwapRequest.setRequestType(manuelSwapRequest.getRequestType());
             existingManuelSwapRequest.setOwnerID(manuelSwapRequest.getOwnerID());
             existingManuelSwapRequest.setMessage(manuelSwapRequest.getMessage());
+            existingManuelSwapRequest.setPending(manuelSwapRequest.getPending());
             existingManuelSwapRequest.setReceiverID(manuelSwapRequest.getReceiverID());
             existingManuelSwapRequest.setOwnerProctoringAssignmentID(manuelSwapRequest.getOwnerProctoringAssignmentID());
             existingManuelSwapRequest.setReceiverProctoringAssignmentID(manuelSwapRequest.getReceiverProctoringAssignmentID());

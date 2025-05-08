@@ -20,8 +20,8 @@ public class LeaveofAbsenceRequestService {
         return leaveofAbsenceRequestRepository.findAll(); 
     }
 
-    public LeaveofAbsenceRequest createLeaveofAbsenceRequest(String requestDate, int ownerID, String message, ArrayList<Integer> dates) {
-        return leaveofAbsenceRequestRepository.save(new LeaveofAbsenceRequest(requestDate, ownerID, message, dates));
+    public LeaveofAbsenceRequest createLeaveofAbsenceRequest(int ownerID, String message, ArrayList<Integer> dates) {
+        return leaveofAbsenceRequestRepository.save(new LeaveofAbsenceRequest(ownerID, message, dates));
     }
 
     public void deleteLeaveofAbsenceRequestByID(Integer id) {
@@ -31,10 +31,10 @@ public class LeaveofAbsenceRequestService {
     public LeaveofAbsenceRequest updateLeaveofAbsenceRequestByID(Integer id, LeaveofAbsenceRequest leaveofAbsenceRequest) {
         LeaveofAbsenceRequest existingLeaveofAbsenceRequest = leaveofAbsenceRequestRepository.findById(id).orElse(null); 
         if (existingLeaveofAbsenceRequest != null){ 
-            existingLeaveofAbsenceRequest.setRequestDate(leaveofAbsenceRequest.getRequestDate());
             existingLeaveofAbsenceRequest.setRequestType(leaveofAbsenceRequest.getRequestType());
             existingLeaveofAbsenceRequest.setMessage(leaveofAbsenceRequest.getMessage());
             existingLeaveofAbsenceRequest.setOwnerID(leaveofAbsenceRequest.getOwnerID());
+            existingLeaveofAbsenceRequest.setPending(leaveofAbsenceRequest.getPending());
             existingLeaveofAbsenceRequest.setDates(leaveofAbsenceRequest.getDates());
             return leaveofAbsenceRequestRepository.save(existingLeaveofAbsenceRequest);  
         }

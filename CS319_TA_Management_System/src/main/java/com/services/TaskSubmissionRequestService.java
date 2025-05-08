@@ -19,8 +19,8 @@ public class TaskSubmissionRequestService {
         return taskSubmissionRequestRepository.findAll(); 
     }
 
-    public TaskSubmissionRequest createTaskSubmissionRequest(String requestDate, int ownerID, String message, String taskType, String taskDate) {
-        return taskSubmissionRequestRepository.save(new TaskSubmissionRequest(requestDate, ownerID, message, taskType, taskDate));
+    public TaskSubmissionRequest createTaskSubmissionRequest(int ownerID, String message, String taskType, String taskDate) {
+        return taskSubmissionRequestRepository.save(new TaskSubmissionRequest(ownerID, message, taskType, taskDate));
     }
 
     public void deleteTaskSubmissionRequestByID(Integer id) {
@@ -30,10 +30,10 @@ public class TaskSubmissionRequestService {
     public TaskSubmissionRequest updateTaskSubmissionRequestByID(Integer id, TaskSubmissionRequest taskSubmissionRequest) {
         TaskSubmissionRequest existingTaskSubmissionRequest = taskSubmissionRequestRepository.findById(id).orElse(null);  
         if (existingTaskSubmissionRequest != null) {
-            existingTaskSubmissionRequest.setRequestDate(taskSubmissionRequest.getRequestDate());
             existingTaskSubmissionRequest.setRequestType(taskSubmissionRequest.getRequestType());
             existingTaskSubmissionRequest.setMessage(taskSubmissionRequest.getMessage());
             existingTaskSubmissionRequest.setOwnerID(taskSubmissionRequest.getOwnerID());
+            existingTaskSubmissionRequest.setPending(taskSubmissionRequest.getPending());
             existingTaskSubmissionRequest.setTaskType(taskSubmissionRequest.getTaskType());
             existingTaskSubmissionRequest.setTaskDate(taskSubmissionRequest.getTaskDate());
             return taskSubmissionRequestRepository.save(existingTaskSubmissionRequest);  

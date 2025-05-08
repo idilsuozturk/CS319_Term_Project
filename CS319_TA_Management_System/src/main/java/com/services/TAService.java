@@ -24,13 +24,16 @@ public class TAService {
 
     private final ManuelSwapRequestService manuelSwapRequestService;
 
+    private final NotificationService notificationService;
+
     private final ProctoringAssignmentService proctoringAssignmentService;
 
-    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taRepository = taRepository;
         this.courseService = courseService; 
         this.instructorService = instructorService;
         this.manuelSwapRequestService = manuelSwapRequestService;
+        this.notificationService = notificationService;
         this.proctoringAssignmentService = proctoringAssignmentService;
     }
 
@@ -125,27 +128,35 @@ public class TAService {
         }
     }
 
+    public void changeMode(int id, byte newMode){
+        TA ta = taRepository.findById(id).orElse(null);
+        if (ta != null){
+            ta.setMode(newMode);
+            updateTAByID(id, ta);
+        }
+    }
+
     public String[] viewSchedule(Integer id, int day) {
         TA ta = taRepository.findById(id).orElse(null);
         if (ta != null){
             if (ta.getMode() == 0){
                 String [] dailySchedule = new String[14];
                 for (int i = day * 14; i < (i + 1) * 14; i++){
-                    dailySchedule[i - day * 14] = convertToViewingFormat(ta.getSchedule()[i]);
+                    dailySchedule[i - day * 14] = convertScheduleCellToString(ta.getSchedule()[i]);
                 }
                 return dailySchedule;
             }
             else if (ta.getMode() == 1){
                 String[] weeklySchedule = new String[98];
                 for (int i = 0; i < 98; i++){
-                    weeklySchedule[i] = convertToViewingFormat(ta.getSchedule()[i]);
+                    weeklySchedule[i] = convertScheduleCellToString(ta.getSchedule()[i]);
                 }
                 return weeklySchedule;
             }
             else {
                 String[] monthlySchedule = new String[392];
                 for (int i = 0; i < 98; i++){
-                    monthlySchedule[i] = convertToViewingFormat(ta.getSchedule()[i]);
+                    monthlySchedule[i] = convertScheduleCellToString(ta.getSchedule()[i]);
                 }
                 for (int i = 98; i < 392; i++){
                     monthlySchedule[i] = monthlySchedule[i%98];
@@ -179,29 +190,17 @@ public class TAService {
                     for (int i : receiver.getProctoringAssignmentIDs()){
                         if (isAvailable(requesterID, i, proctoringAssignmentID) != null){
                             ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                            String newElement = "Exam Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-                            "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
-                            proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-                            proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
-                            output.add(newElement);
+                            output.add(convertProctoringAssignmentToString(proctoringAssignment));
                         }
                     }
                 }
                 else if (arr.length == 2 && arr[0] == 0){
                     ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                    String newElement = "Exam Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-                    "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
-                    proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-                    proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
-                    output.add(newElement);
+                    output.add(convertProctoringAssignmentToString(proctoringAssignment));
                 }
                 else {
                     ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(arr[1]);
-                    String newElement = "Exam Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-                    "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
-                    proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-                    proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
-                    output.add(newElement);
+                    output.add(convertProctoringAssignmentToString(proctoringAssignment));
                 }
                 return output;
             }
@@ -211,16 +210,65 @@ public class TAService {
     }
 
     public void initializeManuelSwapRequest(String requestDate, String message, int requesterID, int receiverID, int requesterProctoringAssignmentID, int receiverProctoringAssignmentID){
-        
-    }
-    public boolean approveProctoringSwapRequest(Integer id, Integer examId) {
-        
-        return true;
+        ManuelSwapRequest newManuelSwapRequest = manuelSwapRequestService.createManuelSwapRequest(requesterID, message, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
+        notificationService.createNotification(requestDate, newManuelSwapRequest.getID(), 0);
     }
 
-    public boolean rejectProctoringSwapRequest(Integer id, Integer examId) {
-        // todo
-        return true;
+    public ArrayList<String> viewRequests(int id){
+        List<ManuelSwapRequest> manuelSwapRequests = manuelSwapRequestService.getAllManuelSwapRequests();
+        ArrayList<String> output = new ArrayList<>();
+        for (ManuelSwapRequest manuelSwapRequest : manuelSwapRequests){
+            if (manuelSwapRequest.getReceiverID() == id && manuelSwapRequest.getPending()) {
+                output.add(convertManuelSwapRequestToString(manuelSwapRequest));
+            }
+        }
+        return output;
+    }
+
+    public boolean approveManuelSwapRequest(String requestDate, Integer manuelSwapRequestID) {
+        ManuelSwapRequest manuelSwapRequest = manuelSwapRequestService.getManuelSwapRequestByID(manuelSwapRequestID);
+        if (manuelSwapRequest != null) {
+            TA owner = getTAByID(manuelSwapRequest.getOwnerID());
+            TA receiver = getTAByID(manuelSwapRequest.getReceiverID());
+            if (owner != null && receiver != null){
+                if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
+                    ArrayList<Integer> ownerProctoringAssignments = owner.getProctoringAssignmentIDs();
+                    ArrayList<Integer> receiverProctoringAssignments = receiver.getProctoringAssignmentIDs();
+                    ownerProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                    receiverProctoringAssignments.add(manuelSwapRequest.getOwnerProctoringAssignmentID());
+                    owner.setProctoringAssignmentIDs(ownerProctoringAssignments);
+                    receiver.setProctoringAssignmentIDs(receiverProctoringAssignments);
+                    updateTAByID(owner.getId(), owner);
+                    updateTAByID(receiver.getId(), receiver);
+                }
+                else {
+                    ArrayList<Integer> ownerProctoringAssignments = owner.getProctoringAssignmentIDs();
+                    ArrayList<Integer> receiverProctoringAssignments = receiver.getProctoringAssignmentIDs();
+                    ownerProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                    receiverProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getReceiverProctoringAssignmentID()));
+                    ownerProctoringAssignments.add(manuelSwapRequest.getReceiverProctoringAssignmentID());
+                    receiverProctoringAssignments.add(manuelSwapRequest.getOwnerProctoringAssignmentID());
+                    updateTAByID(owner.getId(), owner);
+                    updateTAByID(receiver.getId(), receiver);
+                }
+                notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 1);
+                manuelSwapRequest.setPending(false);
+                manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public boolean rejectManuelSwapRequest(String requestDate, Integer manuelSwapRequestID) {
+        ManuelSwapRequest manuelSwapRequest = manuelSwapRequestService.getManuelSwapRequestByID(manuelSwapRequestID);
+        if (manuelSwapRequest != null){
+            notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 2);
+            manuelSwapRequest.setPending(false);
+            manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
+        }
+        return false;
     }
 
     public int viewTotalWorkload(Integer id) {
@@ -231,18 +279,14 @@ public class TAService {
         return -1;
     }
 
-    public String[] viewProctoringAssignment(Integer id) {
+    public String[] viewProctoringAssignments(Integer id) {
         TA ta = taRepository.findById(id).orElse(null);
         if (ta != null){
             String[] output = new String[ta.getProctoringAssignmentIDs().size()];
             int index = 0;
             for (int i : ta.getProctoringAssignmentIDs()){
                 ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(i);
-                String newElement = "Exam Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-                "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
-                proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-                proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
-                output[index] = newElement;
+                output[index] = convertProctoringAssignmentToString(proctoringAssignment);
             }
             return output;
         }
@@ -310,7 +354,7 @@ public class TAService {
         return null;
     }
 
-    private String convertToViewingFormat(String string) {
+    private String convertScheduleCellToString(String string) {
         if (string == null){
             return null;
         }
@@ -342,4 +386,35 @@ public class TAService {
             }
         }
     }
+
+    private String convertManuelSwapRequestToString(ManuelSwapRequest manuelSwapRequest) {
+        if (manuelSwapRequest == null){
+            return "No Manuel Swap Request";
+        }
+        TA ta = getTAByID(manuelSwapRequest.getOwnerID());
+        String output = "";
+        if (ta != null){
+            output = manuelSwapRequest.getMessage() + "\nSender TA Information:" + "\nTA name: " + ta.getName() + "\nTA ID: " + 
+            ta.getUsername() + "\nThe Proctoring Assignment Information TA wants to swap with:\n" + 
+            convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()))
+            + "\nThe Proctoring Assignment Information TA wants to swap to:\n" +
+            convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()))
+            + "\nThe TA's Message:\n" + manuelSwapRequest.getMessage();
+
+        }
+        return output;
+    }
+
+    private String convertProctoringAssignmentToString(ProctoringAssignment proctoringAssignment){
+        if (proctoringAssignment == null){
+            return "No Proctoring Assignment";
+        }
+        String newElement = "Course Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
+        "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
+        proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
+        proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
+        return newElement;
+    }
 }
+
+

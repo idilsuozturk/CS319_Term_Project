@@ -12,14 +12,16 @@ public class AutomaticSwapRequest extends Request {
     public AutomaticSwapRequest(){
         super();
         setRequestType(RequestTypes.AUTOMATIC_SWAP_REQUEST);
+        setPending(false);
         this.firstTAID = -1;
         this.secondTAID = -1;
         this.firstTAsProctoringAssignmentID = -1;
         this.secondTAsProctoringAssignmentID = -1;
     }
 
-    public AutomaticSwapRequest(String requestDate, int ownerID, String message, int firstTAID, int secondTAID, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID){
-        super(requestDate, RequestTypes.AUTOMATIC_SWAP_REQUEST, ownerID, message);
+    public AutomaticSwapRequest(int ownerID, String message, int firstTAID, int secondTAID, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID){
+        super(RequestTypes.AUTOMATIC_SWAP_REQUEST, ownerID, message);
+        setPending(false);
         this.firstTAID = firstTAID;
         this.secondTAID = secondTAID;
         this.firstTAsProctoringAssignmentID = firstTAsProctoringAssignmentID;

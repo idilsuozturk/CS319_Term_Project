@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.entities.TA;
 import com.services.TAService;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,52 +63,51 @@ public class TAController {
         taService.deleteTAByID(id);
     }
 
-    // Still gotta figure out the Schedule thing
+    @GetMapping("/{id}/showpossibletanames")
+    public ArrayList<String> showPossibleTANames(@PathVariable int id, @RequestParam int proctoringAssignmentID){
+        return taService.showPossibleTANames(id, proctoringAssignmentID);
+    }
+
+    @GetMapping("/{id}/showpossibleproctoringswaprequests")
+    public ArrayList<String> showPossibleProctoringSwapRequests(@PathVariable int id, @RequestParam int receiverID, @RequestParam int proctoringAssignmentID){
+        return taService.showPossibleProctoringSwapRequests(id, receiverID, proctoringAssignmentID);
+    }
+
+    @PostMapping("/{id}/initializemanuelswaprequest")
+    public void initializeManuelSwapRequest(@RequestParam String requestDate, @RequestParam String message, @PathVariable int id, @RequestParam int receiverID, 
+    @RequestParam int requesterProctoringAssignmentID, @RequestParam int receiverProctoringAssignmentID){
+        taService.initializeManuelSwapRequest(requestDate, message, id, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
+    }
+
+    @GetMapping("/{id}/viewrequests")
+    public ArrayList<String> viewRequests(@PathVariable int id){
+        return taService.viewRequests(id);
+    }
+
+    @PostMapping("/approvemanuelswaprequests")
+    public boolean approveManuelSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
+        return taService.approveManuelSwapRequest(requestDate, manuelSwapRequest);
+    }
+
+    @PostMapping("/rejectmanuelswaprequests")
+    public boolean rejectManuelSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
+        return taService.rejectManuelSwapRequest(requestDate, manuelSwapRequest);
+    }
+
+    @PutMapping("/{taID}/addcourse")
+    public boolean addCourse(@PathVariable Integer taID, @RequestParam Integer courseID, @RequestParam boolean taken){
+        return taService.addCourse(courseID, taID, taken);
+    }
+
     @GetMapping("/{id}/schedule")
-    public String[] viewSchedule(@PathVariable Integer id, int day) {
+    public String[] viewSchedule(@PathVariable Integer id, @RequestParam int day) {
         return taService.viewSchedule(id, day);
     }
 
-    // a stupid code for task submission, no task yyet
-
-    // @PostMapping("/{id}/task-request")
-    // public boolean submitTaskRequest(
-    // @PathVariable Integer id,
-    // @RequestParam Integer courseId,
-    // @RequestBody Task task) {
-    // return taService.submitTaskRequest(courseId, task);
-    // }
-
-    // Proctor task approve-reject ONLY for TA level. So the TA knows what got
-    // rejected or approved by Superiors.
-    //@PostMapping("/{id}/proc-swap-request")
-    //public boolean sendProcSwapRequest(
-            //@PathVariable Integer id,
-            //@RequestParam Integer examId) {
-        //return taService.sendProcSwapRequest(id, examId);
-    //}
-
-    /*@PostMapping("/{id}/approve-proc-swap")
-    public boolean approveProcSwapRequest(
-            @PathVariable Integer id,
-            @RequestParam Integer examId) {
-        return taService.approveProcSwapRequest(id, examId);
+    @PutMapping("/{id}/mode")
+    public void changeMode(@PathVariable Integer id, @RequestParam byte mode){
+        taService.changeMode(id, mode);
     }
-
-    @PostMapping("/{id}/reject-proc-swap")
-    public boolean rejectProcSwapRequest(
-            @PathVariable Integer id,
-            @RequestParam Integer examId) {
-        return taService.rejectProcSwapRequest(id, examId);
-    }
-
-    @PostMapping("/{id}/request-leave")
-    public boolean requestLeave(
-            @PathVariable Integer id,
-            @RequestParam String date,
-            @RequestParam String reason) {
-        return taService.requestLeave(id, date, reason);
-    }*/
 
     @GetMapping("/{id}/workload")
     public int viewTotalWorkload(@PathVariable Integer id) {
@@ -116,7 +116,6 @@ public class TAController {
 
     @GetMapping("/{id}/proctoring")
     public String[] viewProctoringAssignment(@PathVariable Integer id) {
-        return taService.viewProctoringAssignment(id);
+        return taService.viewProctoringAssignments(id);
     }
-
 }

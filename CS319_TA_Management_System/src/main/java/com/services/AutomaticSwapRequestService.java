@@ -19,8 +19,8 @@ public class AutomaticSwapRequestService {
         return automaticSwapRequestRepository.findAll(); 
     }
 
-    public AutomaticSwapRequest createAutomaticSwapRequest(String requestDate, int ownerID, String message, int firstTAID, int secondTAID, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID) {
-        return automaticSwapRequestRepository.save(new AutomaticSwapRequest(requestDate, ownerID, message, firstTAID, secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID));
+    public AutomaticSwapRequest createAutomaticSwapRequest(int ownerID, String message, int firstTAID, int secondTAID, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID) {
+        return automaticSwapRequestRepository.save(new AutomaticSwapRequest(ownerID, message, firstTAID, secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID));
     }
 
     public void deleteAutomaticSwapRequestByID(Integer id) {
@@ -30,10 +30,10 @@ public class AutomaticSwapRequestService {
     public AutomaticSwapRequest updateAutomaticSwapRequestByID(Integer id, AutomaticSwapRequest automaticSwapRequest) {
         AutomaticSwapRequest existingAutomaticSwapRequest = automaticSwapRequestRepository.findById(id).orElse(null);  // Find AutomaticSwapRequest by ID
         if (existingAutomaticSwapRequest != null) {
-            existingAutomaticSwapRequest.setRequestDate(automaticSwapRequest.getRequestDate());
             existingAutomaticSwapRequest.setRequestType(automaticSwapRequest.getRequestType());
             existingAutomaticSwapRequest.setMessage(automaticSwapRequest.getMessage());
             existingAutomaticSwapRequest.setOwnerID(automaticSwapRequest.getOwnerID());
+            existingAutomaticSwapRequest.setPending(automaticSwapRequest.getPending());
             existingAutomaticSwapRequest.setFirstTAID(automaticSwapRequest.getFirstTAID());
             existingAutomaticSwapRequest.setSecondTAID(automaticSwapRequest.getSecondTAID());
             existingAutomaticSwapRequest.setFirstTAsProctoringAssignmentID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());

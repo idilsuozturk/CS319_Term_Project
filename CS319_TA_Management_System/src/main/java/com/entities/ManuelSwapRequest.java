@@ -16,8 +16,8 @@ public class ManuelSwapRequest extends Request {
         this.receiverProctoringAssignmentID = -1;
     }
 
-    public ManuelSwapRequest(String requestDate, int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID){
-        super(requestDate, RequestTypes.MANUEL_SWAP_REQUEST, ownerID, message);
+    public ManuelSwapRequest(int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID){
+        super(RequestTypes.MANUEL_SWAP_REQUEST, ownerID, message);
         this.receiverID = receiverID;
         this.ownerProctoringAssignmentID = ownerProctoringAssignmentID;
         this.receiverProctoringAssignmentID = receiverProctoringAssignmentID;

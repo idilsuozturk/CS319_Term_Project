@@ -19,8 +19,8 @@ public class LeaveofAbsenceRequest extends Request {
         this.dates = null;
     }
 
-    public LeaveofAbsenceRequest(String requestDate, int ownerID, String message, ArrayList<Integer> dates){
-        super(requestDate, RequestTypes.LEAVE_OF_ABSENCE_REQUEST, ownerID, message);
+    public LeaveofAbsenceRequest(int ownerID, String message, ArrayList<Integer> dates){
+        super(RequestTypes.LEAVE_OF_ABSENCE_REQUEST, ownerID, message);
         this.dates = dates;
     }
 
