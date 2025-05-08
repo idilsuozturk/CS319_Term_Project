@@ -198,113 +198,125 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    async function loadProctoringAssignments() {
-        closeOtherForms()
-        
-        try {
-         
-            historyContentContainer.innerHTML = '';
-            resetAnimation(historyContentContainer);
-         
-            historyContentContainer.innerHTML = '<div class="loading">Loading proctoring assignments...</div>';
-            
-            // Fetch proctoring
-            const response = await fetch('proctoring_assignments.json');
-            const data = await response.json();
-            
+    // Replace only this specific function in history_viewer.js:
+
+async function loadProctoringAssignments() {
+    closeOtherForms()
+    
+    try {
+        historyContentContainer.innerHTML = '';
+        resetAnimation(historyContentContainer);
      
-            historyContentContainer.innerHTML = '';
+        historyContentContainer.innerHTML = '<div class="loading">Loading proctoring assignments...</div>';
+        
+        // Fetch proctoring
+        const response = await fetch('proctoring_assignments.json');
+        const data = await response.json();
+        
+        historyContentContainer.innerHTML = '';
+        
+        // header
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'history-header';
+        headerDiv.innerHTML = '<h2>Current Proctoring Assignments</h2>';
+        historyContentContainer.appendChild(headerDiv);
+        
+        // Check if there are any proctoring assignments
+        if (!data.proctoring || data.proctoring.length === 0) {
+            historyContentContainer.innerHTML += '<div class="no-data">No proctoring assignments available.</div>';
+            return;
+        }
+        
+        const table = document.createElement('table');
+        table.className = 'history-table';
+        
+        const thead = document.createElement('thead');
+        thead.innerHTML = `
+            <tr>
+                <th>Course</th>
+                <th>Exam Type</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Students</th>
+            </tr>
+        `;
+        table.appendChild(thead);
+        
+        const tbody = document.createElement('tbody');
+        
+        // Sort proctoring assignments by date of tha exams
+        data.proctoring.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Add rows for each proctoring assignment
+        data.proctoring.forEach(assignment => {
+            // Format the time range more nicely
+            const startTime = assignment.startTime;
+            const endTime = assignment.endTime;
+            const timeRange = `${startTime} - ${endTime}`;
             
-            // header
-            const headerDiv = document.createElement('div');
-            headerDiv.className = 'history-header';
-            headerDiv.innerHTML = '<h2>Current Proctoring Assignments</h2>';
-            historyContentContainer.appendChild(headerDiv);
-            
-            // Check if there are any proctoring assignments
-            if (!data.proctoring || data.proctoring.length === 0) {
-                historyContentContainer.innerHTML += '<div class="no-data">No proctoring assignments available.</div>';
-                return;
+            // Format the date properly using the formatDate function
+            let formattedDate;
+            try {
+                formattedDate = formatDate(assignment.date);
+            } catch (error) {
+                console.error('Error formatting date:', assignment.date);
+                formattedDate = assignment.date || 'Date unavailable';
             }
             
-     
-            const table = document.createElement('table');
-            table.className = 'history-table';
+            // Create the row element
+            const row = document.createElement('tr');
             
-         
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>Course</th>
-                    <th>Exam Type</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Location</th>
-                    <th>Students</th>
-                </tr>
+            // Check if this is an upcoming assignment (within 3 days)
+            const examDate = new Date(assignment.date);
+            const today = new Date();
+            const threeDaysFromNow = new Date();
+            threeDaysFromNow.setDate(today.getDate() + 3);
+            
+            // Add the class BEFORE setting innerHTML
+            if (examDate >= today && examDate <= threeDaysFromNow) {
+                row.classList.add('upcoming-assignment');
+            }
+            
+            // Create all cells with proper classes
+            row.innerHTML = `
+                <td class="course-column">${assignment.course}</td>
+                <td class="exam-type-column" data-type="${assignment.examType}">${assignment.examType}</td>
+                <td class="date-column">${formattedDate}</td>
+                <td class="time-column">${timeRange}</td>
+                <td class="location-column">${assignment.location}</td>
+                <td class="students-column">${assignment.students}</td>
             `;
-            table.appendChild(thead);
             
-            
-            const tbody = document.createElement('tbody');
-            
-            // Sort proctoring assignments by date of tha exams
-            data.proctoring.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            // Add rows for each proctoring assignment
-            data.proctoring.forEach(assignment => {
-                const startTime = formatDate(assignment.startTime);
-                const endTime = formatDate(assignment.endTime);
-                const timeRange = assignment.startTime + " - " + assignment.endTime;
-                
-                const row = document.createElement('tr');
-                
-                // This hihlights exams that are close
-                const examDate = new Date(assignment.date);
-                const today = new Date();
-                const threeDaysFromNow = new Date();
-                threeDaysFromNow.setDate(today.getDate() + 3);  // wroks only if 3 days left
-                
-                if (examDate >= today && examDate <= threeDaysFromNow) {
-                    row.classList.add('upcoming-assignment');
-                }
-                
-                row.innerHTML = `
-                    <td>${assignment.course}</td>
-                    <td>${assignment.examType}</td>
-                    <td>${formatDate(assignment.date)}</td>
-                    <td>${timeRange}</td>
-                    <td>${assignment.location}</td>
-                    <td>${assignment.students}</td>
-                `;
-                tbody.appendChild(row);
+            // Add the completed row to the table body
+            tbody.appendChild(row);
+        });
+        
+        table.appendChild(tbody);
+        historyContentContainer.appendChild(table);
+        
+        // Add actions button row
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'proctoring-actions';
+        actionsDiv.innerHTML = `
+            <button class="action-btn secondary-btn">Swap Assignments</button>
+            <button class="action-btn export-btn">Export to Calendar</button>
+        `;
+        historyContentContainer.appendChild(actionsDiv);
+        
+        // Add event listeners to buttons
+        const actionButtons = document.querySelectorAll('.action-btn');
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
             });
-            
-            table.appendChild(tbody);
-            historyContentContainer.appendChild(table);
-            
-            // Add actions button row
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'proctoring-actions';
-            actionsDiv.innerHTML = `
-                <button class="action-btn secondary-btn">Swap Assignments</button>
-                <button class="action-btn export-btn">Export to Calendar</button>
-            `;
-            historyContentContainer.appendChild(actionsDiv);
-            
-            // Add event listeners to buttons
-            const actionButtons = document.querySelectorAll('.action-btn');
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                });
-            });
-            
-        } catch (error) {
-            console.error('Error loading proctoring assignments:', error);
-            historyContentContainer.innerHTML = '<div class="error">Error loading proctoring assignments. Please try again later.</div>';
-        }
+        });
+        
+    } catch (error) {
+        console.error('Error loading proctoring assignments:', error);
+        historyContentContainer.innerHTML = '<div class="error">Error loading proctoring assignments. Please try again later.</div>';
     }
+}
 
     if (proctoringAssignmentsLink) {
         proctoringAssignmentsLink.addEventListener('click', function(e) {
