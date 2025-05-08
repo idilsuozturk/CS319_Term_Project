@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class DepartmentStaffService {
 
-    private DepartmentStaffRepository departmentStaffRepository;
+    private final DepartmentStaffRepository departmentStaffRepository;
 
     public DepartmentStaffService(DepartmentStaffRepository departmentStaffRepository) {
         this.departmentStaffRepository = departmentStaffRepository;

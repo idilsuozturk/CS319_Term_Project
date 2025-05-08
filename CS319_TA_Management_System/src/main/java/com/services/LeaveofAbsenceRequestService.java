@@ -36,6 +36,7 @@ public class LeaveofAbsenceRequestService {
             existingLeaveofAbsenceRequest.setOwnerID(leaveofAbsenceRequest.getOwnerID());
             existingLeaveofAbsenceRequest.setPending(leaveofAbsenceRequest.getPending());
             existingLeaveofAbsenceRequest.setDates(leaveofAbsenceRequest.getDates());
+            existingLeaveofAbsenceRequest.setRespondentID(leaveofAbsenceRequest.getRespondentID());
             return leaveofAbsenceRequestRepository.save(existingLeaveofAbsenceRequest);  
         }
         return null;  

@@ -1,6 +1,5 @@
 package com.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.entities.Instructor;
@@ -12,6 +11,8 @@ import java.util.List;
 @Service
 public class InstructorService {
     private InstructorRepository instructorRepository;
+
+    
 
     public List<Instructor> getAllInstructors() {
         return instructorRepository.findAll();

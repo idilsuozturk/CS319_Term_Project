@@ -10,7 +10,8 @@ import jakarta.persistence.*;
 public class TA extends User {
     Integer advisorID; 
 
-    private byte mode;
+    private boolean master;
+    private int mode;
     private Integer totalWorkload;
 
     @Column(columnDefinition = "json")
@@ -28,10 +29,15 @@ public class TA extends User {
     @Column(columnDefinition = "json")
     @Convert(converter = StringArrayToJsonConverter.class)
     private String[] schedule;
+
+    @Column(columnDefinition = "json")
+    @Convert(converter = StringArrayListToJsonConverter.class)
+    private ArrayList<String> onLeaveDates;
     
 
     public TA() {
         super();
+        this.master = false;
         this.mode = 1;
         this.advisorID = -1;
         this.totalWorkload = -1;
@@ -39,10 +45,12 @@ public class TA extends User {
         this.coursesTaken = null;
         this.proctoringAssignmentIDs = null;
         this.schedule = null;
+        this.onLeaveDates = null;
     }
     
-    public TA(String name, String email, String username, String password, Integer advisorID) {
+    public TA(String name, String email, String username, String password, boolean master, Integer advisorID) {
         super(name, email, username, password, Roles.TA);
+        this.master = master;
         this.mode = 1;
         this.advisorID = advisorID;
         this.totalWorkload = 0;
@@ -50,6 +58,16 @@ public class TA extends User {
         this.coursesTaken = new ArrayList<Integer>();
         this.proctoringAssignmentIDs = new ArrayList<Integer>();
         this.schedule = new String[98];
+        this.onLeaveDates = new ArrayList<>();
+
+    }
+
+    public boolean getMaster(){
+        return this.master;
+    }
+
+    public void setMaster(boolean master){
+        this.master = master;
     }
 
     public ArrayList<Integer> getCoursesAssisted() {
@@ -100,11 +118,19 @@ public class TA extends User {
         this.schedule = schedule;
     }
 
-    public byte getMode(){
-        return mode;
+    public int getMode(){
+        return this.mode;
     }
 
     public void setMode(byte mode){
         this.mode = mode;
+    }
+
+    public ArrayList<String> getOnLeaveDates(){
+        return this.onLeaveDates;
+    }
+
+    public void setOnLeaveDates(ArrayList<String> onLeaveDates){
+        this.onLeaveDates = onLeaveDates;
     }
 }

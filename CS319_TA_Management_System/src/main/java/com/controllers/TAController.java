@@ -50,6 +50,7 @@ public class TAController {
                 ta.getEmail(),
                 ta.getUsername(),
                 ta.getPassword(),
+                ta.getMaster(),
                 ta.getAdvisorID());
     }
 

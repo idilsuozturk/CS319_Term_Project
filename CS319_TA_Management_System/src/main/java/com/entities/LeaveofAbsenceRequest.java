@@ -13,15 +13,19 @@ public class LeaveofAbsenceRequest extends Request {
     @Convert(converter = IntegerArrayListToJsonConverter.class)
     private ArrayList<String> dates;
 
+    private Integer respondentID;
+
     public LeaveofAbsenceRequest(){
         super();
         setRequestType(RequestTypes.LEAVE_OF_ABSENCE_REQUEST);
         this.dates = null;
+        this.respondentID = -1;
     }
 
     public LeaveofAbsenceRequest(int ownerID, String message, ArrayList<String> dates){
         super(RequestTypes.LEAVE_OF_ABSENCE_REQUEST, ownerID, message);
         this.dates = dates;
+        this.respondentID = -1;
     }
 
     public ArrayList<String> getDates(){
@@ -30,5 +34,13 @@ public class LeaveofAbsenceRequest extends Request {
 
     public void setDates(ArrayList<String> dates){
         this.dates = dates;
+    }
+
+    public int getRespondentID(){
+        return this.respondentID;
+    }
+
+    public void setRespondentID(int respondentID){
+        this.respondentID = respondentID;
     }
 }

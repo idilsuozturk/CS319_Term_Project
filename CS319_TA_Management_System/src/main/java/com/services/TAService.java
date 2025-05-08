@@ -31,17 +31,20 @@ public class TAService {
 
     private final InstructorService instructorService;
 
+    private final LeaveofAbsenceRequestService leaveofAbsenceRequestService;
+
     private final ManuelSwapRequestService manuelSwapRequestService;
 
     private final NotificationService notificationService;
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
-    public TAService(TARepository taRepository, RequestRepository requestRepository, CoursesService courseService, InstructorService instructorService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository, RequestRepository requestRepository, CoursesService courseService, InstructorService instructorService, LeaveofAbsenceRequestService leaveofAbsenceRequestService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taRepository = taRepository;
         this.requestRepository = requestRepository;
         this.courseService = courseService; 
         this.instructorService = instructorService;
+        this.leaveofAbsenceRequestService = leaveofAbsenceRequestService;
         this.manuelSwapRequestService = manuelSwapRequestService;
         this.notificationService = notificationService;
         this.proctoringAssignmentService = proctoringAssignmentService;
@@ -51,8 +54,8 @@ public class TAService {
         return taRepository.findAll();
     }
 
-    public TA createTA(String name, String username, String email, String password, Integer advisorID) {
-        TA newTA = new TA(name, email, username, password, advisorID);
+    public TA createTA(String name, String username, String email, String password, boolean master, Integer advisorID) {
+        TA newTA = new TA(name, email, username, password, master, advisorID);
         return taRepository.save(newTA);
     }
 
@@ -76,6 +79,8 @@ public class TAService {
             existingTA.setAdvisorID(ta.getAdvisorID());
             existingTA.setTotalWorkload(ta.getTotalWorkload());
             existingTA.setProctoringAssignmentIDs(ta.getProctoringAssignmentIDs());
+            existingTA.setMaster(ta.getMaster());
+            existingTA.setOnLeaveDates(ta.getOnLeaveDates());
             return taRepository.save(existingTA);
         }
         return null;
@@ -188,6 +193,7 @@ public class TAService {
         }
         return possibleNames;
     }
+    
     public ArrayList<String> showPossibleProctoringSwapRequests(Integer requesterID, Integer receiverID, Integer proctoringAssignmentID) {
         TA requester = taRepository.findById(requesterID).orElse(null);
         if (requester != null){
@@ -300,7 +306,6 @@ public class TAService {
             }
             return output;
         }
-
         return null;
     }
 
@@ -320,7 +325,8 @@ public class TAService {
                     notification.getRequestDate() + " between you and TA " + ta.getName() + 
                     ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
                     "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
-                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo);
+                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo) + "Instructor " + 
+                    instructor.getName() + "'s Message:\n" + automaticSwapRequest.getMessage();
                     output.add(newString);
                 }
                 else if (id == automaticSwapRequest.getSecondTAID()){
@@ -332,7 +338,8 @@ public class TAService {
                     notification.getRequestDate() + " between you and TA " + ta.getName() + 
                     ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
                     "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
-                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo);
+                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo) + "\nInstructor " +
+                    instructor.getName() + "'s Message:\n" + automaticSwapRequest.getMessage();
                     output.add(newString);
                 }
                 else {
@@ -348,7 +355,7 @@ public class TAService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + i;
                         }
-                        newString += ".";
+                        newString += ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                     else if (notification.getStatus() == 1){
@@ -356,7 +363,7 @@ public class TAService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         } 
-                        newString += " has been approved at " + notification.getRequestDate() + ".";
+                        newString += " has been approved at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -364,7 +371,7 @@ public class TAService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         } 
-                        newString += " has been rejected at " + notification.getRequestDate() + ".";
+                        newString += " has been rejected at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -388,6 +395,7 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
+                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                         
                     }
@@ -403,6 +411,7 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
+                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -417,6 +426,7 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
+                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -431,7 +441,8 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                     else if (notification.getStatus() == 1){
@@ -444,7 +455,8 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -457,7 +469,8 @@ public class TAService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()));
+                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
+                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -601,6 +614,11 @@ public class TAService {
         proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
         proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
         return newElement;
+    }
+
+    public void createLeaveofAbsenceRequest(int id, String requestDate, String message, ArrayList<String> dates){
+        LeaveofAbsenceRequest leaveofAbsenceRequest = leaveofAbsenceRequestService.createLeaveofAbsenceRequest(id, message, dates);
+        notificationService.createNotification(requestDate, leaveofAbsenceRequest.getID(), 0);
     }
 }
 

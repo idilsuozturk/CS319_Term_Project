@@ -71,6 +71,7 @@ public class UserController {
             ta.getEmail(),
             ta.getUsername(),
             ta.getPassword(),
+            ta.getMaster(),
             ta.getAdvisorID()
         );
     } else if (user instanceof Instructor) {
