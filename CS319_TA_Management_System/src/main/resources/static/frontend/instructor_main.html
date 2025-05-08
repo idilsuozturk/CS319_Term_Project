@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instructor Main Page</title>
+
   <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/ta_request_form.css" />
+
+
+  <link rel="stylesheet" href="assets/css/history_viewer.css?v=1.1">
+  <link rel="stylesheet" href="assets/css/ta_request_form.css?v=1.1">
 </head>
 <body>
   <!-- Header -->
@@ -23,15 +27,15 @@
         <li>
           <a href="#">Proctoring</a>
           <ul class="submenu">
-            <li><a href="approve_ta_assignment.html">Approve TA Assignments</a></li>
-            <li><a href="ta_request_form.html">TA Request</a></li> 
+            <li><a href="#" id="TasksViewLink">Approve TA Assignments</a></li>
+            <li><a href="#" id="requestTALink">TA Request</a></li> 
           </ul>
         </li>
         <li>
           <a href="#">Courses</a>
           <ul class="submenu">
-            <li><a href="current_courses.html">Current Courses</a></li>
-            <li><a href="exam_info.html">Exams</a></li>
+            <li><a href="#" id="CoursesViewLink">Current Courses</a></li>
+            <li><a href="#" id="ExamsViewLink">Exams</a></li>
           </ul>
         </li>
       </ul>
@@ -43,8 +47,12 @@
     </div>
   </div>
 
-  
 
+  <div id="InstructorList"></div>
+  <div id="taRequestFormContainer" class="form-container"></div>
+  
+  <script src="assets/js/Instructor_lists.js"></script>
   <script src="assets/js/ta_request_form.js"></script>
+
 </body>
 </html>

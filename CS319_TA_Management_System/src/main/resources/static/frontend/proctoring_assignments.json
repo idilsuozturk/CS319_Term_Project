@@ -7,7 +7,9 @@
       "startTime": "09:00",
       "endTime": "11:00",
       "location": "EA-409",
-      "students": 35
+      "students": 35,
+      "proctor" : ["Mehmet Can"],
+      "credit" : 4
     },
     {
       "course": "CS 223 - Digital Design",
@@ -16,7 +18,9 @@
       "startTime": "13:30",
       "endTime": "16:30",
       "location": "EE-214",
-      "students": 42
+      "students": 42,
+      "proctor" : ["Mehmet Can", "Elif Demir"],
+      "credit" : 3
     },
     {
       "course": "CS 319 - Object-Oriented Software Engineering",
@@ -25,7 +29,9 @@
       "startTime": "14:00",
       "endTime": "16:00",
       "location": "EA-502",
-      "students": 31
+      "students": 31,
+      "proctor" : ["Ahmet Yılmaz", "Elif Demir"],
+      "credit" : 3
     },
     {
       "course": "CS 342 - Operating Systems",
@@ -34,7 +40,32 @@
       "startTime": "09:00",
       "endTime": "12:00",
       "location": "EB-204",
-      "students": 25
+      "students": 25,
+      "proctor" : ["Zeynep Kaya", "Murat Şahin", "Ayşe Korkmaz"],
+      "credit" : 4
+    }
+  ],
+
+  "courses" : [
+    {
+      "code": "CS 101",
+      "name": "Introduction to Programming",
+      "credit": 4,
+      "semester": "Spring 2025"
+    },
+    {
+      "code": "CS 223",
+      "name": "Digital Design",
+      "credit": 3,
+      "semester": "Spring 2025"
+    },
+    {
+      "code": "CS 342",
+      "name": "Operating Systems",
+      "credit": 4,
+      "semester": "Spring 2025"
     }
   ]
 }
+
+

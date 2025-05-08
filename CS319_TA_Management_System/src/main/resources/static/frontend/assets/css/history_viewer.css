@@ -1,6 +1,6 @@
 /* Enhanced History Viewer CSS */
 
-#historyContentContainer {
+#historyContentContainer, #InstructorList {
     width: 100%;
     max-width: 1400px;
     margin: 20px auto;
@@ -221,39 +221,67 @@
 
 
 
-/* Proctoring specific styles - ENHANCED */
-.upcoming-assignment {
-    background: linear-gradient(to right, #fef9e7 0%, #fffcf2 100%) !important;
-    font-weight: 500;
-    position: relative;
-    z-index: 1;
-    border-left: 3px solid #f1c40f !important;
-}
+/* In history_viewer.css, replace the upcoming assignment styles with these: */
+/* Replace your existing upcoming-assignment CSS with this */
 
-.upcoming-assignment:before {
-    content: '';
-    position: absolute;
-    left: -3px;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: linear-gradient(to bottom, #f1c40f, #f39c12);
-    z-index: 2;
+/* Simple highlighting for upcoming assignments that won't break layout */
+/* Force CSS reload with cache-busting */
+/* Add this to your history_viewer.css */
+
+/* Simplified upcoming assignment styling */
+/* In history_viewer.css */
+.upcoming-assignment {
+    background-color: #fef9e7 !important;
 }
 
 .upcoming-assignment td {
-    position: relative;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.upcoming-assignment td:first-child:before {
+.upcoming-assignment td:first-child {
+    border-left: 3px solid #f1c40f;
+}
 
-    position: absolute;
-    left: -12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 10px;
-    color: #f39c12;
-    opacity: 0.7;
+/* Set explicit widths for columns to ensure consistency */
+.date-column {
+    width: 120px;
+    white-space: nowrap;
+}
+
+.time-column {
+    width: 120px;
+    white-space: nowrap;
+}
+
+.course-column {
+    min-width: 200px;
+}
+
+.location-column {
+    width: 100px;
+    text-align: center;
+}
+
+.students-column {
+    width: 80px;
+    text-align: center;
+}
+
+/* Better cross-browser compatibility */
+@keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@-webkit-keyframes fadeInContent {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#historyContentContainer, #InstructorList {
+    animation: fadeInContent 0.5s ease-in-out;
+    -webkit-animation: fadeInContent 0.5s ease-in-out;
+    opacity: 1;
 }
 
 .proctoring-actions {
@@ -399,7 +427,7 @@
     }
 }
 
-#historyContentContainer {
+#historyContentContainer, #InstructorList {
     animation: fadeInContent 0.5s ease-in-out;
     opacity: 1;
 }
@@ -407,4 +435,228 @@
 @keyframes fadeInContent {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Column-specific styling for the proctoring table */
+.date-column {
+    min-width: 110px;
+    white-space: nowrap;
+}
+
+.time-column {
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.location-column {
+    font-family: monospace;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.course-column {
+    min-width: 150px;
+}
+
+.students-column {
+    text-align: center;
+}
+
+/* Ensure all table cells have proper spacing */
+.history-table td, .history-table th {
+    padding: 14px 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Action buttons styling - Sexy version */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 50px; /* Rounded corners for modern look */
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy animation */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    min-width: 100px;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.action-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.btn-icon {
+    margin-right: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Approve button styling */
+.approve-btn {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+}
+
+.approve-btn:hover {
+    background: linear-gradient(45deg, #43A047, #7CB342);
+}
+
+.approve-btn.selected {
+    background: linear-gradient(45deg, #2E7D32, #558B2F);
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+    font-weight: 700;
+}
+
+.approve-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.approve-btn:hover::before {
+    opacity: 1;
+}
+
+/* Reject button styling */
+.reject-btn {
+    background: linear-gradient(45deg, #F44336, #FF5722);
+    color: white;
+}
+
+.reject-btn:hover {
+    background: linear-gradient(45deg, #E53935, #F4511E);
+}
+
+.reject-btn.selected {
+    background: linear-gradient(45deg, #C62828, #D84315);
+    box-shadow: 0 2px 10px rgba(244, 67, 54, 0.4);
+    font-weight: 700;
+}
+
+.reject-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.reject-btn:hover::before {
+    opacity: 1;
+}
+
+/* Pulse animation for clicked button */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.action-btn.pulse {
+    animation: pulse 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Animation for status updates */
+@keyframes highlightUpdate {
+    0% { background-color: rgba(255, 235, 59, 0.3); }
+    100% { background-color: transparent; }
+}
+
+.status-updated {
+    animation: highlightUpdate 2s ease-out;
+}
+
+/* Notification toast - more attractive */
+.notification-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    min-width: 250px;
+}
+
+.notification-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification-toast.approved {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    border-left: 5px solid #2E7D32;
+}
+
+.notification-toast.rejected {
+    background: linear-gradient(45deg, #F44336, #FF5722);
+    border-left: 5px solid #C62828;
+}
+
+.notification-icon {
+    font-size: 18px;
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-message {
+    font-weight: 500;
+}
+
+/* Status cell styling */
+[data-current-status="approved"] .status-cell {
+    position: relative;
+}
+
+[data-current-status="approved"] .approve-btn {
+    transform: scale(1.05);
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+}
+
+[data-current-status="rejected"] .reject-btn {
+    transform: scale(1.05);
+    box-shadow: 0 2px 10px rgba(244, 67, 54, 0.4);
 }
