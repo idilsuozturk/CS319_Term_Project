@@ -20,7 +20,7 @@ public class Course    {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String code;
-    private Integer section;
+    private String section;
 
     private Integer instructorID;
     @Column(columnDefinition = "json")
@@ -39,7 +39,7 @@ public class Course    {
     }
 
 
-    public Course(String code, Integer section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
+    public Course(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
         this.code = code;
         this.section = section;
         this.instructorID = instructorID;
@@ -60,11 +60,11 @@ public class Course    {
         this.code = code;
     }
 
-    public Integer getSection() {
+    public String getSection() {
         return this.section;
     }
 
-    public void setSection(Integer section) {
+    public void setSection(String section) {
         this.section = section;
     }
 

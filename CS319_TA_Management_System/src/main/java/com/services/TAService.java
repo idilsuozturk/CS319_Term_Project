@@ -3,18 +3,10 @@ package com.services;
 import org.springframework.stereotype.Service;
 
 import com.entities.TA;
-import com.entities.TaskSubmissionRequest;
-import com.entities.AutomaticSwapRequest;
 import com.entities.Course;
 import com.entities.Instructor;
-import com.entities.LeaveofAbsenceRequest;
-import com.entities.ManuelSwapRequest;
-import com.entities.Notification;
 import com.entities.ProctoringAssignment;
-import com.entities.Request;
-import com.entities.RequestTypes;
 import com.repositories.TARepository;
-import com.repositories.RequestRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,28 +17,16 @@ public class TAService {
    
     private final TARepository taRepository;
 
-    private final RequestRepository requestRepository;
-
     private final CoursesService courseService; 
 
     private final InstructorService instructorService;
 
-    private final LeaveofAbsenceRequestService leaveofAbsenceRequestService;
-
-    private final ManuelSwapRequestService manuelSwapRequestService;
-
-    private final NotificationService notificationService;
-
     private final ProctoringAssignmentService proctoringAssignmentService;
 
-    public TAService(TARepository taRepository, RequestRepository requestRepository, CoursesService courseService, InstructorService instructorService, LeaveofAbsenceRequestService leaveofAbsenceRequestService, ManuelSwapRequestService manuelSwapRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taRepository = taRepository;
-        this.requestRepository = requestRepository;
         this.courseService = courseService; 
         this.instructorService = instructorService;
-        this.leaveofAbsenceRequestService = leaveofAbsenceRequestService;
-        this.manuelSwapRequestService = manuelSwapRequestService;
-        this.notificationService = notificationService;
         this.proctoringAssignmentService = proctoringAssignmentService;
     }
 
@@ -64,7 +44,6 @@ public class TAService {
     }
 
     public void deleteTAByID(Integer id) {
-
         taRepository.deleteById(id);
     }
 
@@ -182,109 +161,47 @@ public class TAService {
         return null;
     }
 
-    public ArrayList<String> showPossibleTANames(Integer taID, Integer proctoringAssignmentID){
+    public List<TA> showPossibleTANames(Integer taID, Integer proctoringAssignmentID){
         List<TA> allTAs = getAllTAs();
-        ArrayList<String> possibleNames = new ArrayList<>();
+        ArrayList<TA> possibleNames = new ArrayList<>();
         for (TA ta : allTAs){
             if (ta.getId() == taID) continue;
             if (isAvailable(ta.getId(), proctoringAssignmentID, -1) != null){
-                possibleNames.add(ta.getName());
+                possibleNames.add(ta);
             }
         }
         return possibleNames;
     }
-    
-    public ArrayList<String> showPossibleProctoringSwapRequests(Integer requesterID, Integer receiverID, Integer proctoringAssignmentID) {
+
+    public List<ProctoringAssignment> showPossibleProctoringSwapRequests(Integer requesterID, Integer receiverID, Integer proctoringAssignmentID) {
         TA requester = taRepository.findById(requesterID).orElse(null);
         if (requester != null){
             TA receiver = taRepository.findById(receiverID).orElse(null);
             if (receiver != null){
-                ArrayList<String> output = new ArrayList<String>();
+                ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
                 int[] arr = isAvailable(receiverID, proctoringAssignmentID, -1);
                 if (arr.length == 1) {
                     output.add(null);
                     for (int i : receiver.getProctoringAssignmentIDs()){
                         if (isAvailable(requesterID, i, proctoringAssignmentID) != null){
                             ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                            output.add(convertProctoringAssignmentToString(proctoringAssignment));
+                            output.add(proctoringAssignment);
                         }
                     }
                 }
                 else if (arr.length == 2 && arr[0] == 0){
                     ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                    output.add(convertProctoringAssignmentToString(proctoringAssignment));
+                    output.add(proctoringAssignment);
                 }
                 else {
                     ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(arr[1]);
-                    output.add(convertProctoringAssignmentToString(proctoringAssignment));
+                    output.add(proctoringAssignment);
                 }
                 return output;
             }
             return null;
         }
         return null;
-    }
-
-    public void initializeManuelSwapRequest(String requestDate, String message, int requesterID, int receiverID, int requesterProctoringAssignmentID, int receiverProctoringAssignmentID){
-        ManuelSwapRequest newManuelSwapRequest = manuelSwapRequestService.createManuelSwapRequest(requesterID, message, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
-        notificationService.createNotification(requestDate, newManuelSwapRequest.getID(), 0);
-    }
-
-    public ArrayList<String> viewRequests(int id){
-        List<ManuelSwapRequest> manuelSwapRequests = manuelSwapRequestService.getAllManuelSwapRequests();
-        ArrayList<String> output = new ArrayList<>();
-        for (ManuelSwapRequest manuelSwapRequest : manuelSwapRequests){
-            if (manuelSwapRequest.getReceiverID() == id && manuelSwapRequest.getPending()) {
-                output.add(convertManuelSwapRequestToString(manuelSwapRequest));
-            }
-        }
-        return output;
-    }
-
-    public boolean approveManuelSwapRequest(String requestDate, Integer manuelSwapRequestID) {
-        ManuelSwapRequest manuelSwapRequest = manuelSwapRequestService.getManuelSwapRequestByID(manuelSwapRequestID);
-        if (manuelSwapRequest != null) {
-            TA owner = getTAByID(manuelSwapRequest.getOwnerID());
-            TA receiver = getTAByID(manuelSwapRequest.getReceiverID());
-            if (owner != null && receiver != null){
-                if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                    ArrayList<Integer> ownerProctoringAssignments = owner.getProctoringAssignmentIDs();
-                    ArrayList<Integer> receiverProctoringAssignments = receiver.getProctoringAssignmentIDs();
-                    ownerProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getOwnerProctoringAssignmentID()));
-                    receiverProctoringAssignments.add(manuelSwapRequest.getOwnerProctoringAssignmentID());
-                    owner.setProctoringAssignmentIDs(ownerProctoringAssignments);
-                    receiver.setProctoringAssignmentIDs(receiverProctoringAssignments);
-                    updateTAByID(owner.getId(), owner);
-                    updateTAByID(receiver.getId(), receiver);
-                }
-                else {
-                    ArrayList<Integer> ownerProctoringAssignments = owner.getProctoringAssignmentIDs();
-                    ArrayList<Integer> receiverProctoringAssignments = receiver.getProctoringAssignmentIDs();
-                    ownerProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getOwnerProctoringAssignmentID()));
-                    receiverProctoringAssignments.remove(Integer.valueOf(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                    ownerProctoringAssignments.add(manuelSwapRequest.getReceiverProctoringAssignmentID());
-                    receiverProctoringAssignments.add(manuelSwapRequest.getOwnerProctoringAssignmentID());
-                    updateTAByID(owner.getId(), owner);
-                    updateTAByID(receiver.getId(), receiver);
-                }
-                notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 1);
-                manuelSwapRequest.setPending(false);
-                manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    public boolean rejectManuelSwapRequest(String requestDate, Integer manuelSwapRequestID) {
-        ManuelSwapRequest manuelSwapRequest = manuelSwapRequestService.getManuelSwapRequestByID(manuelSwapRequestID);
-        if (manuelSwapRequest != null){
-            notificationService.createNotification(requestDate, manuelSwapRequest.getID(), 2);
-            manuelSwapRequest.setPending(false);
-            manuelSwapRequestService.updateManuelSwapRequestByID(manuelSwapRequestID, manuelSwapRequest);
-        }
-        return false;
     }
 
     public int viewTotalWorkload(Integer id) {
@@ -295,203 +212,17 @@ public class TAService {
         return -1;
     }
 
-    public String[] viewProctoringAssignments(Integer id) {
+    public List<ProctoringAssignment> viewProctoringAssignments(Integer id) {
         TA ta = taRepository.findById(id).orElse(null);
         if (ta != null){
-            String[] output = new String[ta.getProctoringAssignmentIDs().size()];
-            int index = 0;
+            ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
             for (int i : ta.getProctoringAssignmentIDs()){
                 ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(i);
-                output[index] = convertProctoringAssignmentToString(proctoringAssignment);
+                output.add(proctoringAssignment);
             }
             return output;
         }
         return null;
-    }
-
-    public ArrayList<String> viewNotifications(Integer id) {
-        ArrayList<String> output = new ArrayList<>();
-        List<Notification> notifications = notificationService.getAllNotifications();
-        for (Notification notification : notifications){
-            Request request = requestRepository.findById(id).orElse(null);
-            if (request.getRequestType() == RequestTypes.AUTOMATIC_SWAP_REQUEST){
-                AutomaticSwapRequest automaticSwapRequest = (AutomaticSwapRequest) request;
-                if (id == automaticSwapRequest.getFirstTAID()){
-                    TA ta = getTAByID(automaticSwapRequest.getSecondTAID());
-                    Instructor instructor = instructorService.getInstructorByID(automaticSwapRequest.getOwnerID());
-                    ProctoringAssignment proctoringAssignmentOne = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
-                    ProctoringAssignment proctoringAssignmentTwo = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
-                    String newString = "The Instructor " + instructor.getName() + " initialized a Proctor Swap at " + 
-                    notification.getRequestDate() + " between you and TA " + ta.getName() + 
-                    ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
-                    "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
-                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo) + "Instructor " + 
-                    instructor.getName() + "'s Message:\n" + automaticSwapRequest.getMessage();
-                    output.add(newString);
-                }
-                else if (id == automaticSwapRequest.getSecondTAID()){
-                    TA ta = getTAByID(automaticSwapRequest.getFirstTAID());
-                    Instructor instructor = instructorService.getInstructorByID(automaticSwapRequest.getOwnerID());
-                    ProctoringAssignment proctoringAssignmentOne = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
-                    ProctoringAssignment proctoringAssignmentTwo = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
-                    String newString = "The Instructor " + instructor.getName() + " initialized a Proctor Swap at " + 
-                    notification.getRequestDate() + " between you and TA " + ta.getName() + 
-                    ". Your proctoring assignment (for assignment details see below) and TA " + ta.getName() + 
-                    "'s proctoring assignment (for assignment details see below) has been swapped.\nYour Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentOne)
-                    + "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentTwo) + "\nInstructor " +
-                    instructor.getName() + "'s Message:\n" + automaticSwapRequest.getMessage();
-                    output.add(newString);
-                }
-                else {
-                    continue;
-                }
-            }
-            else if (request.getRequestType() == RequestTypes.LEAVE_OF_ABSENCE_REQUEST){
-                LeaveofAbsenceRequest leaveofAbsenceRequest = (LeaveofAbsenceRequest) request;
-                if (leaveofAbsenceRequest.getOwnerID() == id){
-                    if (notification.getStatus() == 0){
-                        String newString = "You have sent a Leave of Absence request at " + notification.getRequestDate() + 
-                        "for date(s) " + leaveofAbsenceRequest.getDates().get(0);
-                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
-                            newString += ", " + i;
-                        }
-                        newString += ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
-                        output.add(newString);
-                    }
-                    else if (notification.getStatus() == 1){
-                        String newString = "Your Leave of Absence request requested for date(s) " + leaveofAbsenceRequest.getDates().get(0);
-                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
-                            newString += ", " + leaveofAbsenceRequest.getDates().get(i);
-                        } 
-                        newString += " has been approved at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
-                        output.add(newString);
-                    }
-                    else {
-                        String newString = "Your Leave of Absence request requested for date(s) " + leaveofAbsenceRequest.getDates().get(0);
-                        for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
-                            newString += ", " + leaveofAbsenceRequest.getDates().get(i);
-                        } 
-                        newString += " has been rejected at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
-                        output.add(newString);
-                    }
-                }
-                else {
-                    continue;
-                }
-                
-            }
-            else if (request.getRequestType() == RequestTypes.MANUEL_SWAP_REQUEST){
-                ManuelSwapRequest manuelSwapRequest = (ManuelSwapRequest) request;
-                if (manuelSwapRequest.getOwnerID() == id){
-                    if (notification.getStatus() == 0){
-                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
-                        String newString = "You have sent a Proctoring Swap Request to TA " + ta.getName() + " at " + notification.getRequestDate() +
-                        ".\nYour Proctoring Assignment Information:\n" +
-                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                        
-                    }
-                    else if (notification.getStatus() == 1){
-                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
-                        String newString = "Your Proctoring Swap Request to TA " + ta.getName() + " has been approved at " + notification.getRequestDate() + 
-                        ".\nYour Proctoring Assignment Information:\n" +
-                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                    }
-                    else {
-                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
-                        String newString = "Your Proctoring Swap Request to TA " + ta.getName() + " has been rejected at " + notification.getRequestDate() + 
-                        ".\nYour Proctoring Assignment Information:\n" +
-                        convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                    }
-                }
-                else if (manuelSwapRequest.getReceiverID() == id){
-                    if (notification.getStatus() == 0){
-                        TA ta = getTAByID(manuelSwapRequest.getOwnerID());
-                        String newString = "A Proctoring Swap Request has been sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() +
-                        ".\nYour Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                    }
-                    else if (notification.getStatus() == 1){
-                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
-                        String newString = "You have approved the Swap Request sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() + 
-                        ".\nYour Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                    }
-                    else {
-                        TA ta = getTAByID(manuelSwapRequest.getReceiverID());
-                        String newString = "You have rejected the Swap Request sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() + 
-                        ".\nYour Proctoring Assignment Information:\n";
-                        if (manuelSwapRequest.getReceiverProctoringAssignmentID() == -1){
-                            newString += "No Proctoring Assignment.";
-                        }
-                        else {
-                            newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
-                        }
-                        newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
-                        output.add(newString);
-                    }
-                }
-                else {
-                    continue;
-                }
-            }
-            else {
-                TaskSubmissionRequest taskSubmissionRequest = (TaskSubmissionRequest) request;
-                if (notification.getStatus() == 0){
-                    
-                }
-                else if (notification.getStatus() == 1){
-
-                }
-                else {
-
-                }
-            }
-        }
-        return output;
     }
 
     public int[] isAvailable(Integer taID, Integer proctoringAssignmentID, Integer ignore){
@@ -499,9 +230,16 @@ public class TAService {
         if (proctoringAssignment != null){
             TA ta = taRepository.findById(taID).orElse(null);
             if (ta != null){
-                byte day = proctoringAssignment.getDay();
-                short start = proctoringAssignment.getStartDate();
-                short end = proctoringAssignment.getEndDate();
+                int day = proctoringAssignment.getDay();
+                for (String j : ta.getOnLeaveDates()){
+                    if (Integer.valueOf(j.substring(0,2)) == day &&
+                        Integer.valueOf(j.substring(3, 5)) == proctoringAssignment.getMonth() && 
+                        Integer.valueOf(j.substring(6)) == proctoringAssignment.getYear()){
+                            return null;
+                    }
+                }
+                int start = proctoringAssignment.getStartDate();
+                int end = proctoringAssignment.getEndDate();
                 int index = -1;
                 int count = 0;
                 for (int i : ta.getProctoringAssignmentIDs()){
@@ -511,15 +249,20 @@ public class TAService {
                     }
                     ProctoringAssignment taProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(i);
                     if (taProctoringAssignment == null || i == ignore) continue;
-                    if (start > taProctoringAssignment.getStartDate() && start < taProctoringAssignment.getEndDate()){
-                        count++;
-                        index = i;
-                    } 
-                    if (start < taProctoringAssignment.getStartDate() && end > taProctoringAssignment.getStartDate()) {
-                        count++;
-                        index = i;
+                    if (taProctoringAssignment.getDay() == proctoringAssignment.getDay() && 
+                        taProctoringAssignment.getMonth() == taProctoringAssignment.getMonth() &&
+                        taProctoringAssignment.getYear() == taProctoringAssignment.getYear()){
+                        if (start > taProctoringAssignment.getStartDate() && start < taProctoringAssignment.getEndDate()){
+                            count++;
+                            index = i;
+                        } 
+                        if (start < taProctoringAssignment.getStartDate() && end > taProctoringAssignment.getStartDate()) {
+                            count++;
+                            index = i;
+                        }
+                        if (count == 2) return null;
                     }
-                    if (count == 2) return null;
+                    
                 }
                 int indexStart = start / 100;
                 int indexEnd = end / 100;
@@ -587,14 +330,14 @@ public class TAService {
         }
     }
 
-    private String convertManuelSwapRequestToString(ManuelSwapRequest manuelSwapRequest) {
+    /*private String convertManuelSwapRequestToString(ManuelSwapRequest manuelSwapRequest) {
         if (manuelSwapRequest == null){
             return "No Manuel Swap Request";
         }
         TA ta = getTAByID(manuelSwapRequest.getOwnerID());
         String output = "";
         if (ta != null){
-            output = manuelSwapRequest.getMessage() + "\nSender TA Information:" + "\nTA name: " + ta.getName() + "\nTA ID: " + 
+            output = "\nSender TA Information:" + "\nTA name: " + ta.getName() + "\nTA ID: " + 
             ta.getUsername() + "\nThe Proctoring Assignment Information TA wants to swap with:\n" + 
             convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID()))
             + "\nThe Proctoring Assignment Information TA wants to swap to:\n" +
@@ -603,23 +346,7 @@ public class TAService {
 
         }
         return output;
-    }
-
-    private String convertProctoringAssignmentToString(ProctoringAssignment proctoringAssignment){
-        if (proctoringAssignment == null){
-            return "No Proctoring Assignment";
-        }
-        String newElement = "Course Name: " + courseService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-        "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
-        proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-        proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
-        return newElement;
-    }
-
-    public void createLeaveofAbsenceRequest(int id, String requestDate, String message, ArrayList<String> dates){
-        LeaveofAbsenceRequest leaveofAbsenceRequest = leaveofAbsenceRequestService.createLeaveofAbsenceRequest(id, message, dates);
-        notificationService.createNotification(requestDate, leaveofAbsenceRequest.getID(), 0);
-    }
+    }*/
 }
 
 

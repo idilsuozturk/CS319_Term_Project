@@ -1,12 +1,24 @@
 package com.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.entities.Course;
+import com.entities.ManuelSwapRequest;
+import com.entities.ProctoringAssignment;
 import com.entities.TA;
+import com.entities.TaskTypes;
+import com.services.CoursesService;
+import com.services.LeaveofAbsenceRequestService;
+import com.services.ManuelSwapRequestService;
+import com.services.NotificationService;
 import com.services.TAService;
+import com.services.TaskSubmissionRequestService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +32,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/tas")
 public class TAController {
 
+    private final CoursesService coursesService;
+
+    private final LeaveofAbsenceRequestService leaveofAbsenceRequestService;
+
+    private final ManuelSwapRequestService manuelSwapRequestService;
+
+    private final NotificationService notificationService;
+
     private final TAService taService;
 
-    public TAController(TAService taService) {
+    private final TaskSubmissionRequestService taskSubmissionRequestService;
+
+
+    public TAController(TAService taService, CoursesService coursesService, LeaveofAbsenceRequestService leaveofAbsenceRequestService, ManuelSwapRequestService manuelSwapRequestService,
+                        TaskSubmissionRequestService taskSubmissionRequestService, NotificationService notificationService) {
         this.taService = taService;
+        this.coursesService = coursesService;
+        this.leaveofAbsenceRequestService = leaveofAbsenceRequestService;
+        this.manuelSwapRequestService = manuelSwapRequestService;
+        this.taskSubmissionRequestService = taskSubmissionRequestService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/test")
@@ -65,39 +94,49 @@ public class TAController {
     }
 
     @GetMapping("/{id}/showpossibletanames")
-    public ArrayList<String> showPossibleTANames(@PathVariable int id, @RequestParam int proctoringAssignmentID){
+    public List<TA> showPossibleTANames(@PathVariable int id, @RequestParam int proctoringAssignmentID){
         return taService.showPossibleTANames(id, proctoringAssignmentID);
     }
 
-    @GetMapping("/{id}/showpossibleproctoringswaprequests")
-    public ArrayList<String> showPossibleProctoringSwapRequests(@PathVariable int id, @RequestParam int receiverID, @RequestParam int proctoringAssignmentID){
+    @GetMapping("/{id}/showpossibleprocswapreq")
+    public List<ProctoringAssignment> showPossibleProctoringSwapRequests(@PathVariable int id, @RequestParam int receiverID, @RequestParam int proctoringAssignmentID){
         return taService.showPossibleProctoringSwapRequests(id, receiverID, proctoringAssignmentID);
     }
 
-    @PostMapping("/{id}/initializemanuelswaprequest")
+    @PostMapping("/{id}/initemanreq")
     public void initializeManuelSwapRequest(@RequestParam String requestDate, @RequestParam String message, @PathVariable int id, @RequestParam int receiverID, 
-    @RequestParam int requesterProctoringAssignmentID, @RequestParam int receiverProctoringAssignmentID){
-        taService.initializeManuelSwapRequest(requestDate, message, id, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
+                                            @RequestParam int requesterProctoringAssignmentID, @RequestParam int receiverProctoringAssignmentID){
+        manuelSwapRequestService.initializeManuelSwapRequest(requestDate, message, id, receiverID, requesterProctoringAssignmentID, receiverProctoringAssignmentID);
     }
 
-    @GetMapping("/{id}/viewrequests")
-    public ArrayList<String> viewRequests(@PathVariable int id){
-        return taService.viewRequests(id);
+    @GetMapping("/{id}/viewreq")
+    public List<ManuelSwapRequest> viewRequests(@PathVariable int id){
+        return manuelSwapRequestService.viewRequests(id);
     }
 
-    @PostMapping("/approvemanuelswaprequests")
+    @PostMapping("/appmanreq")
     public boolean approveManuelSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
-        return taService.approveManuelSwapRequest(requestDate, manuelSwapRequest);
+        return manuelSwapRequestService.approveManuelSwapRequest(requestDate, manuelSwapRequest);
     }
 
-    @PostMapping("/rejectmanuelswaprequests")
+    @PostMapping("/rejmanreq")
     public boolean rejectManuelSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
-        return taService.rejectManuelSwapRequest(requestDate, manuelSwapRequest);
+        return manuelSwapRequestService.rejectManuelSwapRequest(requestDate, manuelSwapRequest);
     }
 
     @PutMapping("/{taID}/addcourse")
-    public boolean addCourse(@PathVariable Integer taID, @RequestParam Integer courseID, @RequestParam boolean taken){
-        return taService.addCourse(courseID, taID, taken);
+    public boolean addCourse(@PathVariable Integer taID, @RequestParam String code, @RequestParam String section, @RequestParam boolean taken){
+        Course course;
+        if (taken){
+            course = coursesService.getCourseByCodeAndSection(code, section);
+        }
+        else {
+            course = coursesService.getCourseByCode(code);
+        }
+        if (course == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course not found");
+        }
+        return taService.addCourse(course.getId(), taID, taken);
     }
 
     @GetMapping("/{id}/schedule")
@@ -116,12 +155,22 @@ public class TAController {
     }
 
     @GetMapping("/{id}/proctoring")
-    public String[] viewProctoringAssignment(@PathVariable Integer id) {
+    public List<ProctoringAssignment> viewProctoringAssignment(@PathVariable Integer id) {
         return taService.viewProctoringAssignments(id);
     }
 
-    @GetMapping("/{id}/viewnotifications")
-    public ArrayList<String> viewNotifications(@PathVariable Integer id){
-        return taService.viewNotifications(id);
+    @GetMapping("/{id}/viewnot")
+    public List<String> viewNotifications(@PathVariable Integer id){
+        return notificationService.viewNotificationsTA(id);
+    }
+
+    @PostMapping("/{id}/createloareq")
+    public void createLeaveofAbsenceRequest(@PathVariable Integer id, @RequestParam String requestDate, @RequestParam String message, @RequestParam ArrayList<String> dates){
+        leaveofAbsenceRequestService.createLeaveofAbsenceRequest(id, null, null, null);
+    }
+
+    @PostMapping("/{id}/createtaskreq")
+    public void createTaskSubmissionRequest(@PathVariable Integer id, @RequestParam TaskTypes taskType, @RequestParam String taskDate, @RequestParam String requestDate, @RequestParam String message, @RequestParam int courseID){
+        taskSubmissionRequestService.createTaskSubmissionRequest(id, taskType, taskDate, requestDate, message, courseID);
     }
 }
