@@ -117,6 +117,10 @@ document.addEventListener("DOMContentLoaded", function () {
                       <label for="username" class="form-label">Course Id</label>
                       <input type="number" class="form-control" id="id" name="id" required>
                     </div>
+                    <div class="mb-3">
+                      <label for="taIDs" class="form-label">TAs</label>
+                      <input type="text" class="form-control" id="taIDs" name="taIDs">
+                    </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -124,6 +128,53 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </form>`;
             break;
+            //TODO EXAMS YAPIYORUMM
+            case "exams":
+  row = `
+        <thead>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th style="width: 100px">Course</th>
+            <th style="width: 40px">Start Date</th>
+            <th style="width: 40px">End Date</th>
+            <th style="width: 40px">Place</th>
+            <th style="width: 40px">Proctors</th>
+          </tr>
+        </thead>`;
+  addForm = ` <form id="addCourseForm">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="courseID" class="form-label">Course (ID)</label>
+                  <input type="text" class="form-control" id="courseID" name="courseID" required>
+                </div>
+                <div class="mb-3">
+                  <label for="startDate" class="form-label">Start Hour</label>
+                  <input type="string" class="form-control" id="startDate" name="startDate" required>
+                </div>
+                <div class="mb-3">
+                  <label for="endDate" class="form-label">End Hour</label>
+                  <input type="string" class="form-control" id="endDate" name="endDate" required>
+                </div>
+                <div class="mb-3">
+                  <label for="examPlace" class="form-label">Place</label>
+                  <input type="text" class="form-control" id="examPlace" name="examPlace" required>
+                </div>
+                <div class="mb-3">
+                  <label for="proctors" class="form-label">Proctors ID(s)</label>
+                  <input type="text" class="form-control" id="proctors" name="proctors" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create Exam</button>
+              </div>
+            </form>`;
+            break;
+
           default:
             row = `<tr><td colspan="4">Unknown content type: ${pageType}</td></tr>`;
         }
@@ -328,13 +379,18 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.forEach((value, key) => {
               if (["instructor", "section", "id"].includes(key)) {
                 dataForm[key] = value ? Number(value) : null;
-              } else {
+              }
+              else if (
+                ["taIDs"].includes(key)
+              ) {
+                dataForm[key] = value ? value.split(",").map(v => v.trim()).filter(v => v !== "").map(Number) : [];
+              }else {
                 dataForm[key] = value;
               }
             });
 
             // Send data with fetch
-            fetch('/api/create-course/${dataForm.id}', {
+            fetch('/api/create-course', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -348,13 +404,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 myModal.hide();
 
                 document.getElementById("modal-message").innerHTML = `
-      <div class="alert alert-success d-flex align-items-center" role="alert">
-  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-  <div>
-    Course created successfully!
-  </div>
-</div>
-      `;
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                <div>
+                  Course created successfully!
+                </div>
+              </div>
+                    `;
                 setTimeout(() => {
                   location.reload();
                 }, 2000);
