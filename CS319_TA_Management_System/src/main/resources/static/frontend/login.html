@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TA MANAGEMENT SYSTEM</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script>
+        document.cookie = "PHPSESSID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    </script>
 </head>
 <body>
     <div class="login-body">
         <div class = "main-div">    
             <img src="assets/img/bilkentLogo.png" class="bilkent-logo">
             <h2>USER LOGIN</h2>
-            <form id = "loginForm">
+            <form id = "loginForm" method="post" action="/frontend/login">
                 <input type="text" id="username" name="username" placeholder="Username" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <button type="submit">Login</button>

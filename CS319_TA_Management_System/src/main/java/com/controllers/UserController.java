@@ -1,7 +1,14 @@
 package com.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +26,10 @@ import com.entities.DepartmentStaff;
 import com.entities.Instructor;
 import com.entities.TA;
 import com.entities.User;
+import com.security.CustomUserDetails;
 import com.services.*;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api")
@@ -140,5 +150,160 @@ public class UserController {
     public User getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
     }
+
+
+
+    /*@GetMapping("/user-info")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal CustomUserDetails user) {
+            if (user == null) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+        return ResponseEntity.ok(Map.of(
+            "id", user.getId(),
+            "name", user.getName(),
+            "email", user.getEmail(),
+            "username", user.getUsername(),
+            "roles", user.getAuthorities()
+        ));
+    }*/
+    
+   /* @GetMapping("/user-info")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal CustomUserDetails user) {
+        System.out.println("ehe");
+    if (user == null) {
+        System.out.println("ehe");
+        // Debugging: Check if the security context contains the user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            System.out.println("Authentication Principal: " + authentication.getPrincipal());
+        }
+        System.out.println("User is null ehe");
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    return ResponseEntity.ok(Map.of(
+        "id", user.getId(),
+        "name", user.getName(),
+        "email", user.getEmail(),
+        "username", user.getUsername(),
+        "roles", user.getAuthorities()
+    ));
+}*/
+
+
+/*@GetMapping("/user-info")
+public ResponseEntity<?> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "id", user.getId(),
+        "name", user.getName(),
+        "email", user.getEmail(),
+        "username", user.getUsername(),
+        "roles", user.getAuthorities()
+    ));
+}*/
+
+/*@GetMapping("/user-info")
+public ResponseEntity<?> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+        System.out.println("Authentication is null");
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    System.out.println("Authentication Principal: " + authentication.getPrincipal());
+    System.out.println("Principal Class: " + authentication.getPrincipal().getClass());
+    if (!(authentication.getPrincipal() instanceof CustomUserDetails)) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "id", user.getId(),
+        "name", user.getName(),
+        "email", user.getEmail(),
+        "username", user.getUsername(),
+        "roles", user.getAuthorities()
+    ));
+}*/
+
+
+/*@GetMapping("/api/user-info")
+public ResponseEntity<?> getUserInfo(HttpSession session) {
+    Integer userId = (Integer) session.getAttribute("userId");
+
+    System.out.println("Session userId: " + userId);  // log for debug
+    if (userId == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not logged in");
+    }
+    // continue logic
+    return ResponseEntity.ok("User ID: " + userId);
+}*/
+
+ /*  @GetMapping("/user-info")
+    public Map<String, Object> getUserInfo(HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+
+        Object userId = session.getAttribute("userId");
+        Object username = session.getAttribute("username");
+        Object role = session.getAttribute("role");
+
+        if (userId == null || username == null || role == null) {
+            response.put("authenticated", false);
+            response.put("message", "No active session or user not logged in.");
+        } else {
+            response.put("authenticated", true);
+            response.put("userId", userId);
+            response.put("username", username);
+            response.put("role", role);
+        }
+
+        return response;
+    }*/
+
+
+    /*@GetMapping("/user-info")
+public ResponseEntity<?> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+        System.out.println("Authentication is null");
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    System.out.println("Authentication Principal: " + authentication.getPrincipal());
+    System.out.println("Principal Class: " + authentication.getPrincipal().getClass());
+    if (!(authentication.getPrincipal() instanceof CustomUserDetails)) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "id", user.getId(),
+        "name", user.getName(),
+        "email", user.getEmail(),
+        "username", user.getUsername(),
+        "roles", user.getAuthorities()
+    ));
+}*/
+@GetMapping("/user-info")
+public ResponseEntity<?> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+        System.out.println("Authentication is null");
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    System.out.println("Authentication Principal: " + authentication.getPrincipal());
+    System.out.println("Principal Class: " + authentication.getPrincipal().getClass());
+    if (!(authentication.getPrincipal() instanceof CustomUserDetails)) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    return ResponseEntity.ok(Map.of(
+        "id", user.getId(),
+        "name", user.getName(),
+        "email", user.getEmail(),
+        "username", user.getUsername(),
+        "roles", user.getAuthorities()
+    ));
+}
 
 }

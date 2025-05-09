@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,9 +18,14 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.services.AdminDetailsService;
 import com.services.CustomUserDetailsService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -102,20 +108,60 @@ public class SecurityConfig {
 @Order(2)
 public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
     http
+        .securityMatcher("/**")  // Match all paths instead of /frontend/** to include both frontends and API
+        .csrf(csrf -> csrf.disable()) 
+        .authorizeHttpRequests(auth -> auth
+            // Frontend paths
+            .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
+            .requestMatchers("/frontend/**").permitAll()
+            // Admin panel paths
+            .requestMatchers("/adminpanel/login.html", "/adminpanel/assets/**", "/adminpanel/login").permitAll()
+            .requestMatchers("/adminpanel/**").permitAll()
+            // API paths
+            .requestMatchers("/api/user-info").authenticated()
+            .requestMatchers("/api/**").authenticated()
+            .anyRequest().permitAll()
+        )
+        /*
+public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
+    http
         .securityMatcher("/frontend/**") 
         .csrf(csrf -> csrf.disable()) 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
-            .requestMatchers("/api/**", "/frontend/**").permitAll()//.authenticated()
-            .anyRequest().denyAll()//.hasRole("USER")
+             .requestMatchers("/api/user-info").authenticated() 
+            //.requestMatchers("/api/**").permitAll()
+            .requestMatchers( "/api/**").authenticated() // tüm API çağrıları login gerektirir
+            .requestMatchers( "/frontend/**").permitAll()//.authenticated()
+           
+            .anyRequest().permitAll()//.denyAll()//.hasRole("USER")
         )
-        .formLogin(form -> form
+       /* .formLogin(form -> form
             .loginPage("/frontend/login.html")
             .loginProcessingUrl("/frontend/login")
-            .defaultSuccessUrl("/frontend/index.html", true)
+            /*.successHandler((request, response, authentication) -> {
+                //SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+
+                  HttpSession session = request.getSession();
+                    session.setAttribute("userId", user.getId());
+                    session.setAttribute("username", user.getUsername());
+                    session.setAttribute("role", user.getAuthorities().toString());
+
+                response.sendRedirect("/frontend/index.html");
+            })*//*.successHandler((request, response, authentication) -> {
+                    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+                    request.getSession().setAttribute("userId", user.getId());
+                    request.getSession().setAttribute("username", user.getUsername());
+                    request.getSession().setAttribute("role", user.getAuthorities().toString());
+                    System.out.println("Saved userId in session: " + user.getId());  // log for debug
+                    response.sendRedirect("/frontend/index.html");
+                })
+
             .failureUrl("/frontend/login.html?error=true")
             .permitAll()
-        ) .userDetailsService(userDetailsService)
+        )
 
         .exceptionHandling(ex -> ex
             .authenticationEntryPoint(authenticationEntryPoint())
@@ -126,8 +172,28 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
             .logoutSuccessUrl("/frontend/login.html")
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
-        );
+        ) .userDetailsService(userDetailsService);*/
 
+           .formLogin(form -> form
+            .loginPage("/frontend/login.html")
+            .loginProcessingUrl("/frontend/login")
+            .defaultSuccessUrl("/frontend/index.html", true)
+            .failureUrl("/frontend/login.html?error=true")
+            .permitAll()
+        )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/frontend/login.html")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+            )
+
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            )
+
+            .userDetailsService(userDetailsService);
     return http.build();
 }
 
@@ -136,4 +202,17 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
         return new BCryptPasswordEncoder();
     }
 
+
+    @Bean
+public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/api/**")
+                    .allowedOrigins("http://localhost:8081") // or your frontend URL
+                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowCredentials(true);
+        }
+    };
+}
 }

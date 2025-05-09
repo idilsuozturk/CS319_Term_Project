@@ -1,0 +1,57 @@
+<script>
+
+   /* fetch('/api/user-info', {
+          method: 'GET',
+    credentials: 'include'
+    }
+)
+  .then(response => {
+    if (!response.ok) {
+        console.log(response);
+      throw new Error("HTTP error " + response.status);
+    }
+    return response.json(); // Parse JSON body
+  })
+  .then(data => {
+    console.log(data);         // { message: "Hello from Spring Boot!" }
+    //console.log(data.message); // Hello from Spring Boot!
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });*/
+
+
+  
+</script>
+
+<script>
+fetch('/api/user-info', {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+.then(response => {
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+        if (response.status === 401) {
+            window.location.href = '/frontend/login.html';
+            throw new Error('Not authenticated');
+        }
+        throw new Error("HTTP error " + response.status);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('User data:', data);
+    // Handle the user data here
+})
+.catch(error => {
+    console.error('Error:', error);
+    if (error.message === 'Not authenticated') {
+        // Handle unauthenticated user
+    }
+});
+</script>
