@@ -1,5 +1,9 @@
 package com.entities;
 
+import java.util.ArrayList;
+
+import com.converters.StringArrayListToJsonConverter;
+
 import jakarta.persistence.*;
 @Entity
 public class ProctoringAssignment {
@@ -7,14 +11,17 @@ public class ProctoringAssignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    private short year;
-    private byte month;
-    private byte day;
-    private short startDate;
-    private short endDate;
+    private int year;
+    private int month;
+    private int day;
+    private int startDate;
+    private int endDate;
     private String examPlace;
     private int courseID;
     private int proctorID;
+    @Column(columnDefinition = "json")
+    @Convert(converter = StringArrayListToJsonConverter.class)
+    private ArrayList<String> studentNames;
 
     public ProctoringAssignment(){
         this.year = -1;
@@ -25,9 +32,10 @@ public class ProctoringAssignment {
         this.examPlace = null;
         this.courseID = -1;
         this.proctorID = -1;
+        studentNames = null;
     }
 
-    public ProctoringAssignment(short year, byte month, byte day, short startDate, short endDate, String examPlace, int courseID, int proctorID){
+    public ProctoringAssignment(int year, int month, int day, int startDate, int endDate, String examPlace, int courseID, int proctorID, ArrayList<String> studentNames){
         this.year = year;
         this.month = month;
         this.day = day;
@@ -36,45 +44,50 @@ public class ProctoringAssignment {
         this.examPlace = examPlace;
         this.courseID = courseID;
         this.proctorID = proctorID;
+        this.studentNames = studentNames;
     }
 
-    public short getYear(){
+    public int getID(){
+        return id;
+    }
+    
+    public int getYear(){
         return this.year;
     }
 
-    public void setYear(short year){
+    public void setYear(int year){
         this.year = year;
     }
 
-    public byte getMonth(){
+    public int getMonth(){
         return this.month;
     }
 
-    public void setMonth(byte month){
+    public void setMonth(int month){
         this.month = month;
     }
 
-    public byte getDay(){
+    public int getDay(){
         return this.day;
     }
 
-    public void setDay(byte day){
+    public void setDay(int day){
         this.day = day;
     }
 
-    public short getStartDate(){
+    public int getStartDate(){
         return this.startDate;
     }
 
-    public void setStartDate(short startDate){
+    public void setStartDate(int startDate){
         this.startDate = startDate;
     }
 
-    public short getEndDate(){
+    public int getEndDate(){
         return this.endDate;
     }
 
-    public void setEndDate(short endDate){
+    public void setEndDate(int endDate){
         this.endDate = endDate;
     }
 

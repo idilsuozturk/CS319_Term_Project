@@ -9,7 +9,7 @@ import com.repositories.DepartmentChairRepository;
 
 @Service
 public class DepartmentChairService {
-    DepartmentChairRepository departmentChairRepository;
+    private final DepartmentChairRepository departmentChairRepository;
 
     public DepartmentChairService(DepartmentChairRepository departmentChairRepository) {
         this.departmentChairRepository = departmentChairRepository;
@@ -45,4 +45,18 @@ public class DepartmentChairService {
         }
         return null;
     }
+
+    /*private String convertLeaveofAbsenceRequestToString(LeaveofAbsenceRequest leaveofAbsenceRequest) {
+        TA ta = taService.getTAByID(leaveofAbsenceRequest.getOwnerID());
+        String output = "";
+        if (ta != null){
+            output = "\nSender TA Information:" + "\nTA name: " + ta.getName() + "\nTA ID: "
+            + ta.getUsername() + "\nThe TA's Message:\n" + leaveofAbsenceRequest.getMessage() + "\nThe Dates TA wants to be on leave: " + 
+            leaveofAbsenceRequest.getDates().get(0);
+            for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
+                output += ", "+ leaveofAbsenceRequest.getDates().get(i);
+            }
+        }
+        return output;
+    }*/
 }

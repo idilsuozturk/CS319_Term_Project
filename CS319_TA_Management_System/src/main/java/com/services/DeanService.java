@@ -9,7 +9,7 @@ import com.repositories.DeanRepository;
 
 @Service
 public class DeanService {
-    DeanRepository deanRepository;
+    private final DeanRepository deanRepository;
 
     public DeanService(DeanRepository deanRepository) {
         this.deanRepository = deanRepository;

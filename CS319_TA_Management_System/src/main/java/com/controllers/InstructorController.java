@@ -1,7 +1,11 @@
 package com.controllers;
 
 import com.entities.Instructor;
+import com.entities.TaskSubmissionRequest;
 import com.services.InstructorService;
+import com.services.NotificationService;
+import com.services.TaskSubmissionRequestService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +15,15 @@ import java.util.List;
 public class InstructorController {
 
     private final InstructorService instructorService;
-    public InstructorController(InstructorService instructorService) {
+
+    private final NotificationService notificationService;
+
+    private final TaskSubmissionRequestService taskSubmissionRequestService;
+
+    public InstructorController(InstructorService instructorService, NotificationService notificationService, TaskSubmissionRequestService taskSubmissionRequestService) {
         this.instructorService = instructorService;
+        this.notificationService = notificationService;
+        this.taskSubmissionRequestService = taskSubmissionRequestService;
     }
 
     @GetMapping("/instructors")
@@ -46,5 +57,25 @@ public class InstructorController {
     @DeleteMapping("/delete-instructor/{id}")
     public void deleteInstructor(@PathVariable Integer id) {
         instructorService.deleteInstructorByID(id);
+    }
+
+    @GetMapping("/{id}/viewnot")
+    public List<String> viewNotifications(@PathVariable Integer id){
+        return notificationService.viewNotificationsInstructor(id);
+    }
+
+    @GetMapping("/{id}/viewreq")
+    public List<TaskSubmissionRequest> viewRequests(@PathVariable Integer id){
+        return taskSubmissionRequestService.viewRequests(id);
+    }
+
+    @PostMapping("/{id}/apptaskreq")
+    public boolean approveTaskSubmissionRequest(@PathVariable Integer id, @RequestParam Integer taskSubmissionID, @RequestParam String date){
+        return taskSubmissionRequestService.approveTaskSubmissionRequest(date, id, taskSubmissionID);
+    }
+
+    @PostMapping("/{id}/rejtaskreq")
+    public boolean rejectTaskSubmissionRequest(@PathVariable Integer id, @RequestParam Integer taskSubmissionID, @RequestParam String date){
+        return taskSubmissionRequestService.rejectTaskSubmissionRequest(date, id, taskSubmissionID);
     }
 }

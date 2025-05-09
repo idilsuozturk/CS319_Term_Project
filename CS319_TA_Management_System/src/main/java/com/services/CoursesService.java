@@ -21,7 +21,7 @@ public class CoursesService {
         return courseRepository.findAll();  
     }   
 
-    public Course createCourse(String code, Integer section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
+    public Course createCourse(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
         return courseRepository.save(new Course(code, section, instructorID, taIDs, schedule));  // Insert user into MySQL
     }
 
@@ -45,5 +45,13 @@ public class CoursesService {
 
     public Course getCourseByID(Integer id) {
         return courseRepository.findById(id).orElse(null);  // Find user by ID
+    }
+
+    public Course getCourseByCodeAndSection(String code, String section){
+        return courseRepository.findByCodeAndSection(code, section).orElse(null);
+    }
+
+    public Course getCourseByCode(String code){
+        return courseRepository.findByCode(code).orElse(null);
     }
 }

@@ -1,6 +1,5 @@
 package com.repositories;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,25 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import com.entities.Course;
 
-import io.micrometer.common.lang.NonNull;
 
 @Repository
 
 public interface CoursesRepository  extends JpaRepository<Course, Integer> {
-    List<Course> findAll();
-    
-    /*@SuppressWarnings("null")
-    @Override
-    */Optional<Course> findById(Integer id);
-
-    //@SuppressWarnings("null")
-    Course save(@NonNull Course course);    
-
-    void  deleteById( Integer id);
-
-    //unnnecessary
-    //void updateCourseById(@RequestParam(value = "id") Integer id, @RequestParam(value = "course") Course course);
-    
-    
-    //Optional findById(Integer id);
+    Optional<Course> findByCodeAndSection(String code, String section);
+    Optional<Course> findByCode(String code);
 } 
