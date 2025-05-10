@@ -27,9 +27,9 @@ public class AdminDetailsService implements UserDetailsService {
         Admin admin = adminRepository.findByUsername(username)
         
                 .orElseThrow(() -> new UsernameNotFoundException("Admin not found: " + username));
-        System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name());
-        System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name() +"password: " + admin.getPassword());
-        return User.builder()
+            System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name());
+            System.out.println("Admin found: " + admin.getUsername() + ", Role: " + admin.getRole().name() +"password: " + admin.getPassword());
+            return User.builder()
                 .username(admin.getUsername())
                 .password(admin.getPassword())  // bu zaten hashlenmiş olmalı!
                 .roles( admin.getRole().name())  // veya .authorities(...) da kullanılabilir

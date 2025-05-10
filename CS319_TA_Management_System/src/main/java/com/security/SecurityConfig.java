@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.services.AdminDetailsService;
 import com.services.CustomUserDetailsService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Configuration
@@ -63,12 +64,94 @@ public class SecurityConfig {
         };
     }
 
+@Bean
+@Order(1)
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http   
+        .securityMatcher("/adminpanel/**") // Only match admin panel paths
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/adminpanel/login", "/adminpanel/register", "/adminpanel/dist/pages/login.html").permitAll()
+            .requestMatchers("/adminpanel/dist/pages/**").hasRole("ADMIN")
+            .requestMatchers("/adminpanel/dist/pages/403.html").permitAll()
+            .requestMatchers("/adminpanel/assets/**", "/adminpanel/dist/**").permitAll()
+            .anyRequest().permitAll()//.authenticated() // All other requests require authentication
+        )
 
+                     .formLogin(form -> form
+                .loginPage("/adminpanel/dist/pages/login.html") // özel login sayfan
+                .loginProcessingUrl("/adminpanel/login") // form'un action'ı buraya olmalı
+                .defaultSuccessUrl("/adminpanel/dist/pages/index.html", true)
+                .failureUrl("/adminpanel/dist/pages/login.html?error=true")
+                .permitAll()
+            ).userDetailsService(adminDetailsService)
+
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/frontend/login.html")
+                .permitAll()
+            );
+            
+        return http.build();
+ 
+}
+
+@Bean
+@Order(2)
+public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
+    http
+        .securityMatcher("/**")
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
+            .requestMatchers("/frontend/**").permitAll()
+            .requestMatchers("/api/user-info").authenticated()
+            .requestMatchers("/api/**").authenticated()
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/frontend/login.html")
+            .loginProcessingUrl("/frontend/login")
+            .defaultSuccessUrl("/frontend/index.html", true)
+            .failureUrl("/frontend/login.html?error=true")
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/frontend/login.html")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+            .permitAll()
+        )
+        .exceptionHandling(ex -> ex
+            .authenticationEntryPoint((request, response, authException) -> {
+                if (request.getRequestURI().startsWith("/api/")) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"error\": \"Unauthorized\"}");
+                } else {
+                    response.sendRedirect("/frontend/login.html");
+                }
+            })
+        )
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        )
+        .userDetailsService(userDetailsService);
+    
+    return http.build();
+}
+
+/*
     @Bean
     @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http   
-            .securityMatcher("/adminpanel/**") // sadece admin paneli için geçerli
+            .securityMatcher("/adminpanel/**", "/api/**") // sadece admin paneli için geçerli
             .csrf(csrf -> csrf.disable()) // test amaçlı, prod'da dikkat!
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( "/adminpanel/login", "/adminpanel/register", "/adminpanel/dist/pages/login.html").permitAll() // html ve login sayfaları herkese açık
@@ -108,7 +191,7 @@ public class SecurityConfig {
 @Order(2)
 public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
     http
-        .securityMatcher("/**")  // Match all paths instead of /frontend/** to include both frontends and API
+        .securityMatcher("/**") 
         .csrf(csrf -> csrf.disable()) 
         .authorizeHttpRequests(auth -> auth
             // Frontend paths
@@ -174,7 +257,7 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
             .deleteCookies("JSESSIONID")
         ) .userDetailsService(userDetailsService);*/
 
-           .formLogin(form -> form
+          /* .formLogin(form -> form
             .loginPage("/frontend/login.html")
             .loginProcessingUrl("/frontend/login")
             .defaultSuccessUrl("/frontend/index.html", true)
@@ -192,10 +275,10 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
-
+""
             .userDetailsService(userDetailsService);
     return http.build();
-}
+}*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -210,7 +293,7 @@ public WebMvcConfigurer corsConfigurer() {
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/api/**")
                     .allowedOrigins("http://localhost:8081") // or your frontend URL
-                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowCredentials(true);
         }
     };

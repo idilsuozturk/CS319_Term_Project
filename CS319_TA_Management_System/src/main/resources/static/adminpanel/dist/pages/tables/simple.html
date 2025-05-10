@@ -2,9 +2,11 @@
 <html lang="en">
   <!--begin::Head-->
   <head>
-  
+    
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+      <script src="../../js/tables.js"></script>  
+      <script src="../../js/excel.Import.js"></script>
+      <script src="../../js/xlsx.full.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin Panel</title>
     <!--begin::Primary Meta Tags-->
@@ -203,17 +205,38 @@
 <button type="button" class="btn btn-primary" id="addButton" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   Add
 </button>
-<!-- TODO IMPORT BUTTON-->
-<button type="button" class="btn btn-primary" id="importButton" data-bs-toggle="modal">
+
+
+<button type="button" class="btn btn-primary" id="importButton" data-bs-toggle="modal" data-bs-target="#importModal">
   Import From Excel
 </button>
 
+
+<!-- Modal -->
+<div class="modal fade" id="importModal" page-type="import" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Import Excel File</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+          <input type="file" id="excelFileInput" accept=".xlsx, .xls" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="importExcelButton" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal -->
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="add-modal-form">
-      
+       
       
      
     </div>
@@ -333,7 +356,7 @@
 
     </script>
 
-    <script src="../../js/tables.js"></script>  
+    
    
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->

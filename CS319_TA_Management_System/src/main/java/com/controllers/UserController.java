@@ -292,6 +292,8 @@ public ResponseEntity<?> getCurrentUser() {
         "roles", user.getAuthorities()
     ));
 }*/
+
+/*
 @GetMapping("/user-info")
 public ResponseEntity<?> getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -313,6 +315,36 @@ public ResponseEntity<?> getCurrentUser() {
         "username", user.getUsername(),
         "roles", user.getAuthorities()
     ));
-}
+}*/
 
+
+
+@GetMapping("/user-info")
+public ResponseEntity<?> getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+        System.out.println("Authentication is null");
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    
+    System.out.println("Authentication Principal: " + authentication.getPrincipal());
+    System.out.println("Principal Class: " + authentication.getPrincipal().getClass());
+    
+    if (!(authentication.getPrincipal() instanceof CustomUserDetails)) {
+        return ResponseEntity.status(401).body("User is not authenticated");
+    }
+    
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+    
+    // Create map with null checks
+    Map<String, Object> userInfo = new HashMap<>();
+    if (user.getId() != null) userInfo.put("id", user.getId());
+    if (user.getFirstName() != null) userInfo.put("firstName", user.getFirstName());
+    if (user.getLastName() != null) userInfo.put("lastName", user.getLastName());
+    if (user.getEmail() != null) userInfo.put("email", user.getEmail());
+    if (user.getUsername() != null) userInfo.put("username", user.getUsername());
+    if (user.getAuthorities() != null) userInfo.put("roles", user.getAuthorities());
+    
+    return ResponseEntity.ok(userInfo);
+}
 }

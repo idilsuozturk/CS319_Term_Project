@@ -36,11 +36,14 @@ fetch('/api/user-info', {
 .then(response => {
     console.log('Response status:', response.status);
     if (!response.ok) {
-        if (response.status === 401) {
+        if (response.status === 401 || response.status === 302) {
             window.location.href = '/frontend/login.html';
             throw new Error('Not authenticated');
         }
-        throw new Error("HTTP error " + response.status);
+        return response.text().then(text => {
+            console.error('Error response:', text);
+            throw new Error("HTTP error " + response.status);
+        });
     }
     return response.json();
 })
@@ -51,7 +54,7 @@ fetch('/api/user-info', {
 .catch(error => {
     console.error('Error:', error);
     if (error.message === 'Not authenticated') {
-        // Handle unauthenticated user
+        // Already redirected to login page
     }
 });
 </script>

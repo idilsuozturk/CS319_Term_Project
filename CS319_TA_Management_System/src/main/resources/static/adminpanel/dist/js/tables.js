@@ -17,13 +17,27 @@ document.addEventListener("DOMContentLoaded", function () {
     if (titleElement) titleElement.innerText = formattedTitle;
     if (breadcrumbElement) breadcrumbElement.innerText = formattedTitle;
 
-    fetch(`/api/${pageType}`)
-      .then(response => response.json())
+    fetch(`/api/${pageType}`, {
+    //credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+})
+      .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
       .then(data => {
         tableBody.innerHTML = "";
         let row = ``;
         let addForm = ``;
 
+        console.log(pageType)
         //this switch case arranges form inputs
         switch (pageType) {
           case "users":
@@ -204,11 +218,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Send data with fetch
             fetch('/api/create-user', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(dataForm)
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataForm)
             })
               .then(response => response.json())
               .then(result => {
@@ -392,8 +408,10 @@ document.addEventListener("DOMContentLoaded", function () {
             // Send data with fetch
             fetch('/api/create-course', {
               method: 'POST',
+              credentials: 'include', 
               headers: {
-                'Content-Type': 'application/json'
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
               },
               body: JSON.stringify(dataForm)
             })
@@ -447,7 +465,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         </button>
                         <button class="btn btn-danger d-flex align-items-center justify-content-center"
                                 style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
-                                onclick="deleteUser(${item.id}, ${index})">
+                                onclick="deleteUser(${item.id})">
                           <i class="bi bi-x-lg"></i>
                         </button>
 
@@ -507,7 +525,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-pencil-fill"></i>
       </button>
       <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
-                    onclick="deleteCourse(${item.id}, ${index})">
+                    onclick="deleteCourse(${item.id})">
         <i class="bi bi-x-lg"></i>
       </button>
     </div>
@@ -523,7 +541,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const taTableBody = document.getElementById(`taTableBody-${index}`);
 
                 Promise.all(item.tas.map(taId =>
-                  fetch(`/api/TA/${taId}`)
+                  fetch(`/api/TA/${taId}`, {
+                      credentials: 'include',
+                      headers: {
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json'
+                      }
+                  })
                     .then(res => {
                       if (!res.ok) {
                         throw new Error(`HTTP error! status: ${res.status}`);
@@ -564,7 +588,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       })
       .catch(error => {
-        console.error("No data", error);
+        //console.error("No data", error);
       });
   }
 });
@@ -593,7 +617,12 @@ function deleteUser(id) {
   
   if (confirmDelete) {
     fetch(`/api/delete-user/${id}`, {
-      method: 'DELETE',
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
     })
     .then(response => response.text())
     .then(result => {
@@ -612,7 +641,12 @@ function deleteCourse(id) {
   
   if (confirmation) {
     fetch(`/api/delete-course/${id}`, {
-      method: 'DELETE',
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
     })
     .then(response => response.text())
     .then(result => {

@@ -36,7 +36,7 @@ class ClassroomsController {
 
     @PostMapping("/create-Classroom")
     public Classroom createClassroom(@RequestBody Classroom classroom) {
-         return classroomService.createClassroom( classroom.getClassroomName(), classroom.getCapacity(), classroom.getExamCapacity(), classroom.getExamList());
+         return classroomService.createClassroom( classroom.getClassroomName(), classroom.getCapacity(), classroom.getExamCapacity());
     }
 
     @GetMapping("/Classroom/{id}")
