@@ -119,7 +119,7 @@ public class TAController {
     }
 
     @PostMapping("/rejmanreq")
-    public boolean rejectManuelSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
+    public boolean rejectManualSwapRequest(@RequestParam String requestDate, @RequestParam int manuelSwapRequest){
         return manualSwapRequestService.rejectManualSwapRequest(requestDate, manuelSwapRequest);
     }
 

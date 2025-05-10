@@ -56,11 +56,11 @@ public class DepartmentStaffController {
     }
 
     @PostMapping("/{id}/initautoswapreq")
-    public int initializeAutomaticSwapRequest(String date, int ownerID, String message, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID){
-        return automaticSwapRequestService.initializeAutomaticSwapRequest(date, ownerID, message, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID);
+    public int initializeAutomaticSwapRequest(String date, int id, String message, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID){
+        return automaticSwapRequestService.initializeAutomaticSwapRequest(date, id, message, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID);
     }
     
-    @GetMapping("/{id}/viewnotif")
+    @GetMapping("/{id}/viewnotifds")
     public List<String> viewNotifications(@PathVariable Integer id){
         return notificationService.viewNotificationsDepartmentStaff(id);
     }
