@@ -59,7 +59,7 @@ public class InstructorController {
         instructorService.deleteInstructorByID(id);
     }
 
-    @GetMapping("/{id}/viewnot")
+    @GetMapping("/{id}/viewnotifins")
     public List<String> viewNotifications(@PathVariable Integer id){
         return notificationService.viewNotificationsInstructor(id);
     }

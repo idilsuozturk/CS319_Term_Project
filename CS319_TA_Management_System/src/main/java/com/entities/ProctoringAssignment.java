@@ -14,12 +14,9 @@ public class ProctoringAssignment {
     private int day;
     private int startTime;
     private int endTime;
-    private String examPlace;
+    private int classroomID;
     private int courseID;
     private int proctorID;
-    @Column(columnDefinition = "json")
-    @Convert(converter = StringArrayToJsonConverter.class)
-    private String[] studentNames;
 
     public ProctoringAssignment(){
         this.year = -1;
@@ -27,22 +24,20 @@ public class ProctoringAssignment {
         this.day = -1;
         this.startTime = -1;
         this.endTime = -1;
-        this.examPlace = null;
+        this.classroomID = -1;
         this.courseID = -1;
         this.proctorID = -1;
-        studentNames = null;
     }
 
-    public ProctoringAssignment(int year, int month, int day, int startTime, int endTime, String examPlace, int courseID, int proctorID, String[] studentNames){
+    public ProctoringAssignment(int year, int month, int day, int startTime, int endTime, int classroomID, int courseID, int proctorID){
         this.year = year;
         this.month = month;
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.examPlace = examPlace;
+        this.classroomID = classroomID;
         this.courseID = courseID;
         this.proctorID = proctorID;
-        this.studentNames = studentNames;
     }
 
     public int getID(){
@@ -89,12 +84,12 @@ public class ProctoringAssignment {
         this.endTime = endTime;
     }
 
-    public String getExamPlace() {
-        return this.examPlace;
+    public int getClassroomID(){
+        return this.classroomID;
     }
 
-    public void setExamPlace(String examPlace){
-        this.examPlace = examPlace;
+    public void setClassroomID(int classroomID){
+        this.classroomID = classroomID;
     }
 
     public int getCourseID(){
@@ -112,13 +107,5 @@ public class ProctoringAssignment {
 
     public void setProctorID(int proctorID){
         this.proctorID = proctorID;
-    }
-
-    public String[] getStudentNames(){
-        return this.studentNames;
-    }
-
-    public void setStudentNames(String[] studentNames){
-        this.studentNames = studentNames;
     }
 }

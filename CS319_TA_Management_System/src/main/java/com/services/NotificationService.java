@@ -4,6 +4,7 @@ package com.services;
 import org.springframework.stereotype.Service;
 
 import com.entities.AutomaticSwapRequest;
+import com.entities.Classroom;
 import com.entities.Course;
 import com.entities.DepartmentChair;
 import com.entities.DepartmentStaff;
@@ -30,6 +31,8 @@ public class NotificationService {
 
     private final RequestRepository requestRepository;
 
+    private final ClassroomService classroomService;
+
     private final CoursesService coursesService;
 
     private final DepartmentChairService departmentChairService;
@@ -42,10 +45,11 @@ public class NotificationService {
 
     private final TAService taService;
 
-    public NotificationService(NotificationRepository notificationRepository, RequestRepository requestRepository, CoursesService coursesService, DepartmentChairService departmentChairService, DepartmentStaffService departmentStaffService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
+    public NotificationService(NotificationRepository notificationRepository, RequestRepository requestRepository, CoursesService coursesService, ClassroomService classroomService, DepartmentChairService departmentChairService, DepartmentStaffService departmentStaffService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
         this.notificationRepository = notificationRepository;
         this.requestRepository = requestRepository;
         this.coursesService = coursesService;
+        this.classroomService = classroomService;
         this.departmentChairService = departmentChairService;
         this.departmentStaffService = departmentStaffService;
         this.instructorService = instructorService;
@@ -476,8 +480,9 @@ public class NotificationService {
         if (proctoringAssignment == null){
             return "No Proctoring Assignment";
         }
+        Classroom classroom = classroomService.getClassroomByID(proctoringAssignment.getClassroomID());
         String newElement = "Course Name: " + coursesService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
-        "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
+        "\nExam Place: " + classroom.getClassroomName() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
         proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
         proctoringAssignment.getStartTime() + "-" + proctoringAssignment.getEndTime();
         return newElement;
