@@ -1,25 +1,25 @@
 package com.services;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class EmailService {
 
-    // Need an actual mailSender
-    // Todo
-    // @Autowired
-
-    public void sendEmail(String email, String header, String message) {
-        try {
-            // Ffor now
-            System.out.println("Sending email to: " + email);
-            System.out.println("Subject: " + header);
-            System.out.println("Message: " + message);
-
-        } catch (Exception e) {
-            // Log any of the error
-            System.err.println("Failed to send email: " + e.getMessage());
-        }
+    private final JavaMailSender mailSender;
+    
+    // Constructor injection instead of @Autowired
+    public EmailService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+    
+    public void sendSimpleEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        
+        mailSender.send(message);
     }
 }
