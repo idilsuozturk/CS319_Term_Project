@@ -37,7 +37,8 @@ public class DepartmentStaffController {
     @PostMapping("/create-dept-staff")
     public DepartmentStaff createDepartmentStaff(@RequestBody DepartmentStaff staff) {
         return departmentStaffService.createDepartmentStaff(
-                staff.getName(),
+                staff.getFirstName(),
+                staff.getLastName(),
                 staff.getEmail(),
                 staff.getUsername(),
                 staff.getPassword(),

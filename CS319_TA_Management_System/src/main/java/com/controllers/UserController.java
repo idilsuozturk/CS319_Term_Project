@@ -69,7 +69,8 @@ public class UserController {
         Admin admin = (Admin) user;
         return adminsService.createAdmin(
             admin.getUsername(),
-            admin.getName(),
+            admin.getFirstName(),
+            admin.getLastName(),
             admin.getEmail(),
             admin.getPassword()
         );
@@ -77,7 +78,8 @@ public class UserController {
     } else if (user instanceof TA) {
         TA ta = (TA) user;
         return taService.createTA(
-            ta.getName(),
+            ta.getFirstName(),
+            ta.getLastName(),
             ta.getEmail(),
             ta.getUsername(),
             ta.getPassword(),
@@ -87,7 +89,8 @@ public class UserController {
     } else if (user instanceof Instructor) {
         Instructor instructor = (Instructor) user;
         return instructorService.createInstructor(
-            instructor.getName(),
+            instructor.getFirstName(),
+            instructor.getLastName(),
             instructor.getEmail(),
             instructor.getUsername(),
             instructor.getPassword(),
@@ -98,7 +101,8 @@ public class UserController {
     } else if (user instanceof DepartmentStaff) {
         DepartmentStaff departmentStaff = (DepartmentStaff) user;
         return departmentStaffService.createDepartmentStaff(
-            departmentStaff.getName(),
+            departmentStaff.getFirstName(),
+            departmentStaff.getLastName(),
             departmentStaff.getEmail(),
             departmentStaff.getUsername(),
             departmentStaff.getPassword(),
@@ -107,7 +111,8 @@ public class UserController {
     } else if (user instanceof DepartmentChair) {
         DepartmentChair departmentChair = (DepartmentChair) user;
         return departmentChairService.createDepartmentChair(
-            departmentChair.getName(),
+            departmentChair.getFirstName(),
+            departmentChair.getLastName(),
             departmentChair.getEmail(),
             departmentChair.getUsername(),
             departmentChair.getPassword(),
@@ -117,7 +122,8 @@ public class UserController {
     } else if (user instanceof Dean) {
         Dean dean = (Dean) user;
         return deanService.createDean(
-            dean.getName(),
+            dean.getFirstName(),
+            dean.getLastName(),
             dean.getEmail(),
             dean.getUsername(),
             dean.getPassword(),
@@ -127,7 +133,8 @@ public class UserController {
     } else {
         // fallback or throw error
         return userService.createUser(
-            user.getName(),
+            user.getFirstName(),
+            user.getLastName(),
             user.getEmail(),
             user.getUsername(),
             user.getPassword()
@@ -300,7 +307,8 @@ public ResponseEntity<?> getCurrentUser() {
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
     return ResponseEntity.ok(Map.of(
         "id", user.getId(),
-        "name", user.getName(),
+        "name", user.getFirstName(),
+        "surname", user.getLastName(),
         "email", user.getEmail(),
         "username", user.getUsername(),
         "roles", user.getAuthorities()

@@ -40,7 +40,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         System.out.println("User found: " + user.getUsername());
             return new CustomUserDetails(
                     user.getId(),
-                    user.getName(),
+                    user.getFirstName(),
+                    user.getLastName(),
                     user.getEmail(),
                     user.getUsername(),
                     user.getPassword(),

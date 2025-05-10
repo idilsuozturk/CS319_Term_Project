@@ -10,7 +10,7 @@ public class DepartmentStaff extends Staff {
         super();
         setRole(Roles.DEPARTMENT_STAFF);
     }
-    public DepartmentStaff(String name, String email, String username, String password, String departmentCode) {
-        super(name, email, username, password, departmentCode, Roles.DEPARTMENT_STAFF);
+    public DepartmentStaff(String firstName, String lastName, String email, String username, String password, String departmentCode) {
+        super(firstName, lastName, email, username, password, departmentCode, Roles.DEPARTMENT_STAFF);
     }
 }

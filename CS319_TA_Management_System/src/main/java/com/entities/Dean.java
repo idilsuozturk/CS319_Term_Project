@@ -11,7 +11,7 @@ public class Dean extends Staff{
         super.setRole(Roles.DEAN);
     }
 
-    public Dean(String name, String email, String username, String password, String departmentCode) {
-        super(name, email, username, password, departmentCode, Roles.DEAN);
+    public Dean(String firstName, String lastName, String email, String username, String password, String departmentCode) {
+        super(firstName, lastName, email, username, password, departmentCode, Roles.DEAN);
     }
 }

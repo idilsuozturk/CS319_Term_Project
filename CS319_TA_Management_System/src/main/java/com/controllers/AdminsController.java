@@ -32,7 +32,7 @@ public class AdminsController {
 
     @PostMapping("/create-admin")
     public Admin createAdmin(@RequestBody Admin admin) {
-        return adminsService.createAdmin(admin.getUsername(), admin.getName(), admin.getEmail(), admin.getPassword()); // Create a new admin
+        return adminsService.createAdmin(admin.getUsername(), admin.getFirstName(), admin.getLastName(), admin.getEmail(), admin.getPassword()); // Create a new admin
     }
 
     @PostMapping("/delete-admin")

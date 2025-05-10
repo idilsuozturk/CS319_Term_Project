@@ -20,8 +20,8 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(String name, String username, String email, String password, String departmentCode, ArrayList<Integer> courseIDs, ArrayList<Integer> taIDs) {
-        Instructor newInstructor = new Instructor(name, email, username, password, departmentCode, courseIDs, taIDs);
+    public Instructor createInstructor(String firstName, String lastName, String username, String email, String password, String departmentCode, ArrayList<Integer> courseIDs, ArrayList<Integer> taIDs) {
+        Instructor newInstructor = new Instructor(firstName, lastName, email, username, password, departmentCode, courseIDs, taIDs);
         return instructorRepository.save(newInstructor);
     }
 
@@ -36,6 +36,8 @@ public class InstructorService {
     public Instructor updateInstructorByID(Integer id, Instructor instructor) {
         Instructor existingInstructor = instructorRepository.findById(id).orElse(null);
         if (existingInstructor != null) {
+            existingInstructor.setFirstName(instructor.getFirstName());
+            existingInstructor.setLastName(instructor.getLastName());
             existingInstructor.setUsername(instructor.getUsername());
             existingInstructor.setEmail(instructor.getEmail());
             existingInstructor.setPassword(instructor.getPassword());

@@ -23,8 +23,8 @@ public class AdminsService {
         return adminRepository.findByUsername(username).orElse(null);  // Find admin by username
     }
 
-    public Admin createAdmin(String username, String name, String email, String password) {
-        Admin newAdmin = new Admin(username, name, email, password);  // Create new admin object
+    public Admin createAdmin(String username, String firstName, String lastName, String email, String password) {
+        Admin newAdmin = new Admin(username, firstName, lastName, email, password);  // Create new admin object
         return adminRepository.save(newAdmin);  // Insert admin into MySQL
     }
 
@@ -35,8 +35,8 @@ public class AdminsService {
     public Admin updateAdminById(Integer id, Admin admin) {
         Admin existingAdmin = adminRepository.findById(id).orElse(null);  // Find admin by ID
         if (existingAdmin != null) {
-
-            existingAdmin.setName(admin.getName());
+            existingAdmin.setFirstName(admin.getFirstName());
+            existingAdmin.setLastName(admin.getLastName());
             existingAdmin.setEmail(admin.getEmail());
             existingAdmin.setPassword(admin.getPassword());
             return adminRepository.save(existingAdmin);  // Update admin in MySQL

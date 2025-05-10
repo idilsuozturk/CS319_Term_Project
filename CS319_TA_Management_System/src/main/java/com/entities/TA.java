@@ -55,8 +55,8 @@ public class TA extends User {
         this.swapCount = -1;
     }
     
-    public TA(String name, String email, String username, String password, boolean master, Integer advisorID) {
-        super(name, email, username, password, Roles.TA);
+    public TA(String firstName, String lastName, String email, String username, String password, boolean master, Integer advisorID) {
+        super(firstName, lastName, email, username, password, Roles.TA);
         this.master = master;
         this.mode = 1;
         this.advisorID = advisorID;

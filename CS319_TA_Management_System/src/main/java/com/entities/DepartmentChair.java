@@ -13,7 +13,7 @@ public class DepartmentChair extends Staff{
         super.setRole(Roles.DEPARTMENT_CHAIR);
     }
 
-    public DepartmentChair(String name, String email, String userName, String password, String departmentCode) {
-        super(name, email, userName, password, departmentCode, Roles.DEPARTMENT_CHAIR);
+    public DepartmentChair(String firstName, String lastName, String email, String userName, String password, String departmentCode) {
+        super(firstName, lastName, email, userName, password, departmentCode, Roles.DEPARTMENT_CHAIR);
     }
 }

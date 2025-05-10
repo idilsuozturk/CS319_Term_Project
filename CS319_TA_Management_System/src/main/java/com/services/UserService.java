@@ -20,8 +20,8 @@ public class UserService {
         return userRepository.findAll();  // Fetch all users
     }
 
-    public User createUser(String name, String email, String username, String password) {
-        return userRepository.save(new User(name,email, username, password, Roles.UNKNOWN));  // Insert user into MySQL
+    public User createUser(String firstName, String lastName, String email, String username, String password) {
+        return userRepository.save(new User(firstName, lastName, email, username, password, Roles.UNKNOWN));  // Insert user into MySQL
     }
 
     public void deleteUserById(Integer id) {
@@ -31,7 +31,8 @@ public class UserService {
     public User updateUserById(Integer id, User user) {
         User existingUser = userRepository.findById(id).orElse(null);  // Find user by ID
         if (existingUser != null) {
-            existingUser.setName(user.getName());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());

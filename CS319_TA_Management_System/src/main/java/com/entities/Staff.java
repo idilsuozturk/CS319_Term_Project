@@ -12,8 +12,8 @@ public class Staff extends User {
         super();
         this.departmentCode = null;
     }
-    public Staff( String name, String email, String username, String password, String departmentCode, Roles role) {
-        super( name, email, username, password, role);
+    public Staff(String firstName, String lastName, String email, String username, String password, String departmentCode, Roles role) {
+        super(firstName, lastName, email, username, password, role);
         this.departmentCode = departmentCode;
     }
 

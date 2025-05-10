@@ -34,8 +34,8 @@ public class TAService {
         return taRepository.findAll();
     }
 
-    public TA createTA(String name, String username, String email, String password, boolean master, Integer advisorID) {
-        TA newTA = new TA(name, email, username, password, master, advisorID);
+    public TA createTA(String firstName, String lastName, String username, String email, String password, boolean master, Integer advisorID) {
+        TA newTA = new TA(firstName, lastName, email, username, password, master, advisorID);
         return taRepository.save(newTA);
     }
 
@@ -50,6 +50,8 @@ public class TAService {
     public TA updateTAByID(Integer id, TA ta) {
         TA existingTA = taRepository.findById(id).orElse(null);
         if (existingTA != null) {
+            existingTA.setFirstName(ta.getFirstName());
+            existingTA.setLastName(ta.getLastName());
             existingTA.setEmail(ta.getEmail());
             existingTA.setUsername(ta.getUsername());
             existingTA.setPassword(ta.getPassword());

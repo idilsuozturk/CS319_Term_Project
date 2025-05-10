@@ -20,8 +20,8 @@ public class DeanService {
     }
 
 
-    public Dean createDean(String name, String email, String username, String password, String departmentCode) {
-        Dean newDean = new Dean(name, email, username, password, departmentCode);
+    public Dean createDean(String firstName, String lastName, String email, String username, String password, String departmentCode) {
+        Dean newDean = new Dean(firstName, lastName, email, username, password, departmentCode);
         return deanRepository.save(newDean);
     }
     
@@ -36,7 +36,8 @@ public class DeanService {
     public Dean updateDean(Integer id, Dean dean) {
         Dean existingDean = deanRepository.findById(id).orElse(null);
         if (existingDean != null) {
-            existingDean.setName(dean.getName());
+            existingDean.setFirstName(dean.getFirstName());
+            existingDean.setLastName(dean.getLastName());
             existingDean.setEmail(dean.getEmail());
             existingDean.setUsername(dean.getUsername());
             existingDean.setPassword(dean.getPassword());

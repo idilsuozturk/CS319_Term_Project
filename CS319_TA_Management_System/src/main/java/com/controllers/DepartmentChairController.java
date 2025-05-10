@@ -40,7 +40,8 @@ public class DepartmentChairController {
     @PostMapping("/create-dept-chair")
     public DepartmentChair createDepartmentChair(@RequestBody DepartmentChair chair) {
         return departmentChairService.createDepartmentChair(
-            chair.getName(),
+            chair.getFirstName(),
+            chair.getLastName(),
             chair.getEmail(),
             chair.getUsername(),
             chair.getPassword(),

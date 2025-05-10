@@ -19,21 +19,23 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
 
     private Integer id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Integer id, String name, String email, String username, String password,
+    public CustomUserDetails(Integer id, String firstName, String lastName, String email, String username, String password,
                              String role ) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.authorities =  Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
-        System.out.println("user created id: "  + id + " name: " + name + " email: " + email + " username: " + username + " password: " + password);
+        System.out.println("user created id: "  + id + " name: " + firstName + "surname: " + lastName + " email: " + email + " username: " + username + " password: " + password);
         System.out.println("authorities: " + authorities);
     }
 
@@ -41,8 +43,12 @@ public class CustomUserDetails implements UserDetails {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName(){
+        return this.lastName;
     }
 
     public String getEmail() {
