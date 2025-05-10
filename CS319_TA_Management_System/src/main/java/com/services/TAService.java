@@ -3,12 +3,7 @@ package com.services;
 import org.springframework.stereotype.Service;
 
 import com.entities.TA;
-import com.entities.Course;
-import com.entities.Instructor;
-import com.entities.ProctoringAssignment;
 import com.repositories.TARepository;
-
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,17 +12,8 @@ public class TAService {
    
     private final TARepository taRepository;
 
-    private final CoursesService courseService; 
-
-    private final InstructorService instructorService;
-
-    private final ProctoringAssignmentService proctoringAssignmentService;
-
-    public TAService(TARepository taRepository, CoursesService courseService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService) {
+    public TAService(TARepository taRepository) {
         this.taRepository = taRepository;
-        this.courseService = courseService; 
-        this.instructorService = instructorService;
-        this.proctoringAssignmentService = proctoringAssignmentService;
     }
 
     public List<TA> getAllTAs() {
@@ -68,63 +54,6 @@ public class TAService {
             return taRepository.save(existingTA);
         }
         return null;
-    }
-
-    public boolean addCourse(Integer courseID, Integer taID, boolean taken){
-        if (taken){
-            Course course = courseService.getCourseByID(courseID);
-            if (course != null){
-                TA ta = taRepository.findById(taID).orElse(null);
-                if (ta != null){
-                    String[] courseSchedule = course.getSchedule();
-                    String[] taSchedule = ta.getSchedule();
-                    for (int i = 0; i < 98; i++){
-                        if (courseSchedule[i] != null){
-                            if (taSchedule[i] != null){
-                                return false;
-                            }
-                            else {
-                                taSchedule[i] = courseSchedule[i] + course.getCode() + " - " + course.getSection();
-                            }
-                        }
-                    }
-                    ArrayList<Integer> coursesTaken = ta.getCoursesTaken();
-                    coursesTaken.add(courseID);
-                    ta.setCoursesTaken(coursesTaken);
-                    updateTAByID(taID, ta);
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-        else {
-            Course course = courseService.getCourseByID(courseID);
-            if (course != null){
-                TA ta = taRepository.findById(taID).orElse(null);
-                if (ta != null){
-                    ArrayList<Integer> coursesAssisted = ta.getCoursesAssisted();
-                    for (int i : coursesAssisted){
-                        if (i == courseID){
-                            return false;
-                        }
-                    }
-                    coursesAssisted.add(courseID);
-                    ta.setCoursesAssisted(coursesAssisted);
-                    updateTAByID(taID, ta);
-                    Instructor instructor = instructorService.getInstructorByID(course.getInstructorID());
-                    if (instructor != null){
-                        ArrayList<Integer> taIDs = instructor.getTaIDs();
-                        taIDs.add(taID);
-                        instructor.setTaIDs(taIDs);
-                        instructorService.updateInstructorByID(instructor.getId(), instructor);
-                    }
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
     }
 
     public void changeMode(int id, byte newMode){
@@ -172,100 +101,12 @@ public class TAService {
         return allTAs;
     }
 
-    public List<ProctoringAssignment> showPossibleProctoringAssignments(Integer receiverID, Integer proctoringAssignmentID) {
-        ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-        TA requester = taRepository.findById(proctoringAssignment.getProctorID()).orElse(null);
-        TA receiver = taRepository.findById(receiverID).orElse(null);
-        if (proctoringAssignment == null || requester == null || receiver == null){
-            return null;
-        }
-        ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
-        if (isAvailable(receiverID, proctoringAssignmentID, -1)) output.add(null);
-        for (int id : receiver.getProctoringAssignmentIDs()){
-            if (isAvailable(requester.getId(), id, proctoringAssignmentID)){
-                ProctoringAssignment newProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(id);
-                output.add(newProctoringAssignment);
-            }
-        }
-        return output;
-    }
-
     public int viewTotalWorkload(Integer id) {
         TA ta = taRepository.findById(id).orElse(null);
         if (ta != null){
             return ta.getTotalWorkload();
         }
         return -1;
-    }
-
-    public List<ProctoringAssignment> viewProctoringAssignments(Integer id) {
-        TA ta = taRepository.findById(id).orElse(null);
-        if (ta != null){
-            ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
-            for (int i : ta.getProctoringAssignmentIDs()){
-                ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(i);
-                output.add(proctoringAssignment);
-            }
-            return output;
-        }
-        return null;
-    }
-
-    public boolean isAvailable(int taID, Integer proctoringAssignmentID, Integer ignore){
-        ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-        ProctoringAssignment proctoringAssignmentToBeIgnored = proctoringAssignmentService.getProctoringAssignmentByID(ignore);
-        TA ta = taRepository.findById(taID).orElse(null);
-        if (proctoringAssignment == null || ta == null){
-            return false;
-        }
-        int day = proctoringAssignment.getDay();
-        int month = proctoringAssignment.getMonth();
-        int year = proctoringAssignment.getYear();
-        for (String j : ta.getOnLeaveDates()){
-            if (Integer.valueOf(j.substring(0,2)) == day &&
-                Integer.valueOf(j.substring(3, 5)) == month && 
-                Integer.valueOf(j.substring(6)) == year) return false;
-        }
-        int start = proctoringAssignment.getStartTime();
-        int end = proctoringAssignment.getEndTime();
-        int indexStart = start / 100;
-        int indexEnd = end / 100;
-        if (start % 100 <= 30){
-            indexStart -= 9;
-        }
-        else {
-            indexStart -= 8;
-        }
-        if (end % 100 <= 30){
-            indexEnd -= 9;
-        }
-        else {
-            indexEnd -= 8;
-        }
-        for (int i = indexStart; i <= indexEnd;i++){
-            if (ta.getSchedule()[(day - 1) * 14 + i] == null){
-                return false;
-            }   
-        }
-        for (int id : ta.getProctoringAssignmentIDs()){
-            if (proctoringAssignmentToBeIgnored != null && id == proctoringAssignmentToBeIgnored.getID()) continue;
-            ProctoringAssignment test = proctoringAssignmentService.getProctoringAssignmentByID(id);
-            if (test != null) {
-                int testDay = test.getDay();
-                if (day == testDay){
-                    int testMonth = test.getMonth();
-                    if (month == testMonth){
-                        int testYear = test.getYear();
-                        if (year == testYear){
-                            int testStart = test.getStartTime();
-                            int testEnd = test.getEndTime();
-                            if (testStart > start && end > testStart || start > testStart && testEnd > start) return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
     }
 
     private String convertScheduleCellToString(String string) {

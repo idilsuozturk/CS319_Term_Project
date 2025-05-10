@@ -1,7 +1,9 @@
 package com.controllers;
 
+import com.entities.Course;
 import com.entities.Instructor;
 import com.entities.TaskSubmissionRequest;
+import com.services.CoursesService;
 import com.services.InstructorService;
 import com.services.NotificationService;
 import com.services.TaskSubmissionRequestService;
@@ -13,15 +15,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class InstructorController {
-
     private final InstructorService instructorService;
+
+    private final CoursesService coursesService;
 
     private final NotificationService notificationService;
 
     private final TaskSubmissionRequestService taskSubmissionRequestService;
 
-    public InstructorController(InstructorService instructorService, NotificationService notificationService, TaskSubmissionRequestService taskSubmissionRequestService) {
+    public InstructorController(InstructorService instructorService, CoursesService coursesService, NotificationService notificationService, TaskSubmissionRequestService taskSubmissionRequestService) {
         this.instructorService = instructorService;
+        this.coursesService = coursesService;
         this.notificationService = notificationService;
         this.taskSubmissionRequestService = taskSubmissionRequestService;
     }
@@ -65,9 +69,19 @@ public class InstructorController {
         return notificationService.viewNotificationsInstructor(id);
     }
 
-    @GetMapping("/{id}/viewreq")
+    @GetMapping("/{id}/viewreqins")
     public List<TaskSubmissionRequest> viewRequests(@PathVariable Integer id){
         return taskSubmissionRequestService.viewRequests(id);
+    }
+
+    @GetMapping("/{id}/viewcourins")
+    public List<Course> viewCourses(@PathVariable Integer id){
+        return coursesService.viewCoursesGiven(id);
+    }
+
+    @GetMapping("/{id}/viewassisttas")
+    public List<String> viewAssistingTAs(@PathVariable Integer id){
+        return coursesService.viewAssistingTAs(id);
     }
 
     @PostMapping("/{id}/apptaskreq")

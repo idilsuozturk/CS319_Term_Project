@@ -13,5 +13,5 @@ import com.entities.Course;
 
 public interface CoursesRepository  extends JpaRepository<Course, Integer> {
     Optional<Course> findByCodeAndSection(String code, String section);
-    Optional<Course> findByCode(String code);
+    Optional<Course> findFirstByCode(String code);
 } 

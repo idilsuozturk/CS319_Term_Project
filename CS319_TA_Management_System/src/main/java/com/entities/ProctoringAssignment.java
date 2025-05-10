@@ -1,7 +1,5 @@
 package com.entities;
 
-import com.converters.StringArrayToJsonConverter;
-
 import jakarta.persistence.*;
 @Entity
 public class ProctoringAssignment {

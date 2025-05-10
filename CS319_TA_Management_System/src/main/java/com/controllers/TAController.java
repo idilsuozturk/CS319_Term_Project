@@ -12,6 +12,7 @@ import com.services.CoursesService;
 import com.services.LeaveofAbsenceRequestService;
 import com.services.ManualSwapRequestService;
 import com.services.NotificationService;
+import com.services.ProctoringAssignmentService;
 import com.services.TAService;
 import com.services.TaskSubmissionRequestService;
 
@@ -40,19 +41,22 @@ public class TAController {
 
     private final NotificationService notificationService;
 
+    private final ProctoringAssignmentService proctoringAssignmentService;
+
     private final TAService taService;
 
     private final TaskSubmissionRequestService taskSubmissionRequestService;
 
 
     public TAController(TAService taService, CoursesService coursesService, LeaveofAbsenceRequestService leaveofAbsenceRequestService, ManualSwapRequestService manualSwapRequestService,
-                        TaskSubmissionRequestService taskSubmissionRequestService, NotificationService notificationService) {
+                        TaskSubmissionRequestService taskSubmissionRequestService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService) {
         this.taService = taService;
         this.coursesService = coursesService;
         this.leaveofAbsenceRequestService = leaveofAbsenceRequestService;
         this.manualSwapRequestService = manualSwapRequestService;
         this.taskSubmissionRequestService = taskSubmissionRequestService;
         this.notificationService = notificationService;
+        this.proctoringAssignmentService = proctoringAssignmentService;
     }
 
     @GetMapping("/test")
@@ -101,7 +105,7 @@ public class TAController {
 
     @GetMapping("/{id}/showpossibleprocswapreq")
     public List<ProctoringAssignment> showPossibleProctoringAssignments(@RequestParam int receiverID, @RequestParam int proctoringAssignmentID){
-        return taService.showPossibleProctoringAssignments(receiverID, proctoringAssignmentID);
+        return proctoringAssignmentService.showPossibleProctoringAssignments(receiverID, proctoringAssignmentID);
     }
 
     @PostMapping("/initmanreq")
@@ -142,7 +146,7 @@ public class TAController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course name or course section is incorrect!");
             }
         }
-        return taService.addCourse(course.getId(), taID, taken);
+        return coursesService.addCourse(course.getId(), taID, taken);
     }
 
     @GetMapping("/{id}/schedule")
@@ -162,12 +166,22 @@ public class TAController {
 
     @GetMapping("/{id}/proctoring")
     public List<ProctoringAssignment> viewProctoringAssignment(@PathVariable Integer id) {
-        return taService.viewProctoringAssignments(id);
+        return proctoringAssignmentService.viewProctoringAssignments(id);
     }
 
     @GetMapping("/{id}/viewnotifta")
     public List<String> viewNotifications(@PathVariable Integer id){
         return notificationService.viewNotificationsTA(id);
+    }
+
+    @GetMapping("/{id}/viewcouta")
+    public List<String> viewCourses(@PathVariable Integer id, @RequestParam boolean option){
+        if (option){
+            return coursesService.viewCoursesTaken(id);
+        }
+        else {
+            return coursesService.viewCoursesAssisted(id);
+        }
     }
 
     @PostMapping("/{id}/createloareq")
