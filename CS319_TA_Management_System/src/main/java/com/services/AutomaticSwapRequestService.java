@@ -14,14 +14,17 @@ import com.repositories.AutomaticSwapRequestRepository;
 public class AutomaticSwapRequestService {
     private final AutomaticSwapRequestRepository automaticSwapRequestRepository;
 
+    private final EmailService emailService;
+
     private final NotificationService notificationService;
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
     private final TAService taService;
 
-    public AutomaticSwapRequestService(AutomaticSwapRequestRepository automaticSwapRequestRepository, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
+    public AutomaticSwapRequestService(AutomaticSwapRequestRepository automaticSwapRequestRepository, EmailService emailService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
         this.automaticSwapRequestRepository = automaticSwapRequestRepository;
+        this.emailService = emailService;
         this.notificationService = notificationService;
         this.proctoringAssignmentService = proctoringAssignmentService;
         this.taService = taService;
@@ -102,6 +105,36 @@ public class AutomaticSwapRequestService {
         taService.updateTAByID(secondTAID, secondTA);
         AutomaticSwapRequest automaticSwapRequest = createAutomaticSwapRequest(ownerID, message, firstTAID, secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID);
         notificationService.createNotification(date, automaticSwapRequest.getID(), 0);
+        String emailDateFirst = "";
+        String emailDateSecond = "";
+        if (firstProctoringAssignment.getDay() < 10) {
+            emailDateFirst += "0" + firstProctoringAssignment.getDay();
+        }
+        else {
+            emailDateFirst += firstProctoringAssignment.getDay();
+        }
+        if (firstProctoringAssignment.getMonth() < 10){
+            emailDateFirst += "/0" + firstProctoringAssignment.getMonth();
+        }
+        else {
+            emailDateFirst += "/" + firstProctoringAssignment.getMonth();
+        }
+        emailDateFirst += firstProctoringAssignment.getYear();
+        if (secondProctoringAssignment.getDay() < 10) {
+            emailDateSecond += "0" + secondProctoringAssignment.getDay();
+        }
+        else {
+            emailDateSecond += secondProctoringAssignment.getDay();
+        }
+        if (secondProctoringAssignment.getMonth() < 10){
+            emailDateSecond += "/0" + secondProctoringAssignment.getMonth();
+        }
+        else {
+            emailDateSecond += "/" + secondProctoringAssignment.getMonth();
+        }
+        emailDateSecond += secondProctoringAssignment.getYear();
+        emailService.sendEmail(firstTA.getEmail(), "Proctoring Assignment Swap", "Your Proctoring Assignment due to " + emailDateFirst + " has been swapped with TA " + secondTA.getName() + "'s Proctoring Assignment due to " + emailDateSecond + ". For more information, check your notifications page. Have a good day!");
+        emailService.sendEmail(secondTA.getEmail(), "Proctoring Assignment Swap", "Your Proctoring Assignment due to " + emailDateSecond + " has been swapped with TA " + firstTA.getName() + "'s Proctoring Assignment due to " + emailDateFirst + ". For more information, check your notifications page. Have a good day!");
         return 0;
     }
 }

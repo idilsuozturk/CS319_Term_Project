@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.entities.DepartmentChair;
 import com.entities.LeaveofAbsenceRequest;
 import com.entities.TA;
 import com.repositories.LeaveofAbsenceRequestRepository;
@@ -13,14 +14,20 @@ import com.repositories.LeaveofAbsenceRequestRepository;
 public class LeaveofAbsenceRequestService {
     private final LeaveofAbsenceRequestRepository leaveofAbsenceRequestRepository;
 
+    private final DepartmentChairService departmentChairService;
+
     private final NotificationService notificationService;
 
     private final TAService taService;
 
-    public LeaveofAbsenceRequestService(LeaveofAbsenceRequestRepository leaveofAbsenceRequestRepository, NotificationService notificationService, TAService taService) {
+    private final EmailService emailService;
+
+    public LeaveofAbsenceRequestService(LeaveofAbsenceRequestRepository leaveofAbsenceRequestRepository, DepartmentChairService departmentChairService, NotificationService notificationService, TAService taService, EmailService emailService) {
         this.leaveofAbsenceRequestRepository = leaveofAbsenceRequestRepository;
+        this.departmentChairService = departmentChairService;
         this.notificationService = notificationService;
         this.taService = taService;
+        this.emailService = emailService;
     }
 
     public List<LeaveofAbsenceRequest> getAllLeaveofAbsenceRequests() {
@@ -64,14 +71,32 @@ public class LeaveofAbsenceRequestService {
         return output;
     }
 
-    public void createLeaveofAbsenceRequest(int id, String requestDate, String message, ArrayList<String> dates){
+    public boolean createLeaveofAbsenceRequest(int id, String requestDate, String message, ArrayList<String> dates){
+        TA ta = taService.getTAByID(id);
+        if (ta == null) {
+            return false;
+        }
+        List<DepartmentChair> departmentChairs = departmentChairService.getAllDepartmentChair();
+        if (departmentChairs.size() == 0){
+            return false;
+        }
         LeaveofAbsenceRequest leaveofAbsenceRequest = createLeaveofAbsenceRequest(id, message, dates);
         notificationService.createNotification(requestDate, leaveofAbsenceRequest.getID(), 0);
+        for (DepartmentChair dc : departmentChairs){
+            emailService.sendEmail(dc.getEmail(), "Leave of Absence Request", "TA " + ta.getName() + " has sent a Leave of Absence Request. You can approve or reject this request in you application requests page.\nHave a good day!");
+        }
+        return true;
     }
 
     public boolean approveLeaveofAbsenceRequest(String requestDate, int chairID, int leaveofAbsenceID){
         LeaveofAbsenceRequest leaveofAbsenceRequest = getLeaveofAbsenceRequestByID(leaveofAbsenceID);
+        if (leaveofAbsenceRequest == null) {
+            return false;
+        }
         TA ta = taService.getTAByID(leaveofAbsenceRequest.getOwnerID());
+        if (ta == null){
+            return false;
+        }
         leaveofAbsenceRequest.setRespondentID(chairID);
         leaveofAbsenceRequest.setPending(false);
         notificationService.createNotification(requestDate, leaveofAbsenceRequest.getID(), 1);
@@ -98,16 +123,25 @@ public class LeaveofAbsenceRequestService {
         ta.setOnLeaveDates(currentDates);
         taService.updateTAByID(leaveofAbsenceRequest.getOwnerID(), ta);
         updateLeaveofAbsenceRequestByID(leaveofAbsenceID, leaveofAbsenceRequest);
+        emailService.sendEmail(ta.getEmail(), "Approval of Your Leave of Absence Request", "Your leave of absence request has been approved. Have a good day!");
         return true;
     }
 
     public boolean rejectLeaveofAbsenceRequest(String requestDate, int chairID, int leaveofAbsenceID){
         LeaveofAbsenceRequest leaveofAbsenceRequest = getLeaveofAbsenceRequestByID(leaveofAbsenceID);
+        if (leaveofAbsenceRequest == null){
+            return false;
+        }
+        TA ta = taService.getTAByID(leaveofAbsenceRequest.getOwnerID());
+        if (ta == null){
+            return false;
+        }
         notificationService.createNotification(requestDate, leaveofAbsenceID, 2);
         leaveofAbsenceRequest.setPending(false);
         leaveofAbsenceRequest.setRespondentID(chairID);
         updateLeaveofAbsenceRequestByID(leaveofAbsenceID, leaveofAbsenceRequest);
-        return false;
+        emailService.sendEmail(ta.getEmail(), "Rejection of Your Leave of Absence Request", "Your leave of absence request has been rejected. Have a good day!");
+        return true;
     }
 
     private boolean compare(String stringOutside, String stringInside) {

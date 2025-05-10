@@ -185,8 +185,8 @@ public class TAController {
     }
 
     @PostMapping("/{id}/createloareq")
-    public void createLeaveofAbsenceRequest(@PathVariable Integer id, @RequestParam String requestDate, @RequestParam String message, @RequestParam ArrayList<String> dates){
-        leaveofAbsenceRequestService.createLeaveofAbsenceRequest(id, null, null, null);
+    public boolean createLeaveofAbsenceRequest(@PathVariable Integer id, @RequestParam String requestDate, @RequestParam String message, @RequestParam ArrayList<String> dates){
+        return leaveofAbsenceRequestService.createLeaveofAbsenceRequest(id, null, null, null);
     }
 
     @PostMapping("/{id}/createtaskreq")

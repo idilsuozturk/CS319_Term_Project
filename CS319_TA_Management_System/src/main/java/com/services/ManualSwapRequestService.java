@@ -14,14 +14,17 @@ import com.repositories.ManualSwapRequestRepository;
 public class ManualSwapRequestService {
     private final ManualSwapRequestRepository manualSwapRequestRepository;
 
+    private final EmailService emailService;
+
     private final NotificationService notificationService;
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
     private final TAService taService;
 
-    public ManualSwapRequestService(ManualSwapRequestRepository manualSwapRequestRepository, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
+    public ManualSwapRequestService(ManualSwapRequestRepository manualSwapRequestRepository, EmailService emailService, NotificationService notificationService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
         this.manualSwapRequestRepository = manualSwapRequestRepository;
+        this.emailService = emailService;
         this.notificationService = notificationService;
         this.proctoringAssignmentService = proctoringAssignmentService;
         this.taService = taService;
@@ -58,12 +61,24 @@ public class ManualSwapRequestService {
         return manualSwapRequestRepository.findById(id).orElse(null); 
     }
 
-    public void initializeManualSwapRequest(String requestDate, String message, int requesterProctoringAssignmentID, int receiverProctoringAssignmentID){
+    public boolean initializeManualSwapRequest(String requestDate, String message, int requesterProctoringAssignmentID, int receiverProctoringAssignmentID){
+        if (receiverProctoringAssignmentID == requesterProctoringAssignmentID){
+            return false;
+        }
         ProctoringAssignment firstTAProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(requesterProctoringAssignmentID);
         ProctoringAssignment secondTAProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(receiverProctoringAssignmentID);
-        if (firstTAProctoringAssignment == null || secondTAProctoringAssignment == null) return;
+        if (firstTAProctoringAssignment == null || secondTAProctoringAssignment == null){
+            return false;
+        }
+        TA firstTA = taService.getTAByID(firstTAProctoringAssignment.getProctorID());
+        TA secondTA = taService.getTAByID(secondTAProctoringAssignment.getProctorID());
+        if (firstTA == null || secondTA == null){
+            return false;
+        }
+        emailService.sendEmail(secondTA.getEmail(), "Proctoring Swap Request", "TA " + firstTA.getName() + " has sent to you a Proctoring Swap Request. For more details, please check your requests page or notification page. Have a good day!");
         ManualSwapRequest newManualSwapRequest = createManualSwapRequest(firstTAProctoringAssignment.getProctorID(), message, secondTAProctoringAssignment.getProctorID(), requesterProctoringAssignmentID, receiverProctoringAssignmentID);
         notificationService.createNotification(requestDate, newManualSwapRequest.getID(), 0);
+        return true;
     }
 
     public List<ManualSwapRequest> viewRequests(int id){
@@ -106,6 +121,7 @@ public class ManualSwapRequestService {
                 notificationService.createNotification(requestDate, manualSwapRequest.getID(), 1);
                 manualSwapRequest.setPending(false);
                 updateManualSwapRequestByID(manualSwapRequestID, manualSwapRequest);
+                emailService.sendEmail(owner.getEmail(), "Approval of Your Proctoring Assignment Swap Request", "Your Proctoring Swap Request has been approved by TA " + receiver.getName() + ". Have a good day!");
                 return true;
             }
             return false;
@@ -116,9 +132,16 @@ public class ManualSwapRequestService {
     public boolean rejectManualSwapRequest(String requestDate, Integer manuelSwapRequestID) {
         ManualSwapRequest manualSwapRequest = getManualSwapRequestByID(manuelSwapRequestID);
         if (manualSwapRequest != null){
+            TA firstTA = taService.getTAByID(manualSwapRequest.getOwnerID());
+            TA secondTA = taService.getTAByID(manualSwapRequest.getReceiverID());
+            if (firstTA == null || secondTA == null) {
+                return false;
+            }
             notificationService.createNotification(requestDate, manualSwapRequest.getID(), 2);
             manualSwapRequest.setPending(false);
             updateManualSwapRequestByID(manuelSwapRequestID, manualSwapRequest);
+            emailService.sendEmail(firstTA.getEmail(), "Rejection of Your Proctoring Assignment Swap Request", "Your Proctoring Swap Request has been rejected by TA " + secondTA.getName() + ". Have a good day!");
+            return true;
         }
         return false;
     }

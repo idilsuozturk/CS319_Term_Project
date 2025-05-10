@@ -19,15 +19,18 @@ public class TaskSubmissionRequestService {
 
     private final CoursesService coursesService;
 
+    private final EmailService emailService;
+
     private final InstructorService instructorService;
 
     private final NotificationService notificationService;
 
     private final TAService taService;
 
-    public TaskSubmissionRequestService(TaskSubmissionRequestRepository taskSubmissionRequestRepository, CoursesService coursesService, InstructorService instructorService, NotificationService notificationService, TAService taService) {
+    public TaskSubmissionRequestService(TaskSubmissionRequestRepository taskSubmissionRequestRepository, CoursesService coursesService, EmailService emailService, InstructorService instructorService, NotificationService notificationService, TAService taService) {
         this.taskSubmissionRequestRepository = taskSubmissionRequestRepository;
         this.coursesService = coursesService;
+        this.emailService = emailService;
         this.instructorService = instructorService;
         this.notificationService = notificationService;
         this.taService = taService;
@@ -79,15 +82,31 @@ public class TaskSubmissionRequestService {
         return output;
     }
 
-    public void createTaskSubmissionRequest(int id, TaskTypes taskType, String taskDate, String requestDate, String message, int courseID){
+    public boolean createTaskSubmissionRequest(int id, TaskTypes taskType, String taskDate, String requestDate, String message, int courseID){
+        TA ta = taService.getTAByID(id);
+        if (ta == null) {
+            return false;
+        }
+        Course course = coursesService.getCourseByID(courseID);
+        Instructor instructor = instructorService.getInstructorByID(course.getInstructorID());
+        if (instructor == null) { 
+            return false;
+        }
+        emailService.sendEmail(instructor.getEmail(), "Task Submission Request", "TA " + ta.getName() + " has sent a Task Submission Request for the " + course.getCode() + " course. You can approve/reject this request in your requests page. Have a good day!");
         TaskSubmissionRequest taskSubmissionRequest = createTaskSubmissionRequest(id, message, taskType, taskDate, courseID);
         notificationService.createNotification(requestDate, taskSubmissionRequest.getID(), 0);
+        return true;
     }
 
     public boolean approveTaskSubmissionRequest(String approvalDate, int instructorID, int taskSubmissionID){
         TaskSubmissionRequest taskSubmissionRequest = getTaskSubmissionRequestByID(taskSubmissionID);
+        if (taskSubmissionRequest == null) {
+            return false;
+        }
         TA ta = taService.getTAByID(taskSubmissionRequest.getOwnerID());
-        if (ta == null || taskSubmissionRequest == null) return false;
+        if (ta == null){
+            return false;
+        } 
         if (taskSubmissionRequest.getTaskType() == TaskTypes.GRADING){
             int newTotalWorkload = ta.getTotalWorkload();
             newTotalWorkload += 3;
@@ -118,15 +137,24 @@ public class TaskSubmissionRequestService {
         notificationService.createNotification(approvalDate, taskSubmissionID, 1);
         taService.updateTAByID(ta.getId(), ta);
         updateTaskSubmissionRequestByID(taskSubmissionID, taskSubmissionRequest);
+        emailService.sendEmail(ta.getEmail(), "Approval of Your Task Submission Request", "Your task submission request is approved. For more details, please check your notifications page. Have a good day!");
         return true;
     }
 
     public boolean rejectTaskSubmissionRequest(String rejectionDate, int instructorID, int taskSubmissionID){
         TaskSubmissionRequest taskSubmissionRequest = getTaskSubmissionRequestByID(taskSubmissionID);
+        if (taskSubmissionRequest == null) {
+            return false;
+        }
+        TA ta = taService.getTAByID(taskSubmissionRequest.getOwnerID());
+        if (ta == null) {
+            return false;
+        }
         taskSubmissionRequest.setPending(false);
         taskSubmissionRequest.setRespondentID(instructorID);
         notificationService.createNotification(rejectionDate, taskSubmissionID, 2);
         updateTaskSubmissionRequestByID(taskSubmissionID, taskSubmissionRequest);
+        emailService.sendEmail(ta.getEmail(), "Rejection of Your Task Submission Request", "Your task submission request is rejected. For more details, please check your notifications page. Have a good day!");
         return true;
     }
 
