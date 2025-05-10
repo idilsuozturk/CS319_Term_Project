@@ -60,6 +60,9 @@ public class TAService {
             existingTA.setProctoringAssignmentIDs(ta.getProctoringAssignmentIDs());
             existingTA.setMaster(ta.getMaster());
             existingTA.setOnLeaveDates(ta.getOnLeaveDates());
+            existingTA.setLastAutomaticSwapTAID(ta.getLastAutomaticSwapTAID());
+            existingTA.setLastAutomaticSwapProctoringAssignmentID(ta.getLastAutomaticSwapProctoringAssignmentID());
+            existingTA.setSwapCount(ta.getSwapCount());
             return taRepository.save(existingTA);
         }
         return null;
@@ -161,47 +164,28 @@ public class TAService {
         return null;
     }
 
-    public List<TA> showPossibleTANames(Integer taID, Integer proctoringAssignmentID){
+    public List<TA> showTAs(Integer taID){
         List<TA> allTAs = getAllTAs();
-        ArrayList<TA> possibleNames = new ArrayList<>();
-        for (TA ta : allTAs){
-            if (ta.getId() == taID) continue;
-            if (isAvailable(ta.getId(), proctoringAssignmentID, -1) != null){
-                possibleNames.add(ta);
-            }
-        }
-        return possibleNames;
+        allTAs.remove(getTAByID(taID));
+        return allTAs;
     }
 
-    public List<ProctoringAssignment> showPossibleProctoringSwapRequests(Integer requesterID, Integer receiverID, Integer proctoringAssignmentID) {
-        TA requester = taRepository.findById(requesterID).orElse(null);
-        if (requester != null){
-            TA receiver = taRepository.findById(receiverID).orElse(null);
-            if (receiver != null){
-                ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
-                int[] arr = isAvailable(receiverID, proctoringAssignmentID, -1);
-                if (arr.length == 1) {
-                    output.add(null);
-                    for (int i : receiver.getProctoringAssignmentIDs()){
-                        if (isAvailable(requesterID, i, proctoringAssignmentID) != null){
-                            ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                            output.add(proctoringAssignment);
-                        }
-                    }
-                }
-                else if (arr.length == 2 && arr[0] == 0){
-                    ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-                    output.add(proctoringAssignment);
-                }
-                else {
-                    ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(arr[1]);
-                    output.add(proctoringAssignment);
-                }
-                return output;
-            }
+    public List<ProctoringAssignment> showPossibleProctoringAssignments(Integer receiverID, Integer proctoringAssignmentID) {
+        ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
+        TA requester = taRepository.findById(proctoringAssignment.getProctorID()).orElse(null);
+        TA receiver = taRepository.findById(receiverID).orElse(null);
+        if (proctoringAssignment == null || requester == null || receiver == null){
             return null;
         }
-        return null;
+        ArrayList<ProctoringAssignment> output = new ArrayList<ProctoringAssignment>();
+        if (isAvailable(receiverID, proctoringAssignmentID, -1)) output.add(null);
+        for (int id : receiver.getProctoringAssignmentIDs()){
+            if (isAvailable(requester.getId(), id, proctoringAssignmentID)){
+                ProctoringAssignment newProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(id);
+                output.add(newProctoringAssignment);
+            }
+        }
+        return output;
     }
 
     public int viewTotalWorkload(Integer id) {
@@ -225,76 +209,61 @@ public class TAService {
         return null;
     }
 
-    public int[] isAvailable(Integer taID, Integer proctoringAssignmentID, Integer ignore){
+    public boolean isAvailable(int taID, Integer proctoringAssignmentID, Integer ignore){
         ProctoringAssignment proctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(proctoringAssignmentID);
-        if (proctoringAssignment != null){
-            TA ta = taRepository.findById(taID).orElse(null);
-            if (ta != null){
-                int day = proctoringAssignment.getDay();
-                for (String j : ta.getOnLeaveDates()){
-                    if (Integer.valueOf(j.substring(0,2)) == day &&
-                        Integer.valueOf(j.substring(3, 5)) == proctoringAssignment.getMonth() && 
-                        Integer.valueOf(j.substring(6)) == proctoringAssignment.getYear()){
-                            return null;
-                    }
-                }
-                int start = proctoringAssignment.getStartDate();
-                int end = proctoringAssignment.getEndDate();
-                int index = -1;
-                int count = 0;
-                for (int i : ta.getProctoringAssignmentIDs()){
-                    if (i == proctoringAssignmentID) {
-                        int[] output = {0, i};
-                        return output;
-                    }
-                    ProctoringAssignment taProctoringAssignment = proctoringAssignmentService.getProctoringAssignmentByID(i);
-                    if (taProctoringAssignment == null || i == ignore) continue;
-                    if (taProctoringAssignment.getDay() == proctoringAssignment.getDay() && 
-                        taProctoringAssignment.getMonth() == taProctoringAssignment.getMonth() &&
-                        taProctoringAssignment.getYear() == taProctoringAssignment.getYear()){
-                        if (start > taProctoringAssignment.getStartDate() && start < taProctoringAssignment.getEndDate()){
-                            count++;
-                            index = i;
-                        } 
-                        if (start < taProctoringAssignment.getStartDate() && end > taProctoringAssignment.getStartDate()) {
-                            count++;
-                            index = i;
+        ProctoringAssignment proctoringAssignmentToBeIgnored = proctoringAssignmentService.getProctoringAssignmentByID(ignore);
+        TA ta = taRepository.findById(taID).orElse(null);
+        if (proctoringAssignment == null || ta == null){
+            return false;
+        }
+        int day = proctoringAssignment.getDay();
+        int month = proctoringAssignment.getMonth();
+        int year = proctoringAssignment.getYear();
+        for (String j : ta.getOnLeaveDates()){
+            if (Integer.valueOf(j.substring(0,2)) == day &&
+                Integer.valueOf(j.substring(3, 5)) == month && 
+                Integer.valueOf(j.substring(6)) == year) return false;
+        }
+        int start = proctoringAssignment.getStartTime();
+        int end = proctoringAssignment.getEndTime();
+        int indexStart = start / 100;
+        int indexEnd = end / 100;
+        if (start % 100 <= 30){
+            indexStart -= 9;
+        }
+        else {
+            indexStart -= 8;
+        }
+        if (end % 100 <= 30){
+            indexEnd -= 9;
+        }
+        else {
+            indexEnd -= 8;
+        }
+        for (int i = indexStart; i <= indexEnd;i++){
+            if (ta.getSchedule()[(day - 1) * 14 + i] == null){
+                return false;
+            }   
+        }
+        for (int id : ta.getProctoringAssignmentIDs()){
+            if (proctoringAssignmentToBeIgnored != null && id == proctoringAssignmentToBeIgnored.getID()) continue;
+            ProctoringAssignment test = proctoringAssignmentService.getProctoringAssignmentByID(id);
+            if (test != null) {
+                int testDay = test.getDay();
+                if (day == testDay){
+                    int testMonth = test.getMonth();
+                    if (month == testMonth){
+                        int testYear = test.getYear();
+                        if (year == testYear){
+                            int testStart = test.getStartTime();
+                            int testEnd = test.getEndTime();
+                            if (testStart > start && end > testStart || start > testStart && testEnd > start) return false;
                         }
-                        if (count == 2) return null;
                     }
-                    
-                }
-                int indexStart = start / 100;
-                int indexEnd = end / 100;
-                if (start % 100 <= 30){
-                    indexStart -= 9;
-                }
-                else {
-                    indexStart -= 8;
-                }
-                if (end % 100 <= 30){
-                    indexEnd -= 9;
-                }
-                else {
-                    indexEnd -= 8;
-                }
-                for (int i = indexStart; i <= indexEnd;i++){
-                    if (ta.getSchedule()[(day - 1) * 14 + i] == null){
-                        return null;
-                    }   
-                }
-                if (count == 0){
-                    int[] output = {-1};
-                    return output;
-                }
-                else {
-                    int[] output = {1, index};
-                    return output;
                 }
             }
-            return null;
         }
-        return null;
+        return true;
     }
 
     private String convertScheduleCellToString(String string) {

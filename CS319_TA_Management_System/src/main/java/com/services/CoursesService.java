@@ -21,8 +21,8 @@ public class CoursesService {
         return courseRepository.findAll();  
     }   
 
-    public Course createCourse(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
-        return courseRepository.save(new Course(code, section, instructorID, taIDs, schedule));  // Insert user into MySQL
+    public Course createCourse(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule, boolean masterphd) {
+        return courseRepository.save(new Course(code, section, instructorID, taIDs, schedule, masterphd));  
     }
 
  
@@ -31,20 +31,21 @@ public class CoursesService {
     }
 
     public Course updateCourseByID(Integer id, Course course) {
-        Course existingCourse = courseRepository.findById(id).orElse(null);  // Find user by ID
+        Course existingCourse = courseRepository.findById(id).orElse(null);  
         if (existingCourse != null) {
             existingCourse.setCode(course.getCode());
             existingCourse.setSection(course.getSection());
             existingCourse.setInstructorID(course.getInstructorID());
             existingCourse.setTaIDs(course.getTaIDs());
             existingCourse.setSchedule(course.getSchedule());
-            return courseRepository.save(existingCourse);  // Update user in MySQL
+            existingCourse.setMasterphd(course.getMasterphd());
+            return courseRepository.save(existingCourse);  
         }
-        return null;  // Return null if user not found
+        return null;  
     }
 
     public Course getCourseByID(Integer id) {
-        return courseRepository.findById(id).orElse(null);  // Find user by ID
+        return courseRepository.findById(id).orElse(null);  
     }
 
     public Course getCourseByCodeAndSection(String code, String section){

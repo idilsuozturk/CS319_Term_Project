@@ -2,13 +2,13 @@ package com.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "manuel_swap_requests")
-public class ManuelSwapRequest extends Request {
+@Table(name = "manual_swap_requests")
+public class ManualSwapRequest extends Request {
     private int receiverID;
     private int ownerProctoringAssignmentID;
     private int receiverProctoringAssignmentID;
     
-    public ManuelSwapRequest(){
+    public ManualSwapRequest(){
         super();
         setRequestType(RequestTypes.MANUEL_SWAP_REQUEST);
         this.receiverID = -1;
@@ -16,7 +16,7 @@ public class ManuelSwapRequest extends Request {
         this.receiverProctoringAssignmentID = -1;
     }
 
-    public ManuelSwapRequest(int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID){
+    public ManualSwapRequest(int ownerID, String message, int receiverID, int ownerProctoringAssignmentID, int receiverProctoringAssignmentID){
         super(RequestTypes.MANUEL_SWAP_REQUEST, ownerID, message);
         this.receiverID = receiverID;
         this.ownerProctoringAssignmentID = ownerProctoringAssignmentID;

@@ -18,9 +18,8 @@ public class ProctoringAssignmentService {
         return proctoringAssignmentRepository.findAll();  
     }   
 
-    public ProctoringAssignment createProctoringAssignment(short year, byte month, byte day, int startDate, int endDate, String examPlace, int courseID, int proctorID) {
-        return null;
-        //return proctoringAssignmentRepository.save(new ProctoringAssignment(year, month, day, startDate, endDate, examPlace, courseID, proctorID));  
+    public ProctoringAssignment createProctoringAssignment(int year, int month, int day, int startTime, int endTime, String examPlace, int courseID, int proctorID, String[] students) {
+        return proctoringAssignmentRepository.save(new ProctoringAssignment(year, month, day, startTime, endTime, examPlace, courseID, proctorID, students));  
     }
 
  
@@ -34,8 +33,8 @@ public class ProctoringAssignmentService {
             existingProctoringAssignment.setYear(proctoringAssignment.getYear());
             existingProctoringAssignment.setMonth(proctoringAssignment.getMonth());
             existingProctoringAssignment.setDay(proctoringAssignment.getDay());
-            existingProctoringAssignment.setStartDate(proctoringAssignment.getStartDate());
-            existingProctoringAssignment.setEndDate(proctoringAssignment.getEndDate());
+            existingProctoringAssignment.setStartTime(proctoringAssignment.getStartTime());
+            existingProctoringAssignment.setEndTime(proctoringAssignment.getEndTime());
             existingProctoringAssignment.setCourseID(proctoringAssignment.getCourseID());
             existingProctoringAssignment.setProctorID(proctoringAssignment.getProctorID());
             return proctoringAssignmentRepository.save(existingProctoringAssignment);  

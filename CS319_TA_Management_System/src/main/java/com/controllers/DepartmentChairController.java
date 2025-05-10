@@ -73,7 +73,7 @@ public class DepartmentChairController {
         return leaveofAbsenceRequestService.approveLeaveofAbsenceRequest(requestDate, id, leaveofAbsenceID);
     }
 
-    @GetMapping("/{id}/viewNot")
+    @GetMapping("/{id}/viewnotif")
     public List<String> viewNotifications(@PathVariable Integer id){
         return notificationService.viewNotificationsDepartmentChair(id);
     }

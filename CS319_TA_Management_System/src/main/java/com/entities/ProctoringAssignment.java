@@ -1,8 +1,6 @@
 package com.entities;
 
-import java.util.ArrayList;
-
-import com.converters.StringArrayListToJsonConverter;
+import com.converters.StringArrayToJsonConverter;
 
 import jakarta.persistence.*;
 @Entity
@@ -14,33 +12,33 @@ public class ProctoringAssignment {
     private int year;
     private int month;
     private int day;
-    private int startDate;
-    private int endDate;
+    private int startTime;
+    private int endTime;
     private String examPlace;
     private int courseID;
     private int proctorID;
     @Column(columnDefinition = "json")
-    @Convert(converter = StringArrayListToJsonConverter.class)
-    private ArrayList<String> studentNames;
+    @Convert(converter = StringArrayToJsonConverter.class)
+    private String[] studentNames;
 
     public ProctoringAssignment(){
         this.year = -1;
         this.month = -1;
         this.day = -1;
-        this.startDate = -1;
-        this.endDate = -1;
+        this.startTime = -1;
+        this.endTime = -1;
         this.examPlace = null;
         this.courseID = -1;
         this.proctorID = -1;
         studentNames = null;
     }
 
-    public ProctoringAssignment(int year, int month, int day, int startDate, int endDate, String examPlace, int courseID, int proctorID, ArrayList<String> studentNames){
+    public ProctoringAssignment(int year, int month, int day, int startTime, int endTime, String examPlace, int courseID, int proctorID, String[] studentNames){
         this.year = year;
         this.month = month;
         this.day = day;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.examPlace = examPlace;
         this.courseID = courseID;
         this.proctorID = proctorID;
@@ -75,20 +73,20 @@ public class ProctoringAssignment {
         this.day = day;
     }
 
-    public int getStartDate(){
-        return this.startDate;
+    public int getStartTime(){
+        return this.startTime;
     }
 
-    public void setStartDate(int startDate){
-        this.startDate = startDate;
+    public void setStartTime(int startTime){
+        this.startTime = startTime;
     }
 
-    public int getEndDate(){
-        return this.endDate;
+    public int getEndTime(){
+        return this.endTime;
     }
 
-    public void setEndDate(int endDate){
-        this.endDate = endDate;
+    public void setEndTime(int endTime){
+        this.endTime = endTime;
     }
 
     public String getExamPlace() {
@@ -114,5 +112,13 @@ public class ProctoringAssignment {
 
     public void setProctorID(int proctorID){
         this.proctorID = proctorID;
+    }
+
+    public String[] getStudentNames(){
+        return this.studentNames;
+    }
+
+    public void setStudentNames(String[] studentNames){
+        this.studentNames = studentNames;
     }
 }

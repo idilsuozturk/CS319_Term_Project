@@ -1,7 +1,9 @@
 package com.controllers;
 
 import com.entities.DepartmentStaff;
+import com.services.AutomaticSwapRequestService;
 import com.services.DepartmentStaffService;
+import com.services.NotificationService;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +12,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class DepartmentStaffController {
+    private final AutomaticSwapRequestService automaticSwapRequestService;
 
     private final DepartmentStaffService departmentStaffService;
+
+    private final NotificationService notificationService;
     
-    public DepartmentStaffController(DepartmentStaffService departmentStaffService) {
+    public DepartmentStaffController(AutomaticSwapRequestService automaticSwapRequestService, DepartmentStaffService departmentStaffService, NotificationService notificationService) {
+        this.automaticSwapRequestService = automaticSwapRequestService;
         this.departmentStaffService = departmentStaffService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/list-dept-staff")
@@ -46,5 +53,15 @@ public class DepartmentStaffController {
     @DeleteMapping("/delete-dept-staff/{id}")
     public void deleteDepartmentStaff(@PathVariable Integer id) {
         departmentStaffService.deleteDepartmentStaffById(id);
+    }
+
+    @PostMapping("/{id}/initautoswapreq")
+    public int initializeAutomaticSwapRequest(String date, int ownerID, String message, int firstTAsProctoringAssignmentID, int secondTAsProctoringAssignmentID){
+        return automaticSwapRequestService.initializeAutomaticSwapRequest(date, ownerID, message, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID);
+    }
+    
+    @GetMapping("/{id}/viewnotif")
+    public List<String> viewNotifications(@PathVariable Integer id){
+        return notificationService.viewNotificationsDepartmentStaff(id);
     }
 }

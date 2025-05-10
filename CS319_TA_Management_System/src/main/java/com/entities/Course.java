@@ -21,6 +21,7 @@ public class Course    {
     private Integer id;
     private String code;
     private String section;
+    private boolean masterphd;
 
     private Integer instructorID;
     @Column(columnDefinition = "json")
@@ -36,15 +37,17 @@ public class Course    {
         this.instructorID = null;
         this.taIDs = null;
         this.schedule = null;
+        this.masterphd = false;
     }
 
 
-    public Course(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule) {
+    public Course(String code, String section, Integer instructorID, ArrayList<Integer> taIDs, String[] schedule, boolean masterphd) {
         this.code = code;
         this.section = section;
         this.instructorID = instructorID;
         this.taIDs = taIDs;
         this.schedule = schedule;
+        this.masterphd = masterphd;
     }
 
     public Integer getId() {
@@ -89,6 +92,14 @@ public class Course    {
     
     public void setSchedule(String[] schedule) {
         this.schedule = schedule;
+    }
+
+    public boolean getMasterphd(){
+        return this.masterphd;
+    }
+
+    public void setMasterphd(boolean masterphd){
+        this.masterphd = masterphd;
     }
 }
    

@@ -13,6 +13,9 @@ public class TA extends User {
     private boolean master;
     private int mode;
     private Integer totalWorkload;
+    private int lastAutomaticSwapTAID;
+    private int lastAutomaticSwapProctoringAssignmentID;
+    private int swapCount;
 
     @Column(columnDefinition = "json")
     @Convert(converter = IntegerArrayListToJsonConverter.class)
@@ -41,11 +44,15 @@ public class TA extends User {
         this.mode = 1;
         this.advisorID = -1;
         this.totalWorkload = -1;
+        this.lastAutomaticSwapTAID = -1;
+        this.lastAutomaticSwapProctoringAssignmentID = -1;
         this.coursesAssisted = null;
         this.coursesTaken = null;
         this.proctoringAssignmentIDs = null;
         this.schedule = null;
         this.onLeaveDates = null;
+        this.master = false;
+        this.swapCount = -1;
     }
     
     public TA(String name, String email, String username, String password, boolean master, Integer advisorID) {
@@ -54,12 +61,14 @@ public class TA extends User {
         this.mode = 1;
         this.advisorID = advisorID;
         this.totalWorkload = 0;
+        this.lastAutomaticSwapTAID = -1;
+        this.lastAutomaticSwapProctoringAssignmentID = -1;
         this.coursesAssisted = new ArrayList<Integer>();
         this.coursesTaken = new ArrayList<Integer>();
         this.proctoringAssignmentIDs = new ArrayList<Integer>();
         this.schedule = new String[98];
         this.onLeaveDates = new ArrayList<>();
-
+        this.swapCount = 0;
     }
 
     public boolean getMaster(){
@@ -132,5 +141,29 @@ public class TA extends User {
 
     public void setOnLeaveDates(ArrayList<String> onLeaveDates){
         this.onLeaveDates = onLeaveDates;
+    }
+
+    public int getLastAutomaticSwapTAID(){
+        return this.lastAutomaticSwapTAID;
+    }
+
+    public void setLastAutomaticSwapTAID(int lastAutomaticSwapTAID){
+        this.lastAutomaticSwapTAID = lastAutomaticSwapTAID;
+    }
+
+    public int getLastAutomaticSwapProctoringAssignmentID(){
+        return this.lastAutomaticSwapProctoringAssignmentID;
+    }
+
+    public void setLastAutomaticSwapProctoringAssignmentID(int lastAutomaticSwapProctoringAssignmentID){
+        this.lastAutomaticSwapProctoringAssignmentID = lastAutomaticSwapProctoringAssignmentID;
+    }
+
+    public int getSwapCount(){
+        return this.swapCount;
+    }
+
+    public void setSwapCount(int swapCount){
+        this.swapCount = swapCount;
     }
 }

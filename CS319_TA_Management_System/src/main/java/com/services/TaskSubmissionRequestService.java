@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.entities.Course;
+import com.entities.Instructor;
+import com.entities.Notification;
 import com.entities.TA;
 import com.entities.TaskSubmissionRequest;
 import com.entities.TaskTypes;
@@ -16,13 +19,16 @@ public class TaskSubmissionRequestService {
 
     private final CoursesService coursesService;
 
+    private final InstructorService instructorService;
+
     private final NotificationService notificationService;
 
     private final TAService taService;
 
-    public TaskSubmissionRequestService(TaskSubmissionRequestRepository taskSubmissionRequestRepository, CoursesService coursesService, NotificationService notificationService, TAService taService) {
+    public TaskSubmissionRequestService(TaskSubmissionRequestRepository taskSubmissionRequestRepository, CoursesService coursesService, InstructorService instructorService, NotificationService notificationService, TAService taService) {
         this.taskSubmissionRequestRepository = taskSubmissionRequestRepository;
         this.coursesService = coursesService;
+        this.instructorService = instructorService;
         this.notificationService = notificationService;
         this.taService = taService;
     }
@@ -62,7 +68,9 @@ public class TaskSubmissionRequestService {
         List<TaskSubmissionRequest> taskSubmissionRequests = getAllTaskSubmissionRequests();
         ArrayList<TaskSubmissionRequest> output = new ArrayList<>();
         for (TaskSubmissionRequest taskSubmissionRequest : taskSubmissionRequests){
-            if (coursesService.getCourseByID(taskSubmissionRequest.getCourseID()).getInstructorID() == id){
+            Course course = coursesService.getCourseByID(taskSubmissionRequest.getCourseID());
+            if (course == null) continue;
+            if (course.getInstructorID() == id){
                 if (taskSubmissionRequest.getPending()){
                     output.add(taskSubmissionRequest);
                 }
@@ -79,6 +87,7 @@ public class TaskSubmissionRequestService {
     public boolean approveTaskSubmissionRequest(String approvalDate, int instructorID, int taskSubmissionID){
         TaskSubmissionRequest taskSubmissionRequest = getTaskSubmissionRequestByID(taskSubmissionID);
         TA ta = taService.getTAByID(taskSubmissionRequest.getOwnerID());
+        if (ta == null || taskSubmissionRequest == null) return false;
         if (taskSubmissionRequest.getTaskType() == TaskTypes.GRADING){
             int newTotalWorkload = ta.getTotalWorkload();
             newTotalWorkload += 3;
@@ -119,5 +128,51 @@ public class TaskSubmissionRequestService {
         notificationService.createNotification(rejectionDate, taskSubmissionID, 2);
         updateTaskSubmissionRequestByID(taskSubmissionID, taskSubmissionRequest);
         return true;
+    }
+
+    public List<String> viewTaskHistory(int id){
+        List<TaskSubmissionRequest> requests = getAllTaskSubmissionRequests();
+        ArrayList<String> output = new ArrayList<>();
+        for (TaskSubmissionRequest request : requests){
+            if (!request.getPending()){
+                if (request.getOwnerID() == id){
+                    output.add(taskSubmissionRequestToString(request));
+                }
+            }
+        }
+        return output;
+    }
+
+    private String taskSubmissionRequestToString(TaskSubmissionRequest request) {
+        Notification notification = notificationService.getNotificationByRequestIDAndStatusNot(null, 0);
+        Instructor instructor = instructorService.getInstructorByID(request.getRespondentID());
+        Course course = coursesService.getCourseByID(request.getCourseID());
+        if (notification == null || instructor == null) return null;
+        String output = "";
+        if (notification.getStatus() == 1){
+            output += "Your Task Submission was approved by Instructor " + instructor.getName() + " at " + notification.getRequestDate() + ".";
+        }
+        else {
+            output += "Your Task Submission was rejected by Instructor " + instructor.getName() + " at " + notification.getRequestDate() + ".";
+        }
+        output += "\nTask Information:\n" + "Task Type: " ;
+        if (request.getTaskType() == TaskTypes.GRADING){
+            output += "Grading\nDuration: " + request.getDuration();
+        }
+        else if (request.getTaskType() == TaskTypes.LAB){
+            output += "Lab\nDuration: " + request.getDuration() + "\nTask Date: " + request.getTaskDate();
+        }
+        else if (request.getTaskType() == TaskTypes.OFFICE_HOUR){
+            output += "Office Hour" + "\nTask Date: " + request.getTaskDate();
+        }
+        else if (request.getTaskType() == TaskTypes.PROCTORING){
+            output += "Proctoring" + "\nTask Date: " + request.getTaskDate();
+        }
+        else {
+            output += "Recitation" + "\nTask Date: " + request.getTaskDate();
+        }
+        output += "\nCourse Name: " + course.getCode();
+        output += "\nYour Message was: " + request.getMessage();
+        return output;
     }
 }

@@ -6,9 +6,10 @@ import org.springframework.stereotype.Service;
 import com.entities.AutomaticSwapRequest;
 import com.entities.Course;
 import com.entities.DepartmentChair;
+import com.entities.DepartmentStaff;
 import com.entities.Instructor;
 import com.entities.LeaveofAbsenceRequest;
-import com.entities.ManuelSwapRequest;
+import com.entities.ManualSwapRequest;
 import com.entities.Notification;
 import com.entities.ProctoringAssignment;
 import com.entities.Request;
@@ -33,17 +34,20 @@ public class NotificationService {
 
     private final DepartmentChairService departmentChairService;
 
+    private final DepartmentStaffService departmentStaffService;
+
     private final InstructorService instructorService;
 
     private final ProctoringAssignmentService proctoringAssignmentService;
 
     private final TAService taService;
 
-    public NotificationService(NotificationRepository notificationRepository, RequestRepository requestRepository, CoursesService coursesService, DepartmentChairService departmentChairService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
+    public NotificationService(NotificationRepository notificationRepository, RequestRepository requestRepository, CoursesService coursesService, DepartmentChairService departmentChairService, DepartmentStaffService departmentStaffService, InstructorService instructorService, ProctoringAssignmentService proctoringAssignmentService, TAService taService) {
         this.notificationRepository = notificationRepository;
         this.requestRepository = requestRepository;
         this.coursesService = coursesService;
         this.departmentChairService = departmentChairService;
+        this.departmentStaffService = departmentStaffService;
         this.instructorService = instructorService;
         this.proctoringAssignmentService = proctoringAssignmentService;
         this.taService = taService;
@@ -55,6 +59,10 @@ public class NotificationService {
 
     public Notification getNotificationById(Integer notificationId) {
         return notificationRepository.findById(notificationId).orElse(null);
+    }
+
+    public Notification getNotificationByRequestIDAndStatusNot(Integer requestID, int status){
+        return notificationRepository.findByRequestIDAndStatusNot(status, status).orElse(null);
     }
 
     public Notification createNotification(String requestDate, Integer requestID, int status){
@@ -129,7 +137,7 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         } 
-                        newString += " has been approved at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += " has been approved at " + notification.getRequestDate() + ".\nYour Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -137,7 +145,7 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         } 
-                        newString += " has been rejected at " + notification.getRequestDate() + ".\nYour Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += " has been rejected at " + notification.getRequestDate() + ".\nYour Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -147,7 +155,7 @@ public class NotificationService {
                 
             }
             else if (request.getRequestType() == RequestTypes.MANUEL_SWAP_REQUEST){
-                ManuelSwapRequest manuelSwapRequest = (ManuelSwapRequest) request;
+                ManualSwapRequest manuelSwapRequest = (ManualSwapRequest) request;
                 if (manuelSwapRequest.getOwnerID() == id){
                     if (notification.getStatus() == 0){
                         TA ta = taService.getTAByID(manuelSwapRequest.getReceiverID());
@@ -177,7 +185,7 @@ public class NotificationService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
-                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
+                        newString += "\nYour Message was:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -192,7 +200,7 @@ public class NotificationService {
                         else {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
-                        newString += "\nYour Message:\n" + manuelSwapRequest.getMessage();
+                        newString += "\nYour Message was:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -222,7 +230,7 @@ public class NotificationService {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
                         newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
+                        "\nOther TA's Message was:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -236,7 +244,7 @@ public class NotificationService {
                             newString += convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getReceiverProctoringAssignmentID()));
                         }
                         newString += "\nOther TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentService.getProctoringAssignmentByID(manuelSwapRequest.getOwnerProctoringAssignmentID())) + 
-                        "\nOther TA's Message:\n" + manuelSwapRequest.getMessage();
+                        "\nOther TA's Message was:\n" + manuelSwapRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -289,7 +297,7 @@ public class NotificationService {
                     else {
                         newString += "Task Type: Recitation\nTask Date: " + taskSubmissionRequest.getTaskDate();
                     }
-                    newString += "\nYour Message:\n" + taskSubmissionRequest.getMessage();
+                    newString += "\nYour Message was:\n" + taskSubmissionRequest.getMessage();
                     output.add(newString);
                 }
                 else {
@@ -312,7 +320,7 @@ public class NotificationService {
                     else {
                         newString += "Task Type: Recitation\nTask Date: " + taskSubmissionRequest.getTaskDate();
                     }
-                    newString += "\nYour Message:\n" + taskSubmissionRequest.getMessage();
+                    newString += "\nYour Message was:\n" + taskSubmissionRequest.getMessage();
                     output.add(newString);
                 }
             }
@@ -345,7 +353,7 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         }
-                        newString += ".\nThe TA " + ta.getName() + "'s Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += ".\nThe TA " + ta.getName() + "'s Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -356,7 +364,7 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         }
-                        newString += ".\nThe TA " + ta.getName() + "'s Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += ".\nThe TA " + ta.getName() + "'s Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -368,7 +376,7 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         }
-                        newString += ".\nThe TA " + ta.getName() + "'s Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += ".\nThe TA " + ta.getName() + "'s Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
                     else {
@@ -379,9 +387,44 @@ public class NotificationService {
                         for (int i = 1; i < leaveofAbsenceRequest.getDates().size(); i++){
                             newString += ", " + leaveofAbsenceRequest.getDates().get(i);
                         }
-                        newString += ".\nThe TA " + ta.getName() + "'s Message:\n" + leaveofAbsenceRequest.getMessage();
+                        newString += ".\nThe TA " + ta.getName() + "'s Message was:\n" + leaveofAbsenceRequest.getMessage();
                         output.add(newString);
                     }
+                }
+            }
+        }
+        return output;
+    }
+    
+    public List<String> viewNotificationsDepartmentStaff(int id){
+        ArrayList<String> output = new ArrayList<>();
+        List<Notification> notifications = getAllNotifications();
+        for (Notification notification : notifications){
+            Request request = requestRepository.findById(notification.getRequestId()).orElse(null);
+            if (request != null){
+                if (request.getRequestType() == RequestTypes.AUTOMATIC_SWAP_REQUEST){
+                    AutomaticSwapRequest automaticSwapRequest = (AutomaticSwapRequest) request;
+                    TA taFirst = taService.getTAByID(automaticSwapRequest.getFirstTAID());
+                    TA taSecond = taService.getTAByID(automaticSwapRequest.getSecondTAID());
+                    ProctoringAssignment proctoringAssignmentFirst = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getFirstTAsProctoringAssignmentID());
+                    ProctoringAssignment proctoringAssignmentSecond = proctoringAssignmentService.getProctoringAssignmentByID(automaticSwapRequest.getSecondTAsProctoringAssignmentID());
+                    DepartmentStaff departmentStaff = departmentStaffService.getDepartmentStaffById(id);
+                    if (taFirst == null || taSecond == null || proctoringAssignmentFirst == null || proctoringAssignmentSecond == null || departmentStaff == null){
+                        continue;
+                    }
+                    String newString = "";
+                    if (id == automaticSwapRequest.getOwnerID()){
+                        newString += "You have initialized a Proctoring Swap between TA " + taFirst.getName() + " and TA " + taSecond.getName() +
+                        " at " + notification.getRequestDate() + ". The first TA's Proctoring Assignment (see below for more detail) and the second TA's Proctoring Assignment (see below for more detail) has been swapped.\nYour Message:\n" +
+                        automaticSwapRequest.getMessage() + "\nFirst TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentFirst) +
+                        "\nSecond TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentSecond);
+                    }
+                    else {
+                        newString += "The Department Staff " + departmentStaffService.getDepartmentStaffById(id).getName() + "initialized a Proctoring Swap between TA " + taFirst.getName() + " and TA " + taSecond.getName() +
+                        " at " + notification.getRequestDate() + ". The first TA's Proctoring Assignment (see below for more detail) and the second TA's Proctoring Assignment (see below for more detail) has been swapped.\nFirst TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentFirst) +
+                        "\nSecond TA's Proctoring Assignment Information:\n" + convertProctoringAssignmentToString(proctoringAssignmentSecond);
+                    }
+                    output.add(newString);
                 }
             }
         }
@@ -399,6 +442,9 @@ public class NotificationService {
                     Course course = coursesService.getCourseByID(taskSubmissionRequest.getCourseID());
                     if (course != null && course.getInstructorID() == id){
                         TA ta = taService.getTAByID(taskSubmissionRequest.getOwnerID());
+                        if (ta == null){
+                            continue;
+                        }
                         String newString = "";
                         if (notification.getStatus() == 0){
                             newString += "TA " + ta.getName() + "has sent you a Task Submission Request at " + notification.getRequestDate() + ".";
@@ -410,7 +456,14 @@ public class NotificationService {
                             newString += "You have rejected the Task Submission Request sent to you by TA " + ta.getName() + " at " + notification.getRequestDate() + ".";
                         }
                         newString += "\nThe Sender TA Information:\n" + "TA Name : " + ta.getName() + "\nTA ID: " + ta.getUsername() +
-                        "\nTA Current Total Workload: " + ta.getTotalWorkload() + "TA " + ta.getName() + "'s Message:\n" + taskSubmissionRequest.getMessage();
+                        "\nTA Current Total Workload: " + ta.getTotalWorkload() + "TA " + ta.getName();
+                        if (notification.getStatus() == 0){
+                            newString += "'s Message:\n";
+                        }
+                        else {
+                            newString += "'s Message was:\n";
+                        } 
+                        newString += taskSubmissionRequest.getMessage();
                         output.add(newString);
                     }
                 }
@@ -426,7 +479,7 @@ public class NotificationService {
         String newElement = "Course Name: " + coursesService.getCourseByID(proctoringAssignment.getCourseID()).getCode() + 
         "\nExam Place: " + proctoringAssignment.getExamPlace() + "\nExam Date: " + proctoringAssignment.getDay() + "/" + 
         proctoringAssignment.getMonth() + "/" + proctoringAssignment.getDay() + "\nExam Time: " + 
-        proctoringAssignment.getStartDate() + "-" + proctoringAssignment.getEndDate();
+        proctoringAssignment.getStartTime() + "-" + proctoringAssignment.getEndTime();
         return newElement;
     }
 }
