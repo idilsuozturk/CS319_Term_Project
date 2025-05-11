@@ -1,21 +1,29 @@
 package com.controllers;
 
 import com.entities.Dean;
+import com.entities.ProctoringAssignment;
+import com.services.CoursesService;
 import com.services.DeanService;
 import com.services.NotificationService;
+import com.services.ProctoringAssignmentService;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api")
 public class DeanController {
 
     private final DeanService deanService;
+
+    private final ProctoringAssignmentService proctoringAssignmentService;
+
+    private final CoursesService coursesService;
     
-    public DeanController(DeanService deanService, NotificationService notificationService) {
+    public DeanController(DeanService deanService, ProctoringAssignmentService proctoringAssignmentService, CoursesService coursesService) {
         this.deanService = deanService;
+        this.proctoringAssignmentService = proctoringAssignmentService;
+        this.coursesService = coursesService;
     }
 
 
@@ -50,4 +58,21 @@ public class DeanController {
     public void deleteDean(@PathVariable Integer id) {
         deanService.deleteDeanById(id);
     }
+
+    @PostMapping("/dean-exam-assign-")
+    public String assignExamAndManualOrAutomatic(@RequestParam int year, @RequestParam int month, @RequestParam int day, @RequestParam int startTime, @RequestParam int endTime, @RequestParam int classroomID, @RequestParam int courseID, @RequestParam int proctorID, @RequestParam Integer id, @RequestParam String[] selectedDepartments, boolean manual, int restriction){
+        if (manual){
+            return proctoringAssignmentService.manualProctoringAssignmentByDean(new ProctoringAssignment(year, month, day, startTime, endTime, classroomID, courseID, proctorID), id, selectedDepartments);
+        }
+        else {
+            int returned = proctoringAssignmentService.automaticProctoringAssignmentByDean(coursesService.getCourseByID(courseID).getCode(), proctorID, restriction, selectedDepartments);
+            if (returned == 2){
+                return "Successfull!";
+            }
+            else {
+                return "Try again";
+            }
+        }
+    }
+    
 }
