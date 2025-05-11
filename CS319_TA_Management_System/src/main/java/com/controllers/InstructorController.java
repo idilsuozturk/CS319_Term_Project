@@ -57,7 +57,6 @@ public class InstructorController {
             instructor.getUsername(),
             instructor.getPassword(),
             instructor.getDepartmentCode(),
-            instructor.getCourseIDs(),
             instructor.getTaIDs()
         );
     }
