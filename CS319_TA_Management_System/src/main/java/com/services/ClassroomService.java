@@ -19,8 +19,8 @@ public class ClassroomService {
         return classroomRepository.findAll();
     }
 
-    public Classroom createClassroom(String classroomName, int capacity, int examCapacity, String[] examList){
-        return classroomRepository.save(new Classroom(classroomName, capacity, examCapacity, examList));
+    public Classroom createClassroom(String classroomName, int capacity, int examCapacity){
+        return classroomRepository.save(new Classroom(classroomName, capacity, examCapacity));
     }
 
     public void deleteClassroomByID(Integer id) {

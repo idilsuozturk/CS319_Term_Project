@@ -19,7 +19,6 @@ public class Classroom {
     private String classroomName;
     private int capacity;
     private int examCapacity;
-    private int proctoringAssignmentID;
     @Column(columnDefinition = "json")
     @Convert(converter = StringArrayToJsonConverter.class)
     private String[] examList;
@@ -29,7 +28,6 @@ public class Classroom {
         this.capacity = -1;
         this.examCapacity = -1;
         this.examList = null;
-        this.proctoringAssignmentID = -1;
     }
 
     public Classroom(String classroomName, int capacity, int examCapacity){
@@ -37,7 +35,6 @@ public class Classroom {
         this.capacity = capacity;
         this.examCapacity = examCapacity;
         this.examList = null;
-        this.proctoringAssignmentID = -1;
     }
 
     public int getID(){
