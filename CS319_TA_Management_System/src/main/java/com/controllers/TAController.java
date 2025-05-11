@@ -85,7 +85,9 @@ public class TAController {
                 ta.getUsername(),
                 ta.getPassword(),
                 ta.getMaster(),
-                ta.getAdvisorID());
+                ta.getAdvisorID(),
+                ta.getPartTime(),
+                ta.getDepartmentCode());
     }
 
     @PutMapping("/update/{id}")
@@ -145,6 +147,9 @@ public class TAController {
             if (course == null){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course name or course section is incorrect!");
             }
+        }
+        if (course.getMasterphd()){
+            TA ta = taService.getTAByID(taID);
         }
         return coursesService.addCourse(course.getId(), taID, taken);
     }

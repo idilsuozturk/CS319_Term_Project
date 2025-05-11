@@ -2,17 +2,17 @@ package com.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.entities.Classroom;
 import com.entities.Course;
+import com.entities.Instructor;
 import com.entities.ProctoringAssignment;
-import com.entities.Roles;
 import com.entities.Student;
 import com.entities.TA;
-import com.entities.User;
 import com.repositories.ProctoringAssignmentRepository;
 import java.util.Random;
 @Service
@@ -21,13 +21,19 @@ public class ProctoringAssignmentService {
 
     private final ClassroomService classroomService;
 
+    private final CoursesService coursesService;
+
+    private final InstructorService instructorService;
+
     private final StudentService studentService;
 
     private final TAService taService;
 
-    public ProctoringAssignmentService(ProctoringAssignmentRepository proctoringAssignmentRepository, ClassroomService classroomService, StudentService studentService, CoursesService coursesService, TAService taService, UserService userService) {
+    public ProctoringAssignmentService(ProctoringAssignmentRepository proctoringAssignmentRepository, ClassroomService classroomService, StudentService studentService, CoursesService coursesService, InstructorService instructorService, TAService taService, UserService userService) {
         this.proctoringAssignmentRepository = proctoringAssignmentRepository;
         this.classroomService = classroomService; 
+        this.coursesService = coursesService;
+        this.instructorService = instructorService;
         this.studentService = studentService;
         this.taService = taService;
     }
@@ -124,13 +130,75 @@ public class ProctoringAssignmentService {
         return null;
     }
 
+    public int automaticProctoringAssignmentByInstructor(String courseName, Integer id){
+        Instructor instructor = instructorService.getInstructorByID(id);
+        if (instructor == null){
+            return -1;
+        }
+        Course testCourse = coursesService.getCourseByCode(courseName);
+        if (testCourse == null) {
+            return 0;
+        }
+        List<ProctoringAssignment> proctoringAssignments = getAllProctoringAssignments();
+        List<TA> tas = taService.getAllTAs();
+        List<TA> tasFromSameDepartment = new ArrayList<>();
+        for (TA ta : tas){
+            if (ta.getDepartmentCode() == instructor.getDepartmentCode()){
+                tasFromSameDepartment.add(ta);
+            }
+        }
+        List<ProctoringAssignment> specificProctoringAssignments = new ArrayList<>();
+        for (ProctoringAssignment pa : proctoringAssignments){
+            Course course = coursesService.getCourseByID(pa.getCourseID());
+            if (course == null){
+                continue;
+            }
+            if (course.getCode() == courseName){
+                specificProctoringAssignments.add(pa);
+            }
+        }
+        ArrayList<TA> sortedTAs = new ArrayList<>(tas);
+        sortedTAs.sort(Comparator.comparingInt(TA::getTotalWorkload));
+        for (ProctoringAssignment pa : specificProctoringAssignments){
+            boolean isFound = false;
+            for (int i = 0; i < sortedTAs.size(); i++){
+                if (isAvailable(sortedTAs.get(i).getId(), pa.getID(), -1)){
+                    ArrayList<Integer> proctoringAssignmentIDs = sortedTAs.get(i).getProctoringAssignmentIDs();
+                    proctoringAssignmentIDs.add(pa.getID());
+                    sortedTAs.get(i).setProctoringAssignmentIDs(proctoringAssignmentIDs);
+                    taService.updateTAByID(sortedTAs.get(i).getId(), sortedTAs.get(i));
+                    pa.setProctorID(sortedTAs.get(i).getId());
+                    updateProctoringAssignmentByID(pa.getID(), pa);
+                    sortedTAs.get(i).setTotalWorkload(sortedTAs.get(i).getTotalWorkload() + 4);
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound){
+                return 1;
+            }
+        }
+        return 2;
+    }
     
     public boolean isAvailable(int taID, Integer proctoringAssignmentID, Integer ignore){
+        List<ProctoringAssignment> proctoringAssignments = new ArrayList<>();
         ProctoringAssignment proctoringAssignment = getProctoringAssignmentByID(proctoringAssignmentID);
         ProctoringAssignment proctoringAssignmentToBeIgnored = getProctoringAssignmentByID(ignore);
         TA ta = taService.getTAByID(taID);
         if (proctoringAssignment == null || ta == null){
             return false;
+        }
+        int courseID = proctoringAssignment.getCourseID();
+        for (int id : ta.getCoursesTaken()){
+            if (courseID == id){
+                return false;
+            }
+        }
+        for (ProctoringAssignment pa : proctoringAssignments){
+            if (isPresent(pa.getCourseID(), ta.getCoursesTaken())){
+                
+            }
         }
         int day = proctoringAssignment.getDay();
         int month = proctoringAssignment.getMonth();
@@ -177,6 +245,15 @@ public class ProctoringAssignmentService {
                         }
                     }
                 }
+            }
+        }
+        return true;
+    }
+
+    private boolean isPresent(int courseID, ArrayList<Integer> coursesTaken) {
+        for (int id : coursesTaken){
+            if (courseID == id){
+                return false;
             }
         }
         return true;

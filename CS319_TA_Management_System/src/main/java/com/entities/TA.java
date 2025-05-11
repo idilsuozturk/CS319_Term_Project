@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 public class TA extends User {
     Integer advisorID; 
 
+    private boolean partTime;
+    private String departmentCode;
     private boolean master;
     private int mode;
     private Integer totalWorkload;
@@ -41,6 +43,8 @@ public class TA extends User {
     public TA() {
         super();
         this.master = false;
+        this.partTime = false;
+        this.departmentCode = null;
         this.mode = 1;
         this.advisorID = -1;
         this.totalWorkload = -1;
@@ -55,9 +59,10 @@ public class TA extends User {
         this.swapCount = -1;
     }
     
-    public TA(String firstName, String lastName, String email, String username, String password, boolean master, Integer advisorID) {
+    public TA(String firstName, String lastName, String email, String username, String password, boolean master, Integer advisorID, boolean partTime, String departmentCode) {
         super(firstName, lastName, email, username, password, Roles.TA);
         this.master = master;
+        this.partTime = partTime;
         this.mode = 1;
         this.advisorID = advisorID;
         this.totalWorkload = 0;
@@ -69,6 +74,7 @@ public class TA extends User {
         this.schedule = new String[98];
         this.onLeaveDates = new ArrayList<>();
         this.swapCount = 0;
+        this.departmentCode = departmentCode;
     }
 
     public boolean getMaster(){
@@ -165,5 +171,21 @@ public class TA extends User {
 
     public void setSwapCount(int swapCount){
         this.swapCount = swapCount;
+    }
+
+    public String getDepartmentCode(){
+        return this.departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode){
+        this.departmentCode = departmentCode;
+    }
+
+    public boolean getPartTime(){
+        return this.partTime;
+    }
+
+    public void setPartTime(boolean partTime){
+        this.partTime = partTime;
     }
 }
