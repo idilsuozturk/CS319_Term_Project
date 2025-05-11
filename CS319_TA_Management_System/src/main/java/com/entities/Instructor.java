@@ -18,13 +18,11 @@ public class Instructor extends Staff {
 
     public Instructor() {
         super();
-        this.courseIDs = null;
         this.taIDs = null;
     }
 
     public Instructor(String firstName, String lastName, String email, String username, String password, String departmentCode, ArrayList<Integer> taIDs) {
         super(firstName, lastName, email, username, password, departmentCode, Roles.INSTRUCTOR);
-        this.courseIDs = courseIDs;
         this.taIDs = taIDs;
     }
 
