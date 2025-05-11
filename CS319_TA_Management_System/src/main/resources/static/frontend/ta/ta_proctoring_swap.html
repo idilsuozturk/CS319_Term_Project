@@ -4,59 +4,78 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Proctoring Swap</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
 </head>
 <body style="background-color: #f8f9fa;">
-
+  
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="main.html">Teaching Assistant</a>
-    </div>
-  </nav>
+  <div id="navbar-container"></div>
 
-  <!-- Content -->
+  <!-- Main Content -->
   <div class="container py-5">
-    <h3 class="text-primary fw-bold mb-4 text-center">Your Proctoring Assignments</h3>
-    <div id="assignment-container" class="row g-4 justify-content-center">
-      <!-- JS ile doldurulacak -->
+    <div class="row mb-4 mt-5">
+      <div class="col text-center">
+        <h2 class="fw-bold text-primary">Your Proctoring Assignments</h2>
+      </div>
+    </div>
+    <div id="assignment-container" class="row justify-content-center">
+      <!-- Assignment cards will be inserted here -->
     </div>
   </div>
 
-  <!-- Inline JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    const currentTAId = 1; // Giriş yapan TA'nın ID'si (örnek)
-
-    fetch(`/tas/${currentTAId}/proctoring`)
-      .then(res => res.json())
-      .then(assignments => {
-        const container = document.getElementById('assignment-container');
-        if (assignments.length === 0) {
-          container.innerHTML = "<p class='text-center text-muted'>No proctoring assignments found.</p>";
-          return;
-        }
-
-        assignments.forEach(a => {
-          const col = document.createElement('div');
-          col.className = 'col-md-10';
-
-          col.innerHTML = `
-            <div class="card border-0 shadow-sm p-4 d-flex flex-row justify-content-between align-items-center">
-              <div>
-                <h5 class="fw-bold">${a.course.code} - ${a.examType}</h5>
-                <p><i class="fas fa-clock me-2 text-secondary"></i> ${a.date}, ${a.time}</p>
-                <p><i class="fas fa-map-marker-alt me-2 text-secondary"></i> ${a.location}</p>
-                <p><i class="fas fa-user me-2 text-secondary"></i> Assigned TA: You</p>
-              </div>
-              <div>
-                <a href="ta_select_swap_ta.html?assignmentId=${a.id}&currentTAId=${currentTAId}" class="btn btn-outline-primary">Choose</a>
-              </div>
-            </div>
-          `;
-          container.appendChild(col);
-        });
+    // Navbar yükle
+    fetch('ta_navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
       });
+
+    // User bilgisi al
+    fetch('/api/user-info', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(user => {
+      const userId = user.id;
+
+      // Proctoring assignmentleri al
+      fetch(`/tas/${userId}/proctoring`)
+        .then(response => response.json())
+        .then(assignments => {
+          const container = document.getElementById('assignment-container');
+          assignments.forEach(assignment => {
+            const card = document.createElement('div');
+            card.className = 'card mb-3 p-3 shadow-sm col-md-6';
+            card.innerHTML = `
+              <h5 class="fw-bold">Assignment ID: ${assignment.id}</h5>
+              <p><i class="fas fa-clock me-2"></i>${assignment.month}-${assignment.day}-${assignment.year} | ${assignment.startTime} - ${assignment.endTime}</p>
+              <p><i class="fas fa-map-marker-alt me-2"></i>Classroom ID: ${assignment.classroomID}</p>
+              <p><i class="fas fa-book me-2"></i>Course ID: ${assignment.courseID}</p>
+              <p><i class="fas fa-user me-2"></i>Assigned TA ID: ${assignment.proctorID}</p>
+              <button class="btn btn-outline-primary">Choose</button>
+            `;
+            container.appendChild(card);
+          });
+        })
+        .catch(error => {
+          console.error("Fetch assignment error:", error);
+          document.getElementById('assignment-container').innerHTML = `<p class="text-danger text-center">Error loading assignments.</p>`;
+        });
+    })
+    .catch(error => {
+      console.error("User info fetch error:", error);
+      window.location.href = "/frontend/login.html";
+    });
   </script>
 </body>
 </html>
