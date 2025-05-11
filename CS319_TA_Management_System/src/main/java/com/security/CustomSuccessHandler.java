@@ -1,15 +1,16 @@
 package com.security;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Set;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.Set;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
@@ -19,12 +20,12 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-        if (roles.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/frontend/admin.html");
-        } else if (roles.contains("ROLE_INSTRUCTOR")) {
-            response.sendRedirect("/frontend/instructor.html");
-        } else if (roles.contains("ROLE_STUDENT")) {
+        if (roles.contains("ROLE_INSTRUCTOR")) {
+            response.sendRedirect("/frontend/instructor/instructor_main.html");
+        } else if (roles.contains("ROLE_TA")) {
             response.sendRedirect("/frontend/student.html");
+        }else if (roles.contains("ROLE_DEPARTMENT_STAFF")) {
+            response.sendRedirect("/frontend/staff/staff_main.html");
         } else {
             response.sendRedirect("/frontend/index.html"); // default fallback
         }

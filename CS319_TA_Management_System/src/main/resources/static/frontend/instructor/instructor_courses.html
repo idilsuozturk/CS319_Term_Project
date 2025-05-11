@@ -38,30 +38,37 @@
         <thead class="text-center table-secondary">
           <tr>
             <th scope="col">Course Code</th>
-            <th scope="col">Course Name</th>
-            <th scope="col">Semester</th>
-            <th scope="col">Credits</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Section</th>
+            <th scope="col">TAs</th>
           </tr>
         </thead>
-        
         <tbody class="text-center">
           <!-- Example Row -->
           <tr>
             <td>CS101</td>
-            <td>Intro to Programming</td>
-            <td>Fall 2024</td>
             <td>4</td>
-            <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+            <td><a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#taModal">View</a></td>
+            <!-- Modal -->
+            <div class="modal fade" id="taModal" tabindex="-1" aria-labelledby="taModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="taModalLabel">TA Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p><strong>Name:</strong> <span id="taName">John Doe</span></p>
+                    <p><strong>Email:</strong> <span id="taEmail">john.doe@example.com</span></p>
+                    <p><strong>Course:</strong> <span id="taCourse">CS319</span></p>
+                    <p><strong>Role:</strong> <span id="taRole">Teaching Assistant</span></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </tr>
-          <tr>
-            <td>CS202</td>
-            <td>Databases</td>
-            <td>Spring 2025</td>
-            <td>3</td>
-            <td><a href="#" class="btn btn-sm btn-outline-success">View</a></td>
-          </tr>
-          <!-- Add more rows dynamically -->
         </tbody>
       </table>
     </div>

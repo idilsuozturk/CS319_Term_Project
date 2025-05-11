@@ -1,12 +1,12 @@
 package com.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.entities.Instructor;
 import com.repositories.InstructorRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class InstructorService {
@@ -20,7 +20,7 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(String firstName, String lastName, String username, String email, String password, String departmentCode, ArrayList<Integer> courseIDs, ArrayList<Integer> taIDs) {
+    public Instructor createInstructor(String firstName, String lastName, String email, String username, String password, String departmentCode, ArrayList<Integer> courseIDs, ArrayList<Integer> taIDs) {
         Instructor newInstructor = new Instructor(firstName, lastName, email, username, password, departmentCode, courseIDs, taIDs);
         return instructorRepository.save(newInstructor);
     }

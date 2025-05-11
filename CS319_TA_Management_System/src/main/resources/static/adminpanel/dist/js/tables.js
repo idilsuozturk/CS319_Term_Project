@@ -64,8 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                   <div class="modal-body">
                   <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                      <input type="text" class="form-control" id="name" name="name" required>
+                    <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" name="lastName" required>
                     </div>
                     <div class="mb-3">
                       <label for="username" class="form-label">User Name</label>
@@ -116,19 +120,19 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                   <div class="modal-body">
                     <div class="mb-3">
-                      <label for="username" class="form-label">Course Name</label>
+                      <label for="courseName" class="form-label">Course Name</label>
                       <input type="text" class="form-control" id="courseName" name="courseName" required>
                     </div>
                     <div class="mb-3">
-                      <label for="tcNumber" class="form-label">Section</label>
+                      <label for="section" class="form-label">Section</label>
                       <input type="number" class="form-control" id="section" name="section">
                     </div>
                     <div class="mb-3">
-                      <label for="username" class="form-label">Instructor Id</label>
+                      <label for="instructor" class="form-label">Instructor Id</label>
                       <input type="number" class="form-control" id="instructor" name="instructor" required>
                     </div>
                     <div class="mb-3">
-                      <label for="username" class="form-label">Course Id</label>
+                      <label for="id" class="form-label">Course Id</label>
                       <input type="number" class="form-control" id="id" name="id" required>
                     </div>
                     <div class="mb-3">
@@ -209,13 +213,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 ["currentAssistingCourses", "currentTakingCourses", "proctoringExams", "courses", "tas"].includes(key)
               ) {
                 dataForm[key] = value ? value.split(",").map(v => v.trim()).filter(v => v !== "").map(Number) : [];
-              } else if (["advisor", "totalWorkload", "tcNumber"].includes(key)) {
+              } else if (["advisor", "totalWorkload"].includes(key)) {
                 dataForm[key] = value ? Number(value) : null;
               } else {
                 dataForm[key] = value;
               }
             });
-
+            
+            console.log(dataForm);
             // Send data with fetch
             fetch('/api/create-user', {
                 method: 'POST',
@@ -233,15 +238,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 myModal.hide();
 
                 document.getElementById("modal-message").innerHTML = `
-      <div class="alert alert-success d-flex align-items-center" role="alert">
-  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-  <div>
-    User created successfully!
-  </div>
-</div>
-      `;
+                      <div class="alert alert-success d-flex align-items-center" role="alert">
+                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                  <div>
+                    User created successfully!
+                  </div>
+                </div>
+                      `;
                 setTimeout(() => {
-                  location.reload();
+                  //location.reload();
                 }, 2000);
 
                 console.log(result);
@@ -316,10 +321,6 @@ document.addEventListener("DOMContentLoaded", function () {
               <label for="departmentCode" class="form-label">Department Code</label>
               <input type="text" class="form-control" id="departmentCode" name="departmentCode">
             </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
-            </div>
           `;
                 break;
               case "DEPARTMENT_STAFF":
@@ -331,10 +332,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="mb-3">
               <label for="departmentCode" class="form-label">Department Code</label>
               <input type="text" class="form-control" id="departmentCode" name="departmentCode">
-            </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
             </div>
           `;
                 break;
@@ -352,10 +349,6 @@ document.addEventListener("DOMContentLoaded", function () {
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title">
             </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
-            </div>
           `;
                 break;
               case "DEAN":
@@ -371,10 +364,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title">
-            </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
             </div>
           `;
                 break;
@@ -430,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
                     `;
                 setTimeout(() => {
-                  location.reload();
+                  //location.reload();
                 }, 2000);
 
                 console.log(result);
@@ -565,8 +554,8 @@ document.addEventListener("DOMContentLoaded", function () {
                       .map((ta, i) => `
                             <tr>
                               <td>${i + 1}</td>
-                              <td>${ta.name || '-'}</td>
-                              <td>${ta.tcNumber || '-'}</td>
+                              <td>${ta.firsName || '-'}</td>
+                              <td>${ta.lastName || '-'}</td>
                               <td>${ta.email || '-'}</td>
                             </tr>
                           `).join('');
@@ -627,7 +616,7 @@ function deleteUser(id) {
     .then(response => response.text())
     .then(result => {
       console.log('Server response:', result);
-      location.reload();
+      //location.reload();
     })
     .catch(error => {
       console.error('Error:', error);
@@ -651,7 +640,7 @@ function deleteCourse(id) {
     .then(response => response.text())
     .then(result => {
       console.log('Server response:', result);
-      location.reload();
+      //location.reload();
     })
     .catch(error => {
       console.error('Error:', error);
