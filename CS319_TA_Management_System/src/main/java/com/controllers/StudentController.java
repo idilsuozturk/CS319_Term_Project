@@ -26,16 +26,21 @@ class StudentsController {
     public StudentsController(StudentService studentService) {
         this.studentService = studentService;
     }
-
-    @GetMapping("/students")
     
+    @GetMapping("/students")
     public List <Student> listStudents() {
         return studentService.getAllStudents();
     }
 
     @PostMapping("/create-student")
     public Student createStudent(@RequestBody Student student) {
-         return studentService.createStudent( student.getFirstName(), student.getLastName(), student.getStudentID());
+        if (student == null){
+            return null;
+        }
+        if (studentService.getStudentByStudentID(student.getStudentID()) != null) {
+            return null;
+        }
+        return studentService.createStudent( student.getFirstName(), student.getLastName(), student.getStudentID());
     }
 
     @GetMapping("/student/{id}")

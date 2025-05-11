@@ -70,8 +70,8 @@ public class AutomaticSwapRequestService {
         }
         int firstTAID = firstProctoringAssignment.getProctorID();
         int secondTAID = secondProctoringAssignment.getProctorID();
-        if (!proctoringAssignmentService.isAvailable(firstTAID, secondTAsProctoringAssignmentID, firstTAsProctoringAssignmentID) || 
-            !proctoringAssignmentService.isAvailable(secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID)){
+        if (!proctoringAssignmentService.isAvailable(firstTAID, secondTAsProctoringAssignmentID, firstTAsProctoringAssignmentID, 0) || 
+            !proctoringAssignmentService.isAvailable(secondTAID, firstTAsProctoringAssignmentID, secondTAsProctoringAssignmentID, 0)){
             return 1;
         }
         TA firstTA = taService.getTAByID(firstTAID);

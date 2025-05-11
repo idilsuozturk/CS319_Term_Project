@@ -42,4 +42,8 @@ public class ClassroomService {
     public Classroom getClassroomByID(Integer id) {
         return classroomRepository.findById(id).orElse(null);  
     }
+
+    public Classroom getClassroomByClassroomName(String name){
+        return classroomRepository.findByClassroomName(name).orElse(null);
+    }
 }

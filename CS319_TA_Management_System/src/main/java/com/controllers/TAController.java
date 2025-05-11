@@ -142,8 +142,23 @@ public class TAController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Course name or course section is incorrect!");
             }
         }
-        if (course.getMasterphd()){
-            TA ta = taService.getTAByID(taID);
+        TA ta = taService.getTAByID(taID);
+        if (ta == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong!");
+        }
+        if (taken) {
+            for (int i : ta.getCoursesAssisted()) {
+                if (i == course.getId()){
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already assisting this course!");
+                }
+            }
+        }
+        else {
+            for (int i : ta.getCoursesTaken()) {
+                if (i == course.getId()){
+                    throw new ResponseStatusException(HttpStatus.CONFLICT, "You are already taking this course!");
+                }
+            }
         }
         return coursesService.addCourse(course.getId(), taID, taken);
     }
@@ -192,6 +207,7 @@ public class TAController {
     public void createTaskSubmissionRequest(@PathVariable Integer id, @RequestParam TaskTypes taskType, @RequestParam String taskDate, @RequestParam String requestDate, @RequestParam String message, @RequestParam int courseID){
         taskSubmissionRequestService.createTaskSubmissionRequest(id, taskType, taskDate, requestDate, message, courseID);
     }
+
 
     @GetMapping("/{id}/viewhist")
     public List<String> viewTaskHistory(@PathVariable Integer id){

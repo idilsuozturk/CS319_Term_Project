@@ -49,11 +49,7 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);  // Find user by email
     }
 
-    public User getUserIdByFirstname(String firstName) {
-        return userRepository.findByFirstName(firstName).orElse(null);  // Find user by first name
-    }
-
-    public User getUserIdByLastname(String lastName) {
-        return userRepository.findByLastName(lastName).orElse(null);  // Find user by last name
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).orElse(null);
     }
 }

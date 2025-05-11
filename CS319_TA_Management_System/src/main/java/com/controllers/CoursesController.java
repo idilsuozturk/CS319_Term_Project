@@ -37,7 +37,10 @@ class CoursesController {
 
     @PostMapping("/create-course")
     public Course createCourse(@RequestBody Course course) {
-         return coursesService.createCourse( course.getCode(), course.getSection(), course.getInstructorID(), course.getTaIDs(), course.getSchedule(), course.getMasterphd());
+        if (coursesService.getCourseByCodeAndSection(course.getCode(), course.getSection()) != null) {
+            return null;
+        }
+        return coursesService.createCourse( course.getCode(), course.getSection(), course.getInstructorID(), course.getTaIDs(), course.getSchedule(), course.getMasterphd());
     }
 
     @GetMapping("/course/{id}")
@@ -47,12 +50,6 @@ class CoursesController {
 
     @PutMapping("update-course/{id}")
     public Course updateCourse(@PathVariable Integer id, @RequestBody Course course) {
-        //Course updatedCourse = coursesService.updateCourseById(id, course);
-        /*if (updatedCourse != null) {
-            return "Course updated successfully!";
-        } else {
-            return "Course not found!";
-        }*/
         return coursesService.updateCourseByID(id, course);
     }
     
