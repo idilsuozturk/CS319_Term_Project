@@ -126,16 +126,13 @@ public class CoursesService {
         if (instructor == null){
             return null;
         }
+        List<Course> courses = getAllCourses();
         List<Course> output = new ArrayList<>();
-        for (int i : instructor.getCourseIDs()){
-        }
-        for (int i : instructor.getCourseIDs()){
-            Course course = getCourseByID(i);
-            if (course == null){
-                continue;
+        for (Course course : courses){
+            if (course.getInstructorID() == id){
+                output.add(course);
             }
-            output.add(course);
-        }
+        } 
         return output;
     }
 

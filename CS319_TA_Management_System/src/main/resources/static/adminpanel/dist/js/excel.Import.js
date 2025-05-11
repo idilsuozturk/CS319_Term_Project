@@ -33,6 +33,14 @@ document.getElementById("importExcelButton").addEventListener("click", function 
       "Section": row[1],
       "Instructor": row[2]
     }));
+       const additionalInfo = row
+      .slice(3) // 3. hücreden itibaren al
+      .map(cell => (cell ?? "").toString().trim()) // null/undefined'ı boş string yap
+      //.filter(cell => cell !== "") // tamamen boşları çıkar
+      .join(" | ");
+  // Log the additional info
+      console.log("Additional Info:", additionalInfo);
+      
 
   console.log("Valid data:", validData);
   // Process valid rows
@@ -82,6 +90,17 @@ document.getElementById("importExcelButton").addEventListener("click", function 
     case "users":
       // Handle user import logic here
       break;
+
+    case "students":
+      // Handle student import logic here
+      break;
+      
+    case "classrooms":
+ 
+      break;
+    case "exams":
+      // Handle exam import logic here
+      break;  
   }
   };
 

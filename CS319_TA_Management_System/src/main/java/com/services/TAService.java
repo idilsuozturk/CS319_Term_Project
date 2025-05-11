@@ -21,7 +21,7 @@ public class TAService {
         return taRepository.findAll();
     }
 
-    public TA createTA(String firstName, String lastName, String username, String email, String password, boolean master, Integer advisorID, boolean partTime, String departmentCode) {
+    public TA createTA(String firstName, String lastName, String email, String username, String password, boolean master, Integer advisorID, boolean partTime, String departmentCode) {
         TA newTA = new TA(firstName, lastName, email, username, password, master, advisorID, partTime, departmentCode);
         return taRepository.save(newTA);
     }
@@ -53,7 +53,7 @@ public class TAService {
             existingTA.setLastAutomaticSwapProctoringAssignmentID(ta.getLastAutomaticSwapProctoringAssignmentID());
             existingTA.setSwapCount(ta.getSwapCount());
             existingTA.setPartTime(ta.getPartTime());
-            existingTA.setDepartmentCode(ta.getDepartmentCode());
+            existingTA.setDepartmentCode(ta.getDepartmentCode());  
             return taRepository.save(existingTA);
         }
         return null;

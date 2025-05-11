@@ -261,13 +261,5 @@ public class ProctoringAssignmentService {
         return true;
     }
 
-    private boolean isPresent(int courseID, ArrayList<Integer> coursesTaken) {
-        for (int id : coursesTaken){
-            if (courseID == id){
-                return false;
-            }
-        }
-        return true;
-    }
 }
 

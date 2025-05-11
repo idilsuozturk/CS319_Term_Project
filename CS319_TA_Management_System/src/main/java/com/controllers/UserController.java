@@ -86,7 +86,9 @@ public class UserController {
             ta.getUsername(),
             ta.getPassword(),
             ta.getMaster(),
-            ta.getAdvisorID()
+            ta.getAdvisorID(),
+            ta.getPartTime(),
+            ta.getDepartmentCode()
         );
     } else if (user instanceof Instructor) {
         Instructor instructor = (Instructor) user;
@@ -97,7 +99,6 @@ public class UserController {
             instructor.getUsername(),
             instructor.getPassword(),
             instructor.getDepartmentCode(),
-            instructor.getCourseIDs(),
             instructor.getTaIDs()
         );
     } else if (user instanceof DepartmentStaff) {

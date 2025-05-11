@@ -20,7 +20,7 @@ public class InstructorService {
         return instructorRepository.findAll();
     }
 
-    public Instructor createInstructor(String firstName, String lastName, String username, String email, String password, String departmentCode, ArrayList<Integer> taIDs) {
+    public Instructor createInstructor(String firstName, String lastName, String email, String username, String password, String departmentCode, ArrayList<Integer> taIDs) {
         Instructor newInstructor = new Instructor(firstName, lastName, email, username, password, departmentCode, taIDs);
         return instructorRepository.save(newInstructor);
     }
