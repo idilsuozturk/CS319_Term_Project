@@ -41,4 +41,8 @@ public class StudentService {
     public Student getStudentByID(Integer id) {
         return studentRepository.findById(id).orElse(null);  
     }
+
+    public Student getStudentByStudentID(String studentID) {
+        return studentRepository.findByStudentID(studentID).orElse(null);
+    }
 }

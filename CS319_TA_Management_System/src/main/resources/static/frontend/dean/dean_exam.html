@@ -1,0 +1,69 @@
+<!-- dean_exam.html (partial – dean_main.html üzerinden yüklenmek için) -->
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/dean_exam.css" />
+
+<div class="form-container" id="examFormContainer">
+  <div class="form-content">
+    <h2>New Exam Setup</h2>
+    <form id="examForm">
+      <div class="form-group">
+        <label for="courseSelect">Select Course:</label>
+        <select id="courseSelect" name="courseSelect" required>
+          <option value="" disabled selected>-- Select a course --</option>
+          <option value="cs101">CS101</option>
+          <option value="cs102">CS102</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="examDate">Exam Date:</label>
+        <input type="date" id="examDate" name="examDate" required />
+      </div>
+
+      <div class="form-group">
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" required />
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Exam Duration (Hours):</label>
+        <input type="number" id="duration" name="duration" min="1" max="6" required />
+      </div>
+
+      <div class="form-group">
+        <label for="room">Room:</label>
+        <input type="text" id="room" name="room" required />
+      </div>
+
+      <div class="form-group">
+        <label for="capacity">Room Capacity:</label>
+        <input type="number" id="capacity" name="capacity" min="1" required />
+      </div>
+
+      <div class="form-group">
+        <label for="proctorMode">Proctor Assignment Mode:</label>
+        <select id="proctorMode" name="proctorMode" required>
+          <option value="auto" selected>Automatic</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="proctorListGroup" style="display: none;">
+        <label for="proctorSelect">Select Proctor:</label>
+        <select id="proctorSelect" name="proctorSelect">
+          <option value="" disabled selected>-- Select a proctor --</option>
+          <option value="ayse">Ayşe Kaya</option>
+          <option value="mehmet">Mehmet Arı</option>
+          <option value="elif">Elif Demir</option>
+        </select>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn">Save Exam</button>
+        <button type="button" class="cancel-btn" id="cancelExam">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../assets/js/dean_exam.js"></script>

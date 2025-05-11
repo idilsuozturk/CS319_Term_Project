@@ -29,7 +29,7 @@
           <div class="bg-white rounded-circle d-flex justify-content-center align-items-center mb-3" style="width: 50px; height: 50px;">
             <i class="fas fa-user text-primary"></i>
           </div>
-          <h3 class="fw-bold">Welcome, Instructor</h3>
+          <h3 class="fw-bold" id="welcome-message">Welcome, Instructor</h3> <!-- Dynamic Message Here -->
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
             <div class="card card-hover text-center border-0 shadow-sm p-4">
               <i class="fas fa-book fa-2x text-primary mb-3"></i>
               <h5 class="card-title">Courses</h5>
-              <a href="courses.html" class="btn btn-outline-primary mt-2">View Courses</a>
+              <a href="instructor_courses.html" class="btn btn-outline-primary mt-2">View Courses</a>
             </div>
           </div>
       
@@ -49,7 +49,7 @@
             <div class="card card-hover text-center border-0 shadow-sm p-4">
               <i class="fas fa-file-alt fa-2x text-success mb-3"></i>
               <h5 class="card-title">Exams</h5>
-              <a href="exams.html" class="btn btn-outline-success mt-2">View Exams</a>
+              <a href="instructor_exams.html" class="btn btn-outline-success mt-2">View Exams</a>
             </div>
           </div>
       
@@ -58,7 +58,7 @@
             <div class="card card-hover text-center border-0 shadow-sm p-4">
               <i class="fas fa-bell fa-2x text-danger mb-3"></i>
               <h5 class="card-title">Notifications</h5>
-              <a href="exams.html" class="btn btn-outline-danger mt-2">View Notifications</a>
+              <a href="instructor_exams.html" class="btn btn-outline-danger mt-2">View Notifications</a>
             </div>
           </div>
       
@@ -67,11 +67,11 @@
             <div class="card card-hover text-center border-0 shadow-sm p-4">
               <i class="fas fa-envelope-open-text fa-2x text-warning mb-3"></i>
               <h5 class="card-title">Requests</h5>
-              <a href="exams.html" class="btn btn-outline-warning mt-2">View Requests</a>
+              <a href="instructor_requests.html" class="btn btn-outline-warning mt-2">View Requests</a>
+            </div>
           </div>
         </div>
-      </div>
-      
+    </div>
   </div>
 
   <!-- Bootstrap JS -->
@@ -82,7 +82,43 @@
       .then(data => {
         document.getElementById('navbar-container').innerHTML = data;
       });
+
+    fetch('/api/user-info', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 302) {
+                window.location.href = '/frontend/login.html';
+                throw new Error('Not authenticated');
+            }
+            return response.text().then(text => {
+                console.error('Error response:', text);
+                throw new Error("HTTP error " + response.status);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('User data:', data);
+        const welcomeMessage = document.getElementById('welcome-message');
+        if (data.firstName && data.lastName) {
+            welcomeMessage.textContent = `Welcome, ${data.firstName} ${data.lastName}`;
+        } else {
+            welcomeMessage.textContent = `Welcome, Instructor`;  
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (error.message === 'Not authenticated') {
+        }
+    });
   </script>
 </body>
 </html>
-

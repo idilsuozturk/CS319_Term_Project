@@ -128,12 +128,14 @@ public class CoursesService {
         }
         List<Course> output = new ArrayList<>();
         for (int i : instructor.getCourseIDs()){
+        }
+        for (int i : instructor.getCourseIDs()){
             Course course = getCourseByID(i);
             if (course == null){
                 continue;
             }
             output.add(course);
-        } 
+        }
         return output;
     }
 

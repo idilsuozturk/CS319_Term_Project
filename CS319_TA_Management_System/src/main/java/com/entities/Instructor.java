@@ -1,9 +1,13 @@
 package com.entities;
 
+import java.util.ArrayList;
+
 import com.converters.IntegerArrayListToJsonConverter;
 
-import java.util.ArrayList;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "instructors")

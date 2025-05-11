@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded");
   function getQueryParam(param) {
@@ -64,8 +63,12 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                   <div class="modal-body">
                   <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                      <input type="text" class="form-control" id="name" name="name" required>
+                    <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" name="lastName" required>
                     </div>
                     <div class="mb-3">
                       <label for="username" class="form-label">User Name</label>
@@ -100,12 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
             row = `
                   <thead>
                     <tr>
-                      <th style="width: 10px">#</th>
-                      <th style="width: 100px">Course Name</th>
-                      <th style="width: 40px">Section</th>
-                      
-                      <th style="width: 40px">Instructor</th>
-                      <th style="width: 40px">TA's</th>
+                      <th style="width: 300px">#</th>
+                      <th style="width: 300px">Course Code</th>
+                      <th style="width: 300px">Section</th>
+                      <th style="width: 300px">Instructor</th>
+                      <th style="width: 300px">MS/PHD</th>
+                      <th style="width: 300px">TA's</th>
                     </tr>
                   </thead>`;
                   //format of the form for courses
@@ -116,25 +119,27 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                   <div class="modal-body">
                     <div class="mb-3">
-                      <label for="username" class="form-label">Course Name</label>
-                      <input type="text" class="form-control" id="courseName" name="courseName" required>
+                      <label for="code" class="form-label">Course Code</label>
+                      <input type="text" class="form-control" id="code" name="code" required>
                     </div>
                     <div class="mb-3">
-                      <label for="tcNumber" class="form-label">Section</label>
+                      <label for="section" class="form-label">Section</label>
                       <input type="number" class="form-control" id="section" name="section">
                     </div>
                     <div class="mb-3">
-                      <label for="username" class="form-label">Instructor Id</label>
-                      <input type="number" class="form-control" id="instructor" name="instructor" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="username" class="form-label">Course Id</label>
-                      <input type="number" class="form-control" id="id" name="id" required>
+                      <label for="instructorID" class="form-label">Instructor Id</label>
+                      <input type="number" class="form-control" id="instructorID" name="instructorID" required>
                     </div>
                     <div class="mb-3">
                       <label for="taIDs" class="form-label">TAs</label>
                       <input type="text" class="form-control" id="taIDs" name="taIDs">
                     </div>
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="checkbox" id="isGraduateLevel" name="isGraduateLevel">
+                      <label class="form-check-label" for="isGraduateLevel">
+                        MS/PhD Level Course
+                      </label>
+                  </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -209,13 +214,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 ["currentAssistingCourses", "currentTakingCourses", "proctoringExams", "courses", "tas"].includes(key)
               ) {
                 dataForm[key] = value ? value.split(",").map(v => v.trim()).filter(v => v !== "").map(Number) : [];
-              } else if (["advisor", "totalWorkload", "tcNumber"].includes(key)) {
+              } else if (["advisor", "totalWorkload"].includes(key)) {
                 dataForm[key] = value ? Number(value) : null;
               } else {
                 dataForm[key] = value;
               }
             });
-
+            
+            console.log(dataForm);
             // Send data with fetch
             fetch('/api/create-user', {
                 method: 'POST',
@@ -233,13 +239,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 myModal.hide();
 
                 document.getElementById("modal-message").innerHTML = `
-      <div class="alert alert-success d-flex align-items-center" role="alert">
-  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-  <div>
-    User created successfully!
-  </div>
-</div>
-      `;
+                      <div class="alert alert-success d-flex align-items-center" role="alert">
+                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                  <div>
+                    User created successfully!
+                  </div>
+                </div>
+                      `;
                 setTimeout(() => {
                   location.reload();
                 }, 2000);
@@ -316,10 +322,6 @@ document.addEventListener("DOMContentLoaded", function () {
               <label for="departmentCode" class="form-label">Department Code</label>
               <input type="text" class="form-control" id="departmentCode" name="departmentCode">
             </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
-            </div>
           `;
                 break;
               case "DEPARTMENT_STAFF":
@@ -331,10 +333,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="mb-3">
               <label for="departmentCode" class="form-label">Department Code</label>
               <input type="text" class="form-control" id="departmentCode" name="departmentCode">
-            </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
             </div>
           `;
                 break;
@@ -352,10 +350,6 @@ document.addEventListener("DOMContentLoaded", function () {
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title">
             </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
-            </div>
           `;
                 break;
               case "DEAN":
@@ -371,10 +365,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
               <input type="text" class="form-control" id="title" name="title">
-            </div>
-            <div class="mb-3">
-              <label for="tcNumber" class="form-label">TC Number</label>
-              <input type="number" class="form-control" id="tcNumber" name="tcNumber">
             </div>
           `;
                 break;
@@ -393,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData(addCourseForm);
             const dataForm = {};
             formData.forEach((value, key) => {
-              if (["instructor", "section", "id"].includes(key)) {
+              if (["instructorID", "section"].includes(key)) {
                 dataForm[key] = value ? Number(value) : null;
               }
               else if (
@@ -404,6 +394,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 dataForm[key] = value;
               }
             });
+
+            const isGraduateCheckbox = document.getElementById("isGraduateLevel");
+            dataForm.masterphd = isGraduateCheckbox.checked;
 
             // Send data with fetch
             fetch('/api/create-course', {
@@ -478,13 +471,13 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
 
             case "courses":
-              //TODO REMOVE BUTTON
               row = `
                       <tr class="align-middle">
                         <td>${index + 1}.</td>
-                        <td>${item.courseName}</td>
+                        <td>${item.code}</td>
                         <td>${item.section}</td>
-                        <td>${item.instructor}</td>
+                        <td>${item.instructorID}</td>
+                        <td>${item.masterphd ? "Yes" : "No"}</td>
                         <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taModal-${index}">
                           View TAs
@@ -519,17 +512,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                           </div>
                         </td>
-                      <td>
-    <div class="d-flex ms-auto">
-      <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
-        <i class="bi bi-pencil-fill"></i>
-      </button>
-      <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
-                    onclick="deleteCourse(${item.id})">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-  </td>
+                        <td>
+                          <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-warning d-flex align-items-center justify-content-center"
+                              style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
+                              <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                              style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
+                              onclick="deleteCourse(${item.id})">
+                              <i class="bi bi-x-lg"></i>
+                            </button>
+                          </div>
+                        </td>
                       </tr>
 
                     `;
@@ -565,8 +560,8 @@ document.addEventListener("DOMContentLoaded", function () {
                       .map((ta, i) => `
                             <tr>
                               <td>${i + 1}</td>
-                              <td>${ta.name || '-'}</td>
-                              <td>${ta.tcNumber || '-'}</td>
+                              <td>${ta.firsName || '-'}</td>
+                              <td>${ta.lastName || '-'}</td>
                               <td>${ta.email || '-'}</td>
                             </tr>
                           `).join('');

@@ -1,10 +1,11 @@
 package com.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.entities.TA;
 import com.repositories.TARepository;
-import java.util.List;
 
 
 @Service
@@ -20,8 +21,8 @@ public class TAService {
         return taRepository.findAll();
     }
 
-    public TA createTA(String firstName, String lastName, String username, String email, String password, boolean master, Integer advisorID) {
-        TA newTA = new TA(firstName, lastName, email, username, password, master, advisorID);
+    public TA createTA(String firstName, String lastName, String username, String email, String password, boolean master, Integer advisorID, boolean partTime, String departmentCode) {
+        TA newTA = new TA(firstName, lastName, email, username, password, master, advisorID, partTime, departmentCode);
         return taRepository.save(newTA);
     }
 
@@ -51,6 +52,8 @@ public class TAService {
             existingTA.setLastAutomaticSwapTAID(ta.getLastAutomaticSwapTAID());
             existingTA.setLastAutomaticSwapProctoringAssignmentID(ta.getLastAutomaticSwapProctoringAssignmentID());
             existingTA.setSwapCount(ta.getSwapCount());
+            existingTA.setPartTime(ta.getPartTime());
+            existingTA.setDepartmentCode(ta.getDepartmentCode());
             return taRepository.save(existingTA);
         }
         return null;

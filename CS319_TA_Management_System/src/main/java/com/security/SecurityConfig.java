@@ -109,6 +109,7 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
         .securityMatcher("/**")
 
         .csrf(csrf -> csrf.disable())
+        
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
             .requestMatchers("/frontend/**").permitAll()
@@ -295,7 +296,7 @@ public WebMvcConfigurer corsConfigurer() {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/api/**")
-                    .allowedOrigins("http://localhost:8081") // or your frontend URL
+                    .allowedOrigins("http://localhost:8080") // or your frontend URL
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .allowCredentials(true);
         }

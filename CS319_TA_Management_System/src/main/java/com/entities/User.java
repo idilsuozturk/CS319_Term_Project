@@ -1,5 +1,8 @@
 package com.entities;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -7,9 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
 use = JsonTypeInfo.Id.NAME,
@@ -20,6 +20,7 @@ use = JsonTypeInfo.Id.NAME,
 @JsonSubTypes({
   @JsonSubTypes.Type(value = Admin.class, name = "ADMIN"),
   @JsonSubTypes.Type(value = TA.class, name = "TA"),
+  @JsonSubTypes.Type(value = Instructor.class, name = "INSTRUCTOR"),
   @JsonSubTypes.Type(value = DepartmentStaff.class, name = "DEPARTMENT_STAFF"),
   @JsonSubTypes.Type(value = DepartmentChair.class, name = "DEPARTMENT_CHAIR"),
   @JsonSubTypes.Type(value = Dean.class, name = "DEAN"),
