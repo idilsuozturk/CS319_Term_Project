@@ -26,6 +26,68 @@
 
   <!-- JS -->
   <script>
+    function confirmSwap(receiverId) {
+  const { taId, assignmentId } = window.currentSwapData;
+
+  const taListDiv = document.getElementById('ta-list');
+  taListDiv.innerHTML = `<p class="text-muted">Loading available assignments...</p>`;
+
+  fetch(`/tas/showpossibleprocswapreq?receiverID=${receiverId}&proctoringAssignmentID=${assignmentId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch assignments for TA");
+      }
+      return response.json();
+    })
+    .then(assignments => {
+      if (assignments.length === 0 || assignments[0] === null) {
+        taListDiv.innerHTML = `
+          <div class="alert alert-warning text-center" role="alert">
+            This TA has no available assignments to swap with.
+            <br />
+            <button class="btn btn-primary mt-2" id="sendSwapWithoutReplacement">
+              Send Swap Request Without a Replacement
+            </button>
+          </div>
+        `;
+        document.getElementById("sendSwapWithoutReplacement").addEventListener("click", function() {
+          console.log("buradayımm");
+        });
+        return;
+      }
+
+      const list = document.createElement('div');
+      list.classList.add('list-group');
+
+      assignments.forEach(assignment => {
+        const item = document.createElement('div');
+        item.classList.add('list-group-item');
+
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Course:</strong> ${assignment.courseID}<br>
+              <strong>Classroom:</strong> ${assignment.classroomID}<br>
+              <strong>Date:</strong> ${assignment.day}/${assignment.month}/${assignment.year}<br>
+              <strong>Time:</strong> ${formatTime(assignment.startTime)} - ${formatTime(assignment.endTime)}
+            </div>
+            <button class="btn btn-sm btn-outline-success" onclick="requestSwap(${assignment.id})">Request Swap</button>
+          </div>
+        `;
+
+        list.appendChild(item);
+      });
+
+      taListDiv.innerHTML = '';
+      taListDiv.appendChild(list);
+    })
+    .catch(error => {
+      console.error('Error fetching swap assignments:', error);
+      taListDiv.innerHTML = `<div class="alert alert-danger">An error occurred while loading assignments.</div>`;
+    });
+}
+
+
     function formatTime(timeInt) {
       const timeStr = timeInt.toString().padStart(4, '0'); 
       const hours = parseInt(timeStr.slice(0, 2));
@@ -58,22 +120,30 @@
           return;
         }
 
-        // Create list of TAs with buttons
-        const listItems = taList.map(ta => `
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            ${ta.name} (${ta.id})
-            <button class="btn btn-sm btn-outline-primary">Request Swap</button>
-          </li>
-        `).join('');
+        const listGroup = document.createElement('div');
+      listGroup.classList.add('list-group');
 
-        taListDiv.innerHTML = `<ul class="list-group">${listItems}</ul>`;
-      })
-      .catch(error => {
-        console.error('Error fetching TA list:', error);
-        taListDiv.innerHTML = `<p class="text-danger">Error loading TA list.</p>`;
+      taList.forEach(ta => {
+        const item = document.createElement('div');
+        item.classList.add('list-group-item');
+
+        item.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>${ta.name}</strong><br>
+              <small>${ta.id}</small>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="confirmSwap(${ta.id})">See Assignments</button>
+          </div>
+        `;
+
+        listGroup.appendChild(item);
       });
 
-    // Show the modal
+      taListDiv.innerHTML = '';
+      taListDiv.appendChild(listGroup);
+      });
+
     const swapModal = new bootstrap.Modal(document.getElementById('swapModal'));
     swapModal.show();
   }
