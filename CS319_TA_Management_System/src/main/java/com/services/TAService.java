@@ -1,10 +1,11 @@
 package com.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.entities.TA;
 import com.repositories.TARepository;
-import java.util.List;
 
 
 @Service
@@ -20,7 +21,7 @@ public class TAService {
         return taRepository.findAll();
     }
 
-    public TA createTA(String firstName, String lastName, String username, String email, String password, boolean master, Integer advisorID) {
+    public TA createTA(String firstName, String lastName, String email, String username, String password, boolean master, Integer advisorID) {
         TA newTA = new TA(firstName, lastName, email, username, password, master, advisorID);
         return taRepository.save(newTA);
     }

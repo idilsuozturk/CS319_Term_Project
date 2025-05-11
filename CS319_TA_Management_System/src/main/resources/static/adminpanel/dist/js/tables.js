@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
                       `;
                 setTimeout(() => {
-                  //location.reload();
+                  location.reload();
                 }, 2000);
 
                 console.log(result);
@@ -419,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
                     `;
                 setTimeout(() => {
-                  //location.reload();
+                  location.reload();
                 }, 2000);
 
                 console.log(result);
@@ -616,7 +616,7 @@ function deleteUser(id) {
     .then(response => response.text())
     .then(result => {
       console.log('Server response:', result);
-      //location.reload();
+      location.reload();
     })
     .catch(error => {
       console.error('Error:', error);
@@ -640,7 +640,7 @@ function deleteCourse(id) {
     .then(response => response.text())
     .then(result => {
       console.log('Server response:', result);
-      //location.reload();
+      location.reload();
     })
     .catch(error => {
       console.error('Error:', error);
