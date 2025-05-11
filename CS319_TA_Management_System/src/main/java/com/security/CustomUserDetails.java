@@ -35,8 +35,8 @@ public class CustomUserDetails implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities =  Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
-        System.out.println("user created id: "  + id + " name: " + firstName + "surname: " + lastName + " email: " + email + " username: " + username + " password: " + password);
-        System.out.println("authorities: " + authorities);
+        //System.out.println("user created id: "  + id + " name: " + firstName + "surname: " + lastName + " email: " + email + " username: " + username + " password: " + password);
+        //System.out.println("authorities: " + authorities);
     }
 
     public Integer getId() {

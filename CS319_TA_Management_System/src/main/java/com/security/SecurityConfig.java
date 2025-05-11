@@ -107,6 +107,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
     http
         .securityMatcher("/**")
+
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/frontend/login.html", "/frontend/assets/**", "/frontend/login", "/frontend/register").permitAll()
