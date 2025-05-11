@@ -49,4 +49,5 @@ public class AdminsController {
     public Admin getAdmin(@RequestBody Integer id) {
         return adminsService.getAdminById(id); // Get admin by ID
     }
+    
 }

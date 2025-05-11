@@ -8,6 +8,7 @@ public class Request {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
+    
     private RequestTypes requestType;
     private int ownerID;
     private String message;

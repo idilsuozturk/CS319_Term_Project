@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.entities.Admin;
@@ -350,4 +351,25 @@ public ResponseEntity<?> getCurrentUser() {
     
     return ResponseEntity.ok(userInfo);
 }
+
+@GetMapping("/userN")
+public Integer getUserId(  @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName) {
+    if( firstName == null || lastName == null) {
+        return null;
+    } else {
+
+        int id1= userService.getUserIdByFirstname(firstName).getId();
+        int id2= userService.getUserIdByLastname(lastName).getId();
+        
+        if (id1 == id2) {
+            System.out.println("User ID: " + id1);
+            return id1;
+        } else {
+            System.out.println("User ID not found or mismatch");
+            return null;
+        }
+    }
+    }
+
 }

@@ -2,11 +2,8 @@
 <html lang="en">
   <!--begin::Head-->
   <head>
-    
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-      <script src="../../js/tables.js"></script>  
-      <script src="../../js/excel.Import.js"></script>
-      <script src="../../js/xlsx.full.min.js"></script>
+   
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Admin Panel</title>
     <!--begin::Primary Meta Tags-->
@@ -84,32 +81,7 @@
           <!--begin::End Navbar Links-->
           <ul class="navbar-nav ms-auto">
             <!--begin::Notifications Dropdown Menu-->
-            <li class="nav-item dropdown">
-              <a class="nav-link" data-bs-toggle="dropdown" href="#">
-                <i class="bi bi-bell-fill"></i>
-                <span class="navbar-badge badge text-bg-warning">15</span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                  <i class="bi bi-envelope me-2"></i> 4 new messages
-                  <span class="float-end text-secondary fs-7">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                  <i class="bi bi-people-fill me-2"></i> 8 friend requests
-                  <span class="float-end text-secondary fs-7">12 hours</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                  <i class="bi bi-file-earmark-fill me-2"></i> 3 new reports
-                  <span class="float-end text-secondary fs-7">2 days</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer"> See All Notifications </a>
-              </div>
-            </li>
+        
             <!--end::Notifications Dropdown Menu-->
             <!--begin::Fullscreen Toggle-->
             <li class="nav-item">
@@ -169,6 +141,18 @@
                       <p>Users</p>
                     </a>
                   </li>
+                    <li class="nav-item">
+                    <a href="../tables/simple.html?type=tas" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>TA's</p>
+                    </a>
+                  </li>
+                    <li class="nav-item">
+                    <a href="../tables/simple.html?type=instructors" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Instructors</p>
+                    </a>
+                  </li>
                   <li class="nav-item">
                     <a href="../tables/simple.html?type=courses" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
@@ -179,6 +163,12 @@
                     <a href="../tables/simple.html?type=exams" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Exams</p>
+                    </a>
+                  </li>
+                    <li class="nav-item">
+                    <a href="../tables/simple.html?type=classrooms" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Classrooms</p>
                     </a>
                   </li>
                 </ul>
@@ -356,7 +346,10 @@
 
     </script>
 
-    
+     
+      <script src="../../js/tables.js"></script>  
+      <script src="../../js/excel.Import.js"></script>
+      <script src="../../js/xlsx.full.min.js"></script>
    
     <!--end::OverlayScrollbars Configure-->
     <!--end::Script-->

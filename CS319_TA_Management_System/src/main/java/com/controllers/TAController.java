@@ -29,7 +29,7 @@ import com.services.TAService;
 import com.services.TaskSubmissionRequestService;
 
 @RestController
-@RequestMapping("/tas")
+@RequestMapping("/api")
 public class TAController {
 
     private final CoursesService coursesService;
@@ -58,13 +58,8 @@ public class TAController {
         this.proctoringAssignmentService = proctoringAssignmentService;
     }
 
-    @GetMapping("/test")
 
-    public String test() {
-        return "TA controller pls work";
-    }
-
-    @GetMapping("/list")
+    @GetMapping("/tas")
     public List<TA> listTAs() {
         return taService.getAllTAs();
     }
@@ -75,7 +70,7 @@ public class TAController {
         return taService.getTAByID(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create-ta")
     public TA createTA(@RequestBody TA ta) {
         return taService.createTA(
                 ta.getFirstName(),

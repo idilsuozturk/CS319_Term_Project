@@ -28,7 +28,7 @@ class ClassroomsController {
         this.classroomService = classroomService;
     }
 
-    @GetMapping("/Classrooms")
+    @GetMapping("/classrooms")
     
     public List <Classroom> listClassrooms() {
         return classroomService.getAllClassrooms();
@@ -39,7 +39,7 @@ class ClassroomsController {
          return classroomService.createClassroom(classroom.getClassroomName(), classroom.getCapacity(), classroom.getExamCapacity());
     }
 
-    @GetMapping("/Classroom/{id}")
+    @GetMapping("/classroom/{id}")
     public Classroom getClassroom(@PathVariable Integer id) {
         return classroomService.getClassroomByID(id);
     }

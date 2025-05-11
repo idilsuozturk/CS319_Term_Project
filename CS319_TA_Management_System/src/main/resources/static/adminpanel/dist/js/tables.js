@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let addForm = ``;
 
         console.log(pageType)
+
+        document.getElementById("importModal").setAttribute("page-type", pageType);
         //this switch case arranges form inputs
         switch (pageType) {
           case "users":
@@ -99,6 +101,128 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                 </form>`;
             break;
+              case "tas":
+            row = `
+                  <thead>
+                  <tr>
+                  <th style="width: 10px">#</th>
+                  <th style="width: 100px">Name</th>
+                  <th style="width: 40px">Email</th>
+                  <th style="width: 100px">Username</th>
+                  <th style="width: 40px">Password</th>
+                  <th style="width: 40px">Role</th>
+                  <th style="width: 40px"></th>
+                  </tr>
+                  </thead>
+                  <tbody id="dynamic-table-body"></tbody>
+                  `;
+            
+            //shows the form for user
+            addForm = ` <form id="addUserForm">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="username" class="form-label">User Name</label>
+                      <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="role" class="form-label">Role</label>
+                      <select class="form-select" id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="TA">TA</option>
+                        <option value="INSTRUCTOR">Instructor</option>
+                        <option value="DEPARTMENT_STAFF">Department Staff</option>
+                        <option value="DEPARTMENT_CHAIR">Department Chair</option>
+                        <option value="DEAN">Dean</option>
+                      </select>
+                    </div>
+                    <!-- Extra fields will be injected here -->
+                    <div id="extra-fields"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                  </div>
+                </form>`;
+            break;
+
+              case "instructors":
+            row = `
+                  <thead>
+                  <tr>
+                  <th style="width: 10px">#</th>
+                  <th style="width: 100px">Name</th>
+                  <th style="width: 40px">Email</th>
+                  <th style="width: 100px">Username</th>
+                  <th style="width: 40px">Password</th>
+                  <th style="width: 40px">Role</th>
+                  <th style="width: 40px"></th>
+                  </tr>
+                  </thead>
+                  <tbody id="dynamic-table-body"></tbody>
+                  `;
+            
+            //shows the form for user
+            addForm = ` <form id="addUserForm">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="username" class="form-label">User Name</label>
+                      <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="role" class="form-label">Role</label>
+                      <select class="form-select" id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="ADMIN">Admin</option>
+                        <option value="TA">TA</option>
+                        <option value="INSTRUCTOR">Instructor</option>
+                        <option value="DEPARTMENT_STAFF">Department Staff</option>
+                        <option value="DEPARTMENT_CHAIR">Department Chair</option>
+                        <option value="DEAN">Dean</option>
+                      </select>
+                    </div>
+                    <!-- Extra fields will be injected here -->
+                    <div id="extra-fields"></div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                  </div>
+                </form>`;
+            break;
+
           case "courses":
             row = `
                   <thead>
@@ -147,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </form>`;
             break;
-            //TODO EXAMS YAPIYORUMM
+           
             case "exams":
   row = `
         <thead>
@@ -193,7 +317,49 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
             </form>`;
             break;
-
+          case "classrooms":
+             row = `
+        <thead>
+          <tr>
+            <th style="width: 300px">#</th>
+            <th style="width: 300px">Classroom Name</th>
+            <th style="width: 300px">Capacity</th>
+            <th style="width: 300px">Exam Capacity</th>
+          </tr>
+        </thead>`;
+  addForm = ` <form id="addCourseForm">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="courseID" class="form-label">Course (ID)</label>
+                  <input type="text" class="form-control" id="courseID" name="courseID" required>
+                </div>
+                <div class="mb-3">
+                  <label for="startDate" class="form-label">Start Hour</label>
+                  <input type="string" class="form-control" id="startDate" name="startDate" required>
+                </div>
+                <div class="mb-3">
+                  <label for="endDate" class="form-label">End Hour</label>
+                  <input type="string" class="form-control" id="endDate" name="endDate" required>
+                </div>
+                <div class="mb-3">
+                  <label for="examPlace" class="form-label">Place</label>
+                  <input type="text" class="form-control" id="examPlace" name="examPlace" required>
+                </div>
+                <div class="mb-3">
+                  <label for="proctors" class="form-label">Proctors ID(s)</label>
+                  <input type="text" class="form-control" id="proctors" name="proctors" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create Exam</button>
+              </div>
+            </form>`
+            break;
           default:
             row = `<tr><td colspan="4">Unknown content type: ${pageType}</td></tr>`;
         }
@@ -573,6 +739,34 @@ document.addEventListener("DOMContentLoaded", function () {
               }
 
               break;
+
+              case "classrooms":
+              row = `
+                      <tr class="align-middle">
+                        <td>${index + 1}.</td>
+                        <td>${item.classroomName}</td>
+                        <td>${item.capacity}</td>
+                        <td>${item.examCapacity}</td>
+                                              <td>
+                        <div class="d-flex">
+                        <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;
+                        on">
+                          <i class="bi bi-pencil-fill"></i>
+                        </button>
+                        <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                                style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
+                                onclick="deleteUser(${item.id})">
+                          <i class="bi bi-x-lg"></i>
+                        </button>
+
+                      </div> </td>
+
+                      </tr>
+                    `;
+              console.log(pageType);
+              tableBody.insertAdjacentHTML("beforeend", row);
+              break;
+
             default:
               row = `<tr><td colspan="4">Unknown content type: ${pageType}</td></tr>`;
               tableBody.insertAdjacentHTML("beforeend", row);
