@@ -1,21 +1,34 @@
 package com.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.entities.Classroom;
+import com.entities.Course;
 import com.entities.ProctoringAssignment;
+import com.entities.Roles;
+import com.entities.Student;
 import com.entities.TA;
+import com.entities.User;
 import com.repositories.ProctoringAssignmentRepository;
+import java.util.Random;
 @Service
 public class ProctoringAssignmentService {
     private final ProctoringAssignmentRepository proctoringAssignmentRepository;
 
+    private final ClassroomService classroomService;
+
+    private final StudentService studentService;
+
     private final TAService taService;
 
-    public ProctoringAssignmentService(ProctoringAssignmentRepository proctoringAssignmentRepository, TAService taService) {
+    public ProctoringAssignmentService(ProctoringAssignmentRepository proctoringAssignmentRepository, ClassroomService classroomService, StudentService studentService, CoursesService coursesService, TAService taService, UserService userService) {
         this.proctoringAssignmentRepository = proctoringAssignmentRepository;
+        this.classroomService = classroomService; 
+        this.studentService = studentService;
         this.taService = taService;
     }
     
@@ -70,6 +83,34 @@ public class ProctoringAssignmentService {
         return output;
     }
 
+    public String[] getExamList(Integer id, boolean random){
+        ProctoringAssignment proctoringAssignment = getProctoringAssignmentByID(id);
+        if (proctoringAssignment == null){
+            return null;
+        }
+        Classroom classroom = classroomService.getClassroomByID(proctoringAssignment.getClassroomID());
+        if (classroom == null) {
+            return null;
+        }
+        String[] array = new String[classroom.getExamList().length];
+        for (int i = 0; i < array.length; i++){
+            Student student = studentService.getStudentByStudentID(classroom.getExamList()[i]);
+            array[i] = student.getName();
+        }
+        if (random){
+            Random rand = new Random();
+            for (int i = array.length - 1; i > 0; i--) {
+                int j = rand.nextInt(i + 1);
+                String temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        else {
+            Arrays.sort(array);
+        }
+        return array;
+    }
     public List<ProctoringAssignment> viewProctoringAssignments(Integer id) {
         TA ta = taService.getTAByID(id);
         if (ta != null){
@@ -83,6 +124,7 @@ public class ProctoringAssignmentService {
         return null;
     }
 
+    
     public boolean isAvailable(int taID, Integer proctoringAssignmentID, Integer ignore){
         ProctoringAssignment proctoringAssignment = getProctoringAssignmentByID(proctoringAssignmentID);
         ProctoringAssignment proctoringAssignmentToBeIgnored = getProctoringAssignmentByID(ignore);
