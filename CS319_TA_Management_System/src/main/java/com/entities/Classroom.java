@@ -28,7 +28,6 @@ public class Classroom {
         this.capacity = -1;
         this.examCapacity = -1;
         this.examList = null;
-        
     }
 
     public Classroom(String classroomName, int capacity, int examCapacity){
@@ -36,7 +35,6 @@ public class Classroom {
         this.capacity = capacity;
         this.examCapacity = examCapacity;
         this.examList = null;
-       
     }
 
     public int getID(){

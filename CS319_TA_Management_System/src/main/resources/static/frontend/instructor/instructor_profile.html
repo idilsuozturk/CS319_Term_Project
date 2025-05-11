@@ -17,19 +17,19 @@
       <div class="col-md-6">
         <h2 class="text-center mb-4">Instructor Profile</h2>
         <form>
-          <div class="mb-3">
-            <label class="form-label">Name</label>
-            <input type="text" class="form-control" value="Jane" disabled>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Surname</label>
-            <input type="text" class="form-control" value="Smith" disabled>
-          </div>
-  
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" id="nameField" class="form-control" disabled>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Surname</label>
+                <input type="text" id="surnameField" class="form-control" disabled>
+              </div>
+              
           <!-- Optional: Add instructor-specific fields -->
           <div class="mb-3">
             <label class="form-label">Department</label>
-            <input type="text" class="form-control" value="Computer Science" disabled>
+            <input type="text" id="departmentField" class="form-control" disabled>
           </div>
 
           <hr>
@@ -71,41 +71,43 @@
       });
 
     fetch('/api/user-info', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
     })
     .then(response => {
-        console.log('Response status:', response.status);
-        if (!response.ok) {
-            if (response.status === 401 || response.status === 302) {
-                window.location.href = '/frontend/login.html';
-                throw new Error('Not authenticated');
-            }
-            return response.text().then(text => {
-                console.error('Error response:', text);
-                throw new Error("HTTP error " + response.status);
-            });
+    if (!response.ok) {
+        if (response.status === 401 || response.status === 302) {
+        window.location.href = '/frontend/login.html';
+        throw new Error('Not authenticated');
         }
-        return response.json();
+        return response.text().then(text => {
+        console.error('Error response:', text);
+        throw new Error("HTTP error " + response.status);
+        });
+    }
+    return response.json();
     })
-    .then(data => {
-        console.log('User data:', data);
-        const welcomeMessage = document.getElementById('welcome-message');
-        if (data.firstName && data.lastName) {
-            welcomeMessage.textContent = `Welcome, ${data.firstName} ${data.lastName}`;
-        } else {
-            welcomeMessage.textContent = `Welcome, Instructor`;  
-        }
+    .then(user => {
+    document.getElementById('nameField').value = user.firstName;
+    document.getElementById('surnameField').value = user.lastName;
+
+    return fetch(`/api/instructor/${user.id}`);
+    })
+    .then(response => {
+    if (!response.ok) throw new Error("Failed to fetch instructor info");
+    return response.json();
+    })
+    .then(instructor => {
+    document.getElementById('departmentField').value = instructor.departmentCode;
     })
     .catch(error => {
-        console.error('Error:', error);
-        if (error.message === 'Not authenticated') {
-        }
+    console.error('Error:', error);
     });
+
   </script>
 </body>
 </html>

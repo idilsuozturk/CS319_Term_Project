@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded");
   function getQueryParam(param) {
@@ -104,12 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
             row = `
                   <thead>
                     <tr>
-                      <th style="width: 10px">#</th>
-                      <th style="width: 100px">Course Name</th>
-                      <th style="width: 40px">Section</th>
-                      
-                      <th style="width: 40px">Instructor</th>
-                      <th style="width: 40px">TA's</th>
+                      <th style="width: 300px">#</th>
+                      <th style="width: 300px">Course Code</th>
+                      <th style="width: 300px">Section</th>
+                      <th style="width: 300px">Instructor</th>
+                      <th style="width: 300px">MS/PHD</th>
+                      <th style="width: 300px">TA's</th>
                     </tr>
                   </thead>`;
                   //format of the form for courses
@@ -120,25 +119,27 @@ document.addEventListener("DOMContentLoaded", function () {
                   </div>
                   <div class="modal-body">
                     <div class="mb-3">
-                      <label for="courseName" class="form-label">Course Name</label>
-                      <input type="text" class="form-control" id="courseName" name="courseName" required>
+                      <label for="code" class="form-label">Course Code</label>
+                      <input type="text" class="form-control" id="code" name="code" required>
                     </div>
                     <div class="mb-3">
                       <label for="section" class="form-label">Section</label>
                       <input type="number" class="form-control" id="section" name="section">
                     </div>
                     <div class="mb-3">
-                      <label for="instructor" class="form-label">Instructor Id</label>
-                      <input type="number" class="form-control" id="instructor" name="instructor" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="id" class="form-label">Course Id</label>
-                      <input type="number" class="form-control" id="id" name="id" required>
+                      <label for="instructorID" class="form-label">Instructor Id</label>
+                      <input type="number" class="form-control" id="instructorID" name="instructorID" required>
                     </div>
                     <div class="mb-3">
                       <label for="taIDs" class="form-label">TAs</label>
                       <input type="text" class="form-control" id="taIDs" name="taIDs">
                     </div>
+                    <div class="form-check mb-3">
+                      <input class="form-check-input" type="checkbox" id="isGraduateLevel" name="isGraduateLevel">
+                      <label class="form-check-label" for="isGraduateLevel">
+                        MS/PhD Level Course
+                      </label>
+                  </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -382,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData(addCourseForm);
             const dataForm = {};
             formData.forEach((value, key) => {
-              if (["instructor", "section", "id"].includes(key)) {
+              if (["instructorID", "section"].includes(key)) {
                 dataForm[key] = value ? Number(value) : null;
               }
               else if (
@@ -393,6 +394,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 dataForm[key] = value;
               }
             });
+
+            const isGraduateCheckbox = document.getElementById("isGraduateLevel");
+            dataForm.masterphd = isGraduateCheckbox.checked;
 
             // Send data with fetch
             fetch('/api/create-course', {
@@ -467,13 +471,13 @@ document.addEventListener("DOMContentLoaded", function () {
               break;
 
             case "courses":
-              //TODO REMOVE BUTTON
               row = `
                       <tr class="align-middle">
                         <td>${index + 1}.</td>
-                        <td>${item.courseName}</td>
+                        <td>${item.code}</td>
                         <td>${item.section}</td>
-                        <td>${item.instructor}</td>
+                        <td>${item.instructorID}</td>
+                        <td>${item.masterphd ? "Yes" : "No"}</td>
                         <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taModal-${index}">
                           View TAs
@@ -508,17 +512,19 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                           </div>
                         </td>
-                      <td>
-    <div class="d-flex ms-auto">
-      <button class="btn btn-warning d-flex align-items-center justify-content-center" style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
-        <i class="bi bi-pencil-fill"></i>
-      </button>
-      <button class="btn btn-danger d-flex align-items-center justify-content-center" style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
-                    onclick="deleteCourse(${item.id})">
-        <i class="bi bi-x-lg"></i>
-      </button>
-    </div>
-  </td>
+                        <td>
+                          <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-warning d-flex align-items-center justify-content-center"
+                              style="border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107;">
+                              <i class="bi bi-pencil-fill"></i>
+                            </button>
+                            <button class="btn btn-danger d-flex align-items-center justify-content-center"
+                              style="border-top-left-radius: 0; border-bottom-left-radius: 0; background-color: #dc3545;"
+                              onclick="deleteCourse(${item.id})">
+                              <i class="bi bi-x-lg"></i>
+                            </button>
+                          </div>
+                        </td>
                       </tr>
 
                     `;
