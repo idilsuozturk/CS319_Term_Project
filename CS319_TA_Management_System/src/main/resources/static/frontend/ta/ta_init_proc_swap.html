@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Initialize Swap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+</head>
+<body style="background-color: #f8f9fa;">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="main.html">Teaching Assistant</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <h3 class="text-primary fw-bold mb-4 text-center">Your Proctoring Assignments</h3>
+    <div id="assignment-container" class="row g-4 justify-content-center"></div>
+  </div>
+
+  <!-- Swap Modals -->
+  <div class="modal fade" id="swapModal" tabindex="-1" aria-labelledby="swapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="swapModalLabel">Select a TA to Swap With</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="ta-list">
+          <p class="text-muted">Loading...</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let currentSwapData = {};
+
+    function formatTime(timeInt) {
+      const timeStr = timeInt.toString().padStart(4, '0');
+      const hours = parseInt(timeStr.slice(0, 2));
+      const minutes = parseInt(timeStr.slice(2));
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    }
+
+    function handleSwap(taId, assignmentId) {
+      currentSwapData = { taId, assignmentId };
+
+      const taListDiv = document.getElementById('ta-list');
+      taListDiv.innerHTML = `<p class="text-muted"></p>`;
+
+      fetch(`/tas/${taId}/showpossibletanames`)
+        .then(response => response.json())
+        .then(taList => {
+          if (!taList.length) {
+            taListDiv.innerHTML = `<p class="text-danger">No available TAs for swapping.</p>`;
+            return;
+          }
+
+          const listGroup = document.createElement('div');
+          listGroup.className = "list-group";
+
+          taList.forEach(ta => {
+            const item = document.createElement('div');
+            item.className = "list-group-item";
+            item.innerHTML = `
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>${ta.name}</strong><br>
+                  <small>${ta.id}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="confirmSwap(${ta.id})">See Assignments</button>
+              </div>
+            `;
+            listGroup.appendChild(item);
+          });
+
+          taListDiv.innerHTML = '';
+          taListDiv.appendChild(listGroup);
+        });
+
+      const modal = new bootstrap.Modal(document.getElementById('swapModal'));
+      modal.show();
+    }
+
+    function confirmSwap(receiverId) {
+      const { assignmentId } = currentSwapData;
+
+      const taListDiv = document.getElementById('ta-list');
+      taListDiv.innerHTML = `<p class="text-muted">Loading available assignments...</p>`;
+
+      fetch(`/tas/showpossibleprocswapreq?receiverID=${receiverId}&proctoringAssignmentID=${assignmentId}`)
+        .then(response => response.json())
+        .then(assignments => {
+          if (!assignments.length || assignments[0] == null) {
+            taListDiv.innerHTML = `
+              <div class="alert alert-warning text-center">
+                This TA has no available assignments to swap with.<br />
+                <button class="btn btn-primary mt-2" onclick="sendSwapRequest(-1, ${assignmentId})">Send Swap Request</button>
+              </div>
+            `;
+            return;
+          }
+
+          const list = document.createElement('div');
+          list.className = 'list-group';
+
+          assignments.forEach(a => {
+            const item = document.createElement('div');
+            item.className = 'list-group-item';
+            item.innerHTML = `
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>Course:</strong> ${a.courseID}<br>
+                  <strong>Classroom:</strong> ${a.classroomID}<br>
+                  <strong>Date:</strong> ${a.day}/${a.month}/${a.year}<br>
+                  <strong>Time:</strong> ${formatTime(a.startTime)} - ${formatTime(a.endTime)}
+                </div>
+                <button class="btn btn-sm btn-outline-success" onclick="sendSwapRequest(${a.id}, ${assignmentId})">Request Swap</button>
+              </div>
+            `;
+            list.appendChild(item);
+          });
+
+          taListDiv.innerHTML = '';
+          taListDiv.appendChild(list);
+        });
+    }
+
+    function sendSwapRequest(receiverAssignmentId, senderAssignmentId) {
+  currentSwapData = { receiverAssignmentId, senderAssignmentId };
+
+  const swapModal = bootstrap.Modal.getInstance(document.getElementById('swapModal'));
+  if (swapModal) swapModal.hide();
+
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString(); 
+  const formattedTime = now.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }); 
+  
+  const requestDate = `${formattedDate} ${formattedTime}`;
+
+  const defaultMessage = "";
+
+  fetch('/tas/initmanreq', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      requestDate: requestDate,
+      message: defaultMessage, 
+      requesterProctoringAssignmentID: senderAssignmentId,
+      receiverProctoringAssignmentID: receiverAssignmentId,
+    })
+  })
+    .then(response => {
+      if (response.ok) {
+        console.log('Swap request sent successfully.');
+        console.log('Request details:', {
+          requestDate: requestDate,
+          message: defaultMessage,
+          senderAssignmentId: senderAssignmentId,
+          receiverAssignmentId: receiverAssignmentId
+        });
+      } else {
+        throw new Error('Failed to send swap request');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while sending the request.');
+    });
+}
+
+
+
+    // Initial fetch
+    fetch('/api/user-info', { credentials: 'include' })
+      .then(r => r.json())
+      .then(user => {
+        const taId = user.id;
+        return fetch(`/tas/${taId}/proctoring`)
+          .then(r => r.json())
+          .then(async assignments => {
+            const container = document.getElementById('assignment-container');
+            container.innerHTML = '';
+
+            for (const a of assignments) {
+              let classroomName = 'Unknown';
+              let courseName = 'Unknown';
+
+              try {
+                const res = await fetch(`/api/Classroom/${a.classroomID}`);
+                if (res.ok) classroomName = (await res.json()).classroomName;
+              } catch {}
+
+              try {
+                const res = await fetch(`/api/course/${a.courseID}`);
+                if (res.ok) courseName = (await res.json()).code;
+              } catch {}
+
+              const col = document.createElement('div');
+              col.className = 'col-md-5 col-lg-4';
+
+              col.innerHTML = `
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">Course: ${courseName}</h5>
+                    <p class="card-text">
+                      <strong>Classroom:</strong> ${classroomName}<br>
+                      <strong>Date:</strong> ${a.day}/${a.month}/${a.year}<br>
+                      <strong>Time:</strong> ${formatTime(a.startTime)} - ${formatTime(a.endTime)}
+                    </p>
+                    <div class="d-flex justify-content-end">
+                      <button class="btn btn-sm btn-info text-white" onclick="handleSwap(${taId}, ${a.id})">
+                        <i class="fas fa-exchange-alt me-1"></i> Swap
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              container.appendChild(col);
+            }
+          });
+      })
+      .catch(err => {
+        console.error("Error loading user data:", err);
+        window.location.href = "/frontend/login.html";
+      });
+  </script>
+</body>
+</html>

@@ -26,6 +26,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             response.sendRedirect("/frontend/ta/main.html");
         }else if (roles.contains("ROLE_DEPARTMENT_STAFF")) {
             response.sendRedirect("/frontend/staff/staff_main.html");
+        } else if (roles.contains("ROLE_DEPARTMENT_CHAIR")) {
+            response.sendRedirect("/frontend/department_chair/department_chair_main.html");
         } else {
             response.sendRedirect("/frontend/index.html"); // default fallback
         }
