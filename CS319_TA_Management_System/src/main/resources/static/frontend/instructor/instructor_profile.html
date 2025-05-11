@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instructor Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Profile Section -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Instructor Profile</h2>
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" value="Jane" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Surname</label>
+            <input type="text" class="form-control" value="Smith" disabled>
+          </div>
+  
+          <!-- Optional: Add instructor-specific fields -->
+          <div class="mb-3">
+            <label class="form-label">Department</label>
+            <input type="text" class="form-control" value="Computer Science" disabled>
+          </div>
+
+          <hr>
+  
+          <h5 class="text-center mt-4 mb-3">Change Password</h5>
+          <div class="mb-3">
+            <label class="form-label">Current Password</label>
+            <input type="password" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New Password</label>
+            <input type="password" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control">
+          </div>
+          <div class="text-center">
+            <button class="btn btn-primary">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    fetch('instructor_navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+  </script>
+  <script>
+    fetch('instructor_navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+
+    fetch('/api/user-info', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 302) {
+                window.location.href = '/frontend/login.html';
+                throw new Error('Not authenticated');
+            }
+            return response.text().then(text => {
+                console.error('Error response:', text);
+                throw new Error("HTTP error " + response.status);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('User data:', data);
+        const welcomeMessage = document.getElementById('welcome-message');
+        if (data.firstName && data.lastName) {
+            welcomeMessage.textContent = `Welcome, ${data.firstName} ${data.lastName}`;
+        } else {
+            welcomeMessage.textContent = `Welcome, Instructor`;  
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (error.message === 'Not authenticated') {
+        }
+    });
+  </script>
+</body>
+</html>

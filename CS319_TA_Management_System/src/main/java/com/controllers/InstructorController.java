@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entities.Course;
 import com.entities.Instructor;
 import com.entities.TaskSubmissionRequest;
 import com.services.CoursesService;
@@ -82,7 +83,7 @@ public class InstructorController {
     }
 
     @GetMapping("/{id}/viewcourins")
-    public List<Integer> viewCourses(@PathVariable Integer id){
+    public List<Course> viewCourses(@PathVariable Integer id){
         return coursesService.viewCoursesGiven(id);
     }
 

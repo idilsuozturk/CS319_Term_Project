@@ -121,26 +121,20 @@ public class CoursesService {
         }
     }
 
-    public List<Integer> viewCoursesGiven(Integer id){
+    public List<Course> viewCoursesGiven(Integer id){
         Instructor instructor = instructorService.getInstructorByID(id);
         if (instructor == null){
             return null;
         }
-
-        List<Integer> output = new ArrayList<>();
-        /*for (int i : instructor.getCourseIDs()){
-            System.out.println(i);
-        }*/
-        System.out.println("CHECK");
-        System.out.println(instructor.getCourseIDs().size());
+        List<Course> output = new ArrayList<>();
+        for (int i : instructor.getCourseIDs()){
+        }
         for (int i : instructor.getCourseIDs()){
             Course course = getCourseByID(i);
-            System.out.println(course.getCode());
-            System.out.println("BURAYA GELİYOR MU");
-            output.add(i);
-        }
-        for (int i : output){
-            System.out.println(i);
+            if (course == null){
+                continue;
+            }
+            output.add(course);
         }
         return output;
     }
