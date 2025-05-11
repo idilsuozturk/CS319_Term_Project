@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dean Main Page</title>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="innerheader">
+      <div class="logo-container">
+        <li>
+          <h1>Dean Name</h1>
+          <img class="logo" src="../assets/img/pfp.png" alt="Profile" />
+        </li>
+      </div>
+      <ul class="navigation">
+        <li><a href="#" id="importLink">Import</a></li>
+        <li><a href="#" id="semesterLink">Semester</a></li>
+        <li><a href="#" id="examLink">Exam</a></li>
+        <li>
+          <a href="#">
+            <img src="../assets/img/bell.png" alt="Notification" class="bell-icon" />
+            <span class="badge">3</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent"></div>
+
+  <!-- Dynamic JS & View Loader -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mainContent = document.getElementById('mainContent');
+
+      function loadPage(viewName) {
+        const path = {
+          import: 'dean_import.html',
+          semester: 'dean_semester.html',
+          exam: 'dean_exam.html'
+        }[viewName];
+
+        if (path) {
+          fetch(path)
+            .then(response => response.text())
+            .then(html => {
+              mainContent.innerHTML = html;
+
+              // Dynamic JS file load from parent path
+              const script = document.createElement('script');
+              script.src = `../assets/js/dean_${viewName}.js`;
+              script.defer = true;
+              script.onload = () => console.log(`✅ dean_${viewName}.js loaded.`);
+              document.body.appendChild(script);
+            })
+            .catch(err => console.error(`Error loading ${path}:`, err));
+        }
+      }
+
+      // Check URL parameter on load
+      const params = new URLSearchParams(window.location.search);
+      const view = params.get('view');
+      if (view) loadPage(view);
+
+      // Navigation click handlers
+      document.getElementById('importLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        loadPage('import');
+        history.pushState(null, '', '?view=import');
+      });
+
+      document.getElementById('semesterLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        loadPage('semester');
+        history.pushState(null, '', '?view=semester');
+      });
+
+      document.getElementById('examLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        loadPage('exam');
+        history.pushState(null, '', '?view=exam');
+      });
+    });
+  </script>
+</body>
+</html>

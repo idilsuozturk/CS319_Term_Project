@@ -1,0 +1,22 @@
+<!-- dean_import.html (partial – dean_main.html'e yüklenmek için) -->
+<link rel="stylesheet" href="../assets/css/style.css" />
+<link rel="stylesheet" href="../assets/css/dean_import.css" />
+
+<div class="form-container" id="importFormContainer">
+  <div class="form-content">
+    <h2>Upload TA Excel File</h2>
+    <form id="fileUploadForm">
+      <div class="form-group">
+        <label for="fileInput">Select Excel File:</label>
+        <input type="file" id="fileInput" name="fileInput" accept=".xlsx, .xls" required />
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="submit-btn">Upload</button>
+        <button type="button" class="cancel-btn" id="cancelUpload">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../assets/js/dean_import.js"></script>
