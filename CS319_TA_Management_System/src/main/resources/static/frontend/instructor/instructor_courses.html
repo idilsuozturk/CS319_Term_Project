@@ -97,9 +97,57 @@
                     row.innerHTML = `
                         <td>${course.code}</td>
                         <td>${course.section}</td>
-                        <td><a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#taModal">View</a></td>
+                        <td><button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#taModal-${course.id}">View</button></td>
                     `;
                     tableBody.appendChild(row);
+
+                    // Modal for TAs
+                    const modal = document.createElement('div');
+                    modal.classList.add('modal', 'fade');
+                    modal.id = `taModal-${course.id}`;
+                    modal.tabIndex = -1;
+                    modal.setAttribute('aria-labelledby', `taModalLabel-${course.id}`);
+                    modal.setAttribute('aria-hidden', 'true');
+                    modal.innerHTML = `
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="taModalLabel-${course.id}">Teaching Assistants - ${course.code}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="modal-body">
+                            <div id="taTableBody-${course.id}" class="px-2">
+                              <!-- TA data will be loaded here line by line -->
+                            </div>
+                          </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    `;
+                    document.body.appendChild(modal);
+                    
+                    // Fetch TAs for the course when the modal is shown
+                    const viewButton = row.querySelector('button');
+                    viewButton.addEventListener('click', function () {
+                    fetch(`/api/${course.id}/viewassisttas`)
+                      .then(response => response.json())
+                      .then(tas => {
+                        const taTableBody = document.getElementById(`taTableBody-${course.id}`);
+                        taTableBody.innerHTML = ''; // Clear any previous content
+                        tas.forEach((ta, index) => {
+                          const line = document.createElement('p');
+                          line.textContent = `${index + 1}. ${ta}`;  // Each item in the list is just a string, so we display it directly
+                          taTableBody.appendChild(line);
+                        });
+                      })
+                      .catch(error => {
+                        console.error('Error fetching TAs:', error);
+                      });
+                  });
                 });
             })
             .catch(error => {

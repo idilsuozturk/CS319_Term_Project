@@ -1,5 +1,6 @@
 package com.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -100,8 +101,14 @@ public class TAService {
 
     public List<TA> showTAs(Integer taID){
         List<TA> allTAs = getAllTAs();
-        allTAs.remove(getTAByID(taID));
-        return allTAs;
+        List<TA> output = new ArrayList<>();
+        for (TA ta : allTAs){
+            System.out.println(ta.getId());
+            if (!(ta.getId() == taID)){
+                output.add(ta);
+            }
+        }
+        return output;
     }
 
     public int viewTotalWorkload(Integer id) {
