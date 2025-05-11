@@ -35,9 +35,11 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final AdminDetailsService adminDetailsService;
-    public SecurityConfig(CustomUserDetailsService userDetailsService, AdminDetailsService adminDetailsService) {
+    private CustomSuccessHandler customSuccessHandler;
+    public SecurityConfig(CustomUserDetailsService userDetailsService, AdminDetailsService adminDetailsService, CustomSuccessHandler customSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.adminDetailsService = adminDetailsService;
+        this.customSuccessHandler = customSuccessHandler;
     }
 
 @Bean
@@ -116,7 +118,7 @@ public SecurityFilterChain userSecurity(HttpSecurity http) throws Exception {
         .formLogin(form -> form
             .loginPage("/frontend/login.html")
             .loginProcessingUrl("/frontend/login")
-            .defaultSuccessUrl("/frontend/index.html", true)
+            .successHandler(customSuccessHandler)
             .failureUrl("/frontend/login.html?error=true")
             .permitAll()
         )
