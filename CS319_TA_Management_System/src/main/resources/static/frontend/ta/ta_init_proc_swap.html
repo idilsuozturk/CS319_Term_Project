@@ -31,7 +31,52 @@
       const hours = parseInt(timeStr.slice(0, 2));
       const minutes = parseInt(timeStr.slice(2));
       return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    }
+      }
+
+    
+  function handleSwap(taId, assignmentId) {
+    console.log("Opening swap modal for TA ID:", taId, "Assignment ID:", assignmentId);
+
+    window.currentSwapData = {
+      taId,
+      assignmentId
+    };
+
+    const taListDiv = document.getElementById('ta-list');
+    taListDiv.innerHTML = `<p class="text-muted">Loading available TAs...</p>`;
+
+    fetch(`/tas/${taId}/showpossibletanames`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch TA list");
+        }
+        return response.json();
+      })
+      .then(taList => {
+        if (taList.length === 0) {
+          taListDiv.innerHTML = `<p class="text-danger">No available TAs for swapping.</p>`;
+          return;
+        }
+
+        // Create list of TAs with buttons
+        const listItems = taList.map(ta => `
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            ${ta.name} (${ta.id})
+            <button class="btn btn-sm btn-outline-primary">Request Swap</button>
+          </li>
+        `).join('');
+
+        taListDiv.innerHTML = `<ul class="list-group">${listItems}</ul>`;
+      })
+      .catch(error => {
+        console.error('Error fetching TA list:', error);
+        taListDiv.innerHTML = `<p class="text-danger">Error loading TA list.</p>`;
+      });
+
+    // Show the modal
+    const swapModal = new bootstrap.Modal(document.getElementById('swapModal'));
+    swapModal.show();
+  }
 
 
     fetch('/api/user-info', {
@@ -102,18 +147,22 @@
   
             const card = document.createElement('div');
             card.classList.add('card', 'shadow-sm');
-  
+
             card.innerHTML = `
-              <div class="card-body">
-                <h5 class="card-title text-primary">Course: ${courseName}</h5>
-                <p class="card-text">
-                  <strong>Classroom:</strong> ${classroomName}<br>
-                  <strong>Date:</strong> ${assignment.day}/${assignment.month}/${assignment.year}<br>
-                 <strong>Time:</strong> ${formatTime(assignment.startTime)} - ${formatTime(assignment.endTime)}
-                </p>
-              </div>
-            `;
-  
+            <div class="card-body">
+              <h5 class="card-title text-primary">Course: ${courseName}</h5>
+              <p class="card-text">
+                <strong>Classroom:</strong> ${classroomName}<br>
+                <strong>Date:</strong> ${assignment.day}/${assignment.month}/${assignment.year}<br>
+                <strong>Time:</strong> ${formatTime(assignment.startTime)} - ${formatTime(assignment.endTime)}
+              </p>
+              <div class="d-flex justify-content-end">
+                  <button class="btn btn-sm btn-info text-white" onclick="handleSwap(${taId}, ${assignment.id})">
+                    <i class="fas fa-exchange-alt me-1"></i> Swap
+                  </button>
+                </div>
+            </div>
+          `;
             col.appendChild(card);
             container.appendChild(col);
           }
@@ -126,6 +175,25 @@
       console.error('Error:', error);
     });
   </script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Swap Modal -->
+<div class="modal fade" id="swapModal" tabindex="-1" aria-labelledby="swapModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="swapModalLabel">Select a TA to Swap With</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="ta-list">
+        <!-- TA list will be populated here -->
+        <p class="text-muted">Fetching TA list or displaying dummy list here later...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>  
